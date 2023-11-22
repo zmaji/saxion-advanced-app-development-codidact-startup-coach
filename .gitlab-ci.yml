@@ -1,6 +1,13 @@
 stages:
   - merge-check
+  - build
+  - lint
   - release
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - backend/node_modules/
 
 allowed-to-merge:
   image: ubuntu:latest
@@ -14,6 +21,38 @@ allowed-to-merge:
       else
         exit 0;
       fi
+
+build:
+  image: node:latest
+  stage: build
+  only:
+    - merge_requests
+  before_script:
+    - cd backend
+  script:
+    - if [ "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" == "main" ] && [ "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" != "develop" ]; then
+        echo "Cannot merge to the main branch directly. Please create a merge request from the develop branch.";
+        exit 1;
+      else
+        exit 0;
+      fi
+    - npm install
+
+lint:
+  image: node:latest
+  stage: lint
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - backend/node_modules/
+  only:
+    - merge_requests
+  needs:
+    - build
+  before_script:
+    - cd backend
+  script:
+    - npm run lint
 
 release-backend:
   image: docker:cli
