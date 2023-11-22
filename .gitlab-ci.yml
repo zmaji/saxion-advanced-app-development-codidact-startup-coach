@@ -26,16 +26,12 @@ build:
   image: node:latest
   stage: build
   only:
-    - merge_requests
-  before_script:
-    - cd backend
+    refs:
+      - merge_requests  
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
   script:
-    - if [ "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" == "main" ] && [ "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" != "develop" ]; then
-        echo "Cannot merge to the main branch directly. Please create a merge request from the develop branch.";
-        exit 1;
-      else
-        exit 0;
-      fi
+    - cd backend
     - npm install
 
 lint:
@@ -49,9 +45,8 @@ lint:
     - merge_requests
   needs:
     - build
-  before_script:
-    - cd backend
   script:
+    - cd backend
     - npm run lint
 
 release-backend:
