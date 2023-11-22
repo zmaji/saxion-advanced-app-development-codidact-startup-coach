@@ -1,6 +1,6 @@
 stages:
   - merge-check
-  - build-and-publish
+  - release
 
 allowed-to-merge:
   image: ubuntu:latest
@@ -15,9 +15,9 @@ allowed-to-merge:
         exit 0;
       fi
 
-build-and-publish:
+release-backend:
   image: docker:cli
-  stage: build-and-publish
+  stage: release
   services:
     - docker:dind
   only:
