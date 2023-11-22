@@ -21,7 +21,7 @@ build-and-publish:
   services:
     - docker:dind
   only:
-    - merge_requests
+    - main
   before_script:
     - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
   script:
