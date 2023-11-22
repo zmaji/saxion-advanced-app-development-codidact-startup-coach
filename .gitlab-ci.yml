@@ -1,9 +1,10 @@
 stages:
   - merge-check
+  - build-and-publish
 
 allowed-to-merge:
-  stage: merge-check
   image: ubuntu:latest
+  stage: merge-check
   only:
     - merge_requests
   script:
@@ -13,3 +14,16 @@ allowed-to-merge:
       else
         exit 0;
       fi
+
+build-and-publish:
+  image: docker:cli
+  stage: build-and-publish
+  services:
+    - docker:dind
+  only:
+    - merge_requests
+  before_script:
+    - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
+  script:
+    - docker build --pull --rm -f "./backend/Dockerfile" -t "zikria40/codidact-startup-coach-backend:latest" "./backend"
+    - docker push "zikria40/codidact-startup-coach-backend:latest"
