@@ -7,9 +7,9 @@ merge-check:
   only:
     - merge_requests
   script:
-    - if [ "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" == "main"] && ["${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" != "develop" ]; then
-        echo "Cannot merge to main branch directly. Please create a merge request from develop branch.";
-        exit 1;
+    - if [ "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" == "main" ] && [ "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" != "develop" ]; then
+        echo "Cannot merge to the main branch directly. Please create a merge request from the develop branch."
+        exit 1
       else
-        return 0;
+        exit 0
       fi
