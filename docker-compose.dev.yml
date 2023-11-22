@@ -4,6 +4,11 @@ services:
   mongo:
     image: mongo:latest
     container_name: api-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - 27017:27017
 
   backend:
     image: codidact-startup-coach-backend:latest

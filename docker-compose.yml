@@ -4,6 +4,8 @@ services:
   mongo:
     image: mongo:latest
     container_name: api-mongo
+    ports:
+      - 27017:27017
 
   backend:
     image: 'zikria40/codidact-startup-coach-backend:latest'
