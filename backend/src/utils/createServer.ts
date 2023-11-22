@@ -1,9 +1,12 @@
 import type { Express, Request, Response } from 'express';
 
 import express from 'express';
+import cors from 'cors';
 
 const createServer = () => {
   const app: Express = express();
+
+  app.use(cors());
 
   app.use(express.urlencoded({
     extended: true,
