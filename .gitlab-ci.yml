@@ -26,12 +26,13 @@ build:
   image: node:latest
   stage: build
   only:
-    - merge_requests  
+    refs:
+      - merge_requests  
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
   script:
     - cd backend
     - npm install
-  rules:
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
 
 lint:
   image: node:latest
