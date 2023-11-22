@@ -1,7 +1,7 @@
 stages:
   - merge-check
 
-merge-check:
+allowed-to-merge:
   stage: merge-check
   image: ubuntu:latest
   only:

@@ -2,11 +2,18 @@ import type { Express, Request, Response } from 'express';
 
 import express from 'express';
 import cors from 'cors';
+import fileUpload from 'express-fileupload';
 
 const createServer = () => {
   const app: Express = express();
 
   app.use(cors());
+
+  app.use(fileUpload({
+    createParentPath: true,
+  }));
+
+  app.use(express.static('public'));
 
   app.use(express.urlencoded({
     extended: true,
