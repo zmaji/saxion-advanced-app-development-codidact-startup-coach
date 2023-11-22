@@ -24,6 +24,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
   ],
   rules: {
+    'linebreak-style': 0,
     'new-cap': 'off',
     'object-curly-spacing': ['error', 'always'],
     'max-len': ['error', {
