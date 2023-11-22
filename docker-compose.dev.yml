@@ -1,0 +1,18 @@
+name: codidact-startup-coach
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: api-mongo
+
+  backend:
+    build: ./backend
+    environment:
+      DB_HOST: mongo
+      DB_PORT: 27017
+      DB_NAME: codidact-startup-coach-db
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+    container_name: api-backend

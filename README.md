@@ -1,1 +1,1 @@
-# Codidact
+# Codidact Startup Coach
