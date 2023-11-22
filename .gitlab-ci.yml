@@ -1,16 +1,17 @@
+image: node:latest
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - backend/node_modules/
+    
 stages:
   - merge-check
   - build
   - lint
   - release
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - backend/node_modules/
-
 allowed-to-merge:
-  image: ubuntu:latest
   stage: merge-check
   only:
     - merge_requests
@@ -23,7 +24,6 @@ allowed-to-merge:
       fi
 
 build:
-  image: node:latest
   stage: build
   only:
     refs:
@@ -35,7 +35,6 @@ build:
     - npm install
 
 lint:
-  image: node:latest
   stage: lint
   cache:
     key: ${CI_COMMIT_REF_SLUG}
