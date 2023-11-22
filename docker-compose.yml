@@ -6,7 +6,7 @@ services:
     container_name: api-mongo
 
   backend:
-    image: 'zikria40/codidact-startup-coach-backend:${CI_COMMIT_BRANCH}'
+    image: 'zikria40/codidact-startup-coach-backend:latest'
     container_name: api-backend
     restart: always
     ports:
