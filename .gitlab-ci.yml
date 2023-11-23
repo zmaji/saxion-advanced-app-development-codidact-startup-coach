@@ -8,6 +8,7 @@ cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - backend/node_modules/
+    - frontend/node_modules/
 
 # All stages in execution order
 stages:
@@ -41,6 +42,18 @@ build-backend:
     - cd backend
     - npm install
 
+# Build the frontend application in preparation for testing
+build-frontend:
+  stage: build
+  only:
+    refs:
+      - merge_requests  
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+  script:
+    - cd frontend
+    - npm install
+
 # Check if backend linting rules are in order
 test-lint-backend:
   stage: test
@@ -56,6 +69,21 @@ test-lint-backend:
     - cd backend
     - npm run lint
 
+# Check if frontend linting rules are in order
+test-lint-frontend:
+  stage: test
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - frontend/node_modules/
+  only:
+    - merge_requests
+  needs:
+    - build-frontend
+  script:
+    - cd frontend
+    - npm run lint
+
 # Release backend docker image(s) to dockerhub
 release-backend:
   image: docker:cli
@@ -69,3 +97,17 @@ release-backend:
   script:
     - docker build --pull --rm -f "./backend/Dockerfile" -t "zikria40/codidact-startup-coach-backend:latest" "./backend"
     - docker push "zikria40/codidact-startup-coach-backend:latest"
+
+# Release frontend docker image(s) to dockerhub
+release-frontend:
+  image: docker:cli
+  stage: release
+  services:
+    - docker:dind
+  only:
+    - main
+  before_script:
+    - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
+  script:
+    - docker build --pull --rm -f "./frontend/Dockerfile" -t "zikria40/codidact-startup-coach-frontend:latest" "./frontend"
+    - docker push "zikria40/codidact-startup-coach-frontend:latest"
