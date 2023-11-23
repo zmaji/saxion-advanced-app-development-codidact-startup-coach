@@ -8,7 +8,7 @@ Before running the project, make sure you have the following prerequisites insta
 1. [Docker](https://www.docker.com/)
 2. [Docker Compose](https://docs.docker.com/compose/)
 
-## Setup
+## Setup for local development
 
 Follow the steps below to set up and run the project:
 
