@@ -51,7 +51,7 @@ test-lint-backend:
   only:
     - merge_requests
   needs:
-    - build
+    - build-backend
   script:
     - cd backend
     - npm run lint
