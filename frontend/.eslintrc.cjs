@@ -4,8 +4,8 @@ require('@rushstack/eslint-patch/modern-module-resolution')
 const importOrderRule = ['error', {
   'newlines-between': 'always',
   groups: [
-    ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
     ['type'],
+    ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
   ],
 }];
 
@@ -29,6 +29,8 @@ module.exports = {
     'import', 'import-newlines'
   ],
   rules: {
+    'vue/script-indent': ['error', 2, { 'baseIndent': 1 }],
+    'vue/multi-word-component-names': 'off',
     'linebreak-style': 0,
     'new-cap': 'off',
     'object-curly-spacing': ['error', 'always'],
@@ -40,9 +42,19 @@ module.exports = {
       { blankLine: 'always', prev: '*', next: 'return' },
     ],
     'no-multi-spaces': ['error'],
+
     'import-newlines/enforce': ['error',
       { items: 3 },
     ],
     'import/order': importOrderRule,
   },
+  overrides: [
+    {
+      files: ['*.spec.ts'],
+      rules: {
+        '@typescript-eslint/no-non-null-assertion': 'off',
+        'import/order': importOrderRule,
+      },
+    }
+  ],
 }
