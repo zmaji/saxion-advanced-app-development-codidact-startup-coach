@@ -43,6 +43,7 @@ build-backend:
   script:
     - cd backend
     - npm install
+    - cd ../
 
 # Build the frontend application in preparation for testing
 build-frontend:
@@ -55,6 +56,7 @@ build-frontend:
   script:
     - cd frontend
     - npm install
+    - cd ../
 
 # Check if backend linting rules are in order
 test-lint-backend:
