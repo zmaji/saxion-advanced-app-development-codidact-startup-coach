@@ -41,9 +41,8 @@ build-backend:
     variables:
       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
   script:
-    - cd backend
+    - cd /builds/saxion.nl/hbo-ict/aad/project/09/backend
     - npm install
-    - cd ../
 
 # Build the frontend application in preparation for testing
 build-frontend:
@@ -54,9 +53,8 @@ build-frontend:
     variables:
       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
   script:
-    - cd frontend
+    - cd /builds/saxion.nl/hbo-ict/aad/project/09/frontend
     - npm install
-    - cd ../
 
 # Check if backend linting rules are in order
 test-lint-backend:
@@ -70,7 +68,7 @@ test-lint-backend:
   needs:
     - build-backend
   script:
-    - cd backend
+    - cd /builds/saxion.nl/hbo-ict/aad/project/09/backend
     - npm run lint
 
 # Check if frontend linting rules are in order
@@ -85,7 +83,7 @@ test-lint-frontend:
   needs:
     - build-frontend
   script:
-    - cd frontend
+    - cd /builds/saxion.nl/hbo-ict/aad/project/09/frontend
     - npm run lint
 
 # Release backend docker image(s) to dockerhub
