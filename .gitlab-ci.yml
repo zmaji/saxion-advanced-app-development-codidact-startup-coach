@@ -5,10 +5,12 @@ image: node:latest
 # This folder is cached between builds
 # https://docs.gitlab.com/ee/ci/yaml/index.html#cache
 cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - backend/node_modules/
-    - frontend/node_modules/
+  - key: ${CI_COMMIT_REF_SLUG}-backend
+    paths:
+      - backend/node_modules/
+  - key: ${CI_COMMIT_REF_SLUG}-frontend
+    paths:
+      - frontend/node_modules/
 
 # All stages in execution order
 stages:
@@ -58,7 +60,7 @@ build-frontend:
 test-lint-backend:
   stage: test
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
+    key: ${CI_COMMIT_REF_SLUG}-backend
     paths:
       - backend/node_modules/
   only:
@@ -73,7 +75,7 @@ test-lint-backend:
 test-lint-frontend:
   stage: test
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
+    key: ${CI_COMMIT_REF_SLUG}-frontend
     paths:
       - frontend/node_modules/
   only:
