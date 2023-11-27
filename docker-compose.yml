@@ -1,0 +1,28 @@
+name: codidact-startup-coach
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: api-mongo
+    ports:
+      - 27017:27017
+
+  backend:
+    image: 'zikria40/codidact-startup-coach-backend:latest'
+    container_name: api-backend
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+    environment:
+      DB_HOST: mongo
+      DB_PORT: 27017
+      DB_NAME: codidact-startup-coach-db
+
+  frontend:
+    image: codidact-startup-coach-frontend:latest
+    container_name: frontend
+    restart: always
+    ports:
+      - 80:80

@@ -1,0 +1,115 @@
+# Official framework image. Look for the different tagged releases at:
+# https://hub.docker.com/r/library/node/tags/
+image: node:latest
+
+# This folder is cached between builds
+# https://docs.gitlab.com/ee/ci/yaml/index.html#cache
+cache:
+  - key: ${CI_COMMIT_REF_SLUG}-backend
+    paths:
+      - backend/node_modules/
+  - key: ${CI_COMMIT_REF_SLUG}-frontend
+    paths:
+      - frontend/node_modules/
+
+# All stages in execution order
+stages:
+  - merge-check
+  - build
+  - test
+  - release
+
+# Check if the branch is allowed to make a merge request to the target branch
+allowed-to-merge:
+  stage: merge-check
+  only:
+    - merge_requests
+  script:
+    - if [ "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" == "main" ] && [ "${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}" != "develop" ]; then
+        echo "Cannot merge to the main branch directly. Please create a merge request from the develop branch.";
+        exit 1;
+      else
+        exit 0;
+      fi
+
+# Build the backend application in preparation for testing
+build-backend:
+  stage: build
+  only:
+    refs:
+      - merge_requests  
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+  script:
+    - cd /builds/saxion.nl/hbo-ict/aad/project/09/backend
+    - npm install
+
+# Build the frontend application in preparation for testing
+build-frontend:
+  stage: build
+  only:
+    refs:
+      - merge_requests  
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+  script:
+    - cd /builds/saxion.nl/hbo-ict/aad/project/09/frontend
+    - npm install
+
+# Check if backend linting rules are in order
+test-lint-backend:
+  stage: test
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-backend
+    paths:
+      - backend/node_modules/
+  only:
+    - merge_requests
+  needs:
+    - build-backend
+  script:
+    - cd /builds/saxion.nl/hbo-ict/aad/project/09/backend
+    - npm run lint
+
+# Check if frontend linting rules are in order
+test-lint-frontend:
+  stage: test
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-frontend
+    paths:
+      - frontend/node_modules/
+  only:
+    - merge_requests
+  needs:
+    - build-frontend
+  script:
+    - cd /builds/saxion.nl/hbo-ict/aad/project/09/frontend
+    - npm run lint
+
+# Release backend docker image(s) to dockerhub
+release-backend:
+  image: docker:cli
+  stage: release
+  services:
+    - docker:dind
+  only:
+    - main
+  before_script:
+    - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
+  script:
+    - docker build --pull --rm -f "./backend/Dockerfile" -t "zikria40/codidact-startup-coach-backend:latest" "./backend"
+    - docker push "zikria40/codidact-startup-coach-backend:latest"
+
+# Release frontend docker image(s) to dockerhub
+release-frontend:
+  image: docker:cli
+  stage: release
+  services:
+    - docker:dind
+  only:
+    - main
+  before_script:
+    - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
+  script:
+    - docker build --pull --rm -f "./frontend/Dockerfile" -t "zikria40/codidact-startup-coach-frontend:latest" "./frontend"
+    - docker push "zikria40/codidact-startup-coach-frontend:latest"

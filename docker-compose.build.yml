@@ -1,0 +1,14 @@
+name: codidact-startup-coach
+
+services:
+  backend:
+    container_name: api-backend
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+  
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile

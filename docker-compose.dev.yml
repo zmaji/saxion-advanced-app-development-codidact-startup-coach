@@ -1,0 +1,31 @@
+name: codidact-startup-coach
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: api-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - 27017:27017
+
+  backend:
+    image: codidact-startup-coach-backend:latest
+    container_name: api-backend
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+    environment:
+      DB_HOST: mongo
+      DB_PORT: 27017
+      DB_NAME: codidact-startup-coach-db
+  
+  frontend:
+    image: codidact-startup-coach-frontend:latest
+    container_name: frontend
+    restart: always
+    ports:
+      - 8080:80

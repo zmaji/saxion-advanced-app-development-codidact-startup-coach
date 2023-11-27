@@ -1,0 +1,13 @@
+#project module files
+node_modules
+
+# User-specific files
+Dockerfile*
+docker-compose*
+.dockerignore
+.idea
+.vscode/
+
+# .env file contains default environment variables for docker
+.env
+.git

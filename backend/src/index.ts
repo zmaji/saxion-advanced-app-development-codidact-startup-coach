@@ -1,15 +1,17 @@
-import express, { Request, Response , Application } from 'express';
+import type { Express } from 'express';
+
 import dotenv from 'dotenv';
+import createServer from './utils/createServer';
+import Database from './database/connection';
 
 dotenv.config();
 
-const app: Application = express();
+const app: Express = createServer();
 const port = process.env.PORT || 3000;
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Welcome to Express & TypeScript Server');
-});
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const database = Database;
 
 app.listen(port, () => {
-    console.log(`Server is Fire at http://localhost:${port}`);
+  console.log(`App listening on port ${port}`);
 });
