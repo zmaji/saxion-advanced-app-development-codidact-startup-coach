@@ -1,0 +1,32 @@
+[
+  {
+    "moduleID": "eb8c22d0-e183-4d59-a839-762307639faf",
+    "roadmapID": "f2efba7e-3561-465a-8945-75618875778e",
+    "name": "Market Research and Validation",
+    "description": "Explore target markets, identify customer needs, and validate your startup idea through thorough market research. Lay the foundation for a product that addresses real market demands."
+  },
+  {
+    "moduleID": "71f9fcbf-4902-43a0-aa4b-5a92223c5dc9",
+    "roadmapID": "f2efba7e-3561-465a-8945-75618875778e",
+    "name": "Product Development and Prototyping",
+    "description": "Embark on the journey of product development by creating prototypes and minimum viable products (MVPs). Iterate on your ideas, gather feedback, and refine your product to meet user expectations."
+  },
+  {
+    "moduleID": "1aae8e51-92fb-4a1d-83ea-0a07c48255df",
+    "roadmapID": "f2efba7e-3561-465a-8945-75618875778e",
+    "name": "Founding Team Building",
+    "description": "Build a strong and complementary founding team that brings diverse skills to the table. Foster effective communication, collaboration, and a shared vision to drive the success of your startup."
+  },
+  {
+    "moduleID": "dbdfd9dc-3830-4297-86d8-f281874663f8",
+    "roadmapID": "f2efba7e-3561-465a-8945-75618875778e",
+    "name": "Go-to-Market Strategy",
+    "description": "Develop a comprehensive go-to-market strategy to launch your product successfully. Define your target audience, distribution channels, pricing, and promotional tactics to maximize market penetration."
+  },
+  {
+    "moduleID": "a76e8fd1-f74d-4d1f-911c-ef625d999036",
+    "roadmapID": "f2efba7e-3561-465a-8945-75618875778e",
+    "name": "Funding and Financial Planning",
+    "description": "Outline a solid financial plan and explore funding options to support your startup's growth. Understand budgeting, forecasting, and financial management to secure the necessary resources for your venture."
+  }
+]

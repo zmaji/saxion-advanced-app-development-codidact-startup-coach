@@ -6,7 +6,13 @@ services:
     build:
       context: ./backend
       dockerfile: ./Dockerfile
-  
+
+  seed:
+    container_name: mongo-seed
+    build:
+      context: ./backend/src/database
+      dockerfile: ./Dockerfile
+
   frontend:
     container_name: frontend
     build:

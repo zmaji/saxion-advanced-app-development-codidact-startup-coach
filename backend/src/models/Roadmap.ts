@@ -12,6 +12,10 @@ const roadmapSchema: Schema<Roadmap> = new Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+    required: true,
+  },
 }, {
   collection: 'roadmaps',
   versionKey: false,

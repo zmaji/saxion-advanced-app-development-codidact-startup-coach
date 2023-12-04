@@ -21,7 +21,7 @@ services:
       DB_NAME: codidact-startup-coach-db
 
   frontend:
-    image: codidact-startup-coach-frontend:latest
+    image: 'zikria40/codidact-startup-coach-frontend:latest'
     container_name: frontend
     restart: always
     ports:
