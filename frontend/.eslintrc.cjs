@@ -7,6 +7,10 @@ const importOrderRule = ['error', {
     ['type'],
     ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
   ],
+  alphabetize: {
+    order: 'asc',
+    caseInsensitive: true,
+  },
 }];
 
 module.exports = {
@@ -16,15 +20,15 @@ module.exports = {
     es2021: true,
     node: true,
   },
+  parserOptions: {
+    ecmaVersion: 2021
+  },
   'extends': [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
     '@vue/eslint-config-typescript',
     '@vue/eslint-config-prettier/skip-formatting'
   ],
-  parserOptions: {
-    ecmaVersion: 'latest'
-  },
   plugins: [
     'import', 'import-newlines'
   ],
@@ -42,11 +46,11 @@ module.exports = {
       { blankLine: 'always', prev: '*', next: 'return' },
     ],
     'no-multi-spaces': ['error'],
-
     'import-newlines/enforce': ['error',
       { items: 3 },
     ],
     'import/order': importOrderRule,
+    'quotes': ['error', 'single', { 'avoidEscape': true }],
   },
   overrides: [
     {
