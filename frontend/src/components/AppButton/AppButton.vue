@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { RouteLocationRaw } from 'vue-router';
-  import type { buttonTypes, buttonSizes } from '.';
+  import type { buttonTypes, buttonSizes, buttonDisplayStyles } from '.';
 
   import { computed } from 'vue';
 
@@ -9,19 +9,39 @@
     renderAs?: 'button' | 'a';
     buttonType?: 'submit' | 'button' | null;
     type?: buttonTypes;
+    displayStyle?: buttonDisplayStyles;
     to?: RouteLocationRaw;
   }
 
   const props = withDefaults(defineProps<Props>(), {
     size: undefined,
-    renderAs: 'button',
-    buttonType: 'submit',
-    type: 'info',
+    renderAs: 'a',
+    buttonType: 'button',
+    type: 'primary',
+    displayStyle: 'primary',
     to: '#',
   });
 
   const dynamicDomClasses = computed<string[]>(() => {
-    return ['btn btn-' + (props.type ? props.type : 'primary'), props.size ? 'btn-' + props.size : ''];
+    switch (props.displayStyle) {
+    case 'secondary':
+      return `
+        btn text-${(props.type ? props.type : 'primary')}
+        bg-${(props.type ? props.type : 'primary')}-subtle
+        ${props.size ? 'btn-' + props.size : ''}
+       `;
+    case 'tertiary':
+      return `
+        btn bg-white text-${(props.type ? props.type : 'primary')}
+        ${props.size ? 'btn-' + props.size : ''}
+       `;
+    default:
+      // primary
+      return `
+        btn btn-${(props.type ? props.type : 'primary')}
+        ${props.size ? 'btn-' + props.size : ''}
+       `;
+    }
   });
 </script>
 
@@ -33,6 +53,7 @@
   >
     <slot></slot>
   </button>
+
 
   <RouterLink
     v-else
