@@ -59,7 +59,7 @@
   </nav>
 </template>
 
-<style scoped lang="postcss">
+<style scoped>
  .navbar {
    height: 5.5rem;
  }

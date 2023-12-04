@@ -17,7 +17,3 @@
     <slot></slot>
   </h2>
 </template>
-
-<style scoped>
-
-</style>
