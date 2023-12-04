@@ -5,9 +5,9 @@
 </script>
 
 <template>
-  <PageTitle>Login Page</PageTitle>
+  <PageTitle>Roadmap index</PageTitle>
 
-  <SubTitle>Sub title</SubTitle>
+  <SubTitle>Overzicht van roadmap</SubTitle>
 
   <SecondaryTitle>Secondary header</SecondaryTitle>
 
@@ -26,3 +26,7 @@
 
   </div>
 </template>
+
+<style scoped>
+
+</style>

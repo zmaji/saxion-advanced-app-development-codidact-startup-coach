@@ -5,9 +5,9 @@
 </script>
 
 <template>
-  <PageTitle>Login Page</PageTitle>
+  <PageTitle>bedrijfsoverzicht</PageTitle>
 
-  <SubTitle>Sub title</SubTitle>
+  <SubTitle>Overzicht van alle componenten</SubTitle>
 
   <SecondaryTitle>Secondary header</SecondaryTitle>
 
