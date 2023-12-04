@@ -6,29 +6,29 @@ const stepSchema: Schema<Step> = new Schema({
   stepID: {
     type: String,
     unique: true,
-    immutable: true
+    immutable: true,
   },
   moduleID: {
     type: String,
     required: true,
-    immutable: true
+    immutable: true,
   },
   name: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   content: {
     type: String,
-    required: true
+    required: true,
   },
   status: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 }, {
   collection: 'steps',
   versionKey: false,

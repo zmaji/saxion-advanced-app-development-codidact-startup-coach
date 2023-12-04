@@ -6,12 +6,12 @@ const roadmapSchema: Schema<Roadmap> = new Schema({
   roadmapID: {
     type: String,
     unique: true,
-    immutable: true
+    immutable: true,
   },
   title: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 }, {
   collection: 'roadmaps',
   versionKey: false,

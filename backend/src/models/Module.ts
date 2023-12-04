@@ -6,7 +6,7 @@ const moduleSchema: Schema<Module> = new Schema({
   moduleID: {
     type: String,
     unique: true,
-    immutable: true
+    immutable: true,
   },
   roadmapID: {
     type: String,
@@ -19,7 +19,7 @@ const moduleSchema: Schema<Module> = new Schema({
   description: {
     type: String,
     required: true,
-  }
+  },
 }, {
   collection: 'modules',
   versionKey: false,

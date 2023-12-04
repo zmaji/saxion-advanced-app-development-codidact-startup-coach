@@ -1,4 +1,3 @@
-import type { Module } from './Module';
 import type { Content } from './Content';
 
 export interface Step {
