@@ -40,6 +40,6 @@ const userSchema: Schema<User> = new Schema({
   versionKey: false,
 });
 
-const UserModel = mongoose.model<User>('Module', userSchema);
+const UserModel = mongoose.model<User>('User', userSchema);
 
 export default UserModel;
