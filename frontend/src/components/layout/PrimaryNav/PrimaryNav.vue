@@ -11,10 +11,8 @@
   });
 
   const dynamicDomClasses = computed(() => {
-    const showPrimaryNav = showPrimaryNavMeta.value;
-
     return {
-      'd-none': showPrimaryNav === false
+      'd-none': !showPrimaryNavMeta.value,
     };
   });
 </script>
