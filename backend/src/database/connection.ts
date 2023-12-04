@@ -16,16 +16,17 @@ class Database {
   }
 
   private connect() {
-    const mongoURI = `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/?authMechanism=SCRAM-SHA-256&authSource=admin`
+    const mongoURI =
+      `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/?authMechanism=SCRAM-SHA-256&authSource=admin`;
     console.log('setting up database connection');
 
     mongoose.connect(mongoURI, {})
-      .then(() => {
-        console.log('Database connection successful to ' + DB_HOST + ':' + DB_PORT);
-      })
-      .catch((err) => {
-        console.log('Database connection error:', err);
-      });
+        .then(() => {
+          console.log('Database connection successful to ' + DB_HOST + ':' + DB_PORT);
+        })
+        .catch((err) => {
+          console.log('Database connection error:', err);
+        });
   }
 }
 
