@@ -8,7 +8,7 @@ const importOrderRule = ['error', {
     ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
   ],
   alphabetize: {
-    order: 'asc',
+    order: 'desc',
     caseInsensitive: true,
   },
 }];
