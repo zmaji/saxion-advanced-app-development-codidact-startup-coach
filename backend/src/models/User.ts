@@ -13,7 +13,7 @@ const userSchema: Schema<User> = new Schema({
     required: true,
     immutable: true,
   },
-  username: {
+  userName: {
     type: String,
     unique: true,
     required: true,
@@ -21,6 +21,10 @@ const userSchema: Schema<User> = new Schema({
   password: {
     type: String,
     required: true,
+  },
+  secret: {
+    type: String,
+    immutable: true,
   },
   emailAddress: {
     type: String,

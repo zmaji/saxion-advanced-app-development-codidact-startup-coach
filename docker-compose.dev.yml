@@ -10,6 +10,13 @@ services:
     ports:
       - 27017:27017
 
+  seed:
+    image: codidact-startup-coach-seed:latest
+    depends_on:
+      - mongo
+    container_name: mongo-seed
+    restart: "no"
+
   backend:
     image: codidact-startup-coach-backend:latest
     container_name: api-backend
@@ -22,7 +29,7 @@ services:
       DB_HOST: mongo
       DB_PORT: 27017
       DB_NAME: codidact-startup-coach-db
-  
+
   frontend:
     image: codidact-startup-coach-frontend:latest
     container_name: frontend
