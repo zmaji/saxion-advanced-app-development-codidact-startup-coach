@@ -7,10 +7,6 @@ const importOrderRule = ['error', {
     ['type'],
     ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
   ],
-  alphabetize: {
-    order: 'desc',
-    caseInsensitive: true,
-  },
 }];
 
 module.exports = {
