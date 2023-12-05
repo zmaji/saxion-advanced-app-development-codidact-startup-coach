@@ -1,12 +1,13 @@
 <script setup lang="ts">
 
   import {
-    AppButton,
+    TextButton,
+    IconButton,
     PageTitle,
+    SubHeader,
     SubTitle,
     SecondaryTitle
   } from '@/components';
-
 </script>
 
 <template>
@@ -14,81 +15,147 @@
 
   <SubTitle>Alle elementen hier zijn een compoment, dit element ook! (SubTitle)</SubTitle>
 
-  <SecondaryTitle>SecondaryTitle</SecondaryTitle>
+  <SecondaryTitle>Buttons (SecondaryTitle)</SecondaryTitle>
 
+  <SubHeader>Text buttons</SubHeader>
+  <p>Buttons that can only display text</p>
 
-  <SecondaryTitle>Buttons</SecondaryTitle>
-
-  <div class="row row-cols-1 g-3">
+  <section class="row row-cols-1 g-3 pb-4">
     <div class="col">
-      <AppButton class="me-2">
+      <TextButton class="me-2">
         Button primary
-      </AppButton>
+      </TextButton>
 
-      <AppButton display-style="secondary"  class="me-2">
+      <TextButton display-style="secondary"  class="me-2">
         Button secondary
-      </AppButton>
+      </TextButton>
 
-      <AppButton display-style="tertiary">
+      <TextButton display-style="tertiary">
         Button tertiary
-      </AppButton>
+      </TextButton>
     </div>
 
     <div class="col">
-      <AppButton type="success" class="me-2">
+      <TextButton type="success" class="me-2">
         Button primary
-      </AppButton>
+      </TextButton>
 
-      <AppButton type="success" display-style="secondary"  class="me-2">
+      <TextButton type="success" display-style="secondary"  class="me-2">
         Button secondary
-      </AppButton>
+      </TextButton>
 
-      <AppButton type="success" display-style="tertiary">
+      <TextButton type="success" display-style="tertiary">
         Button tertiary
-      </AppButton>
+      </TextButton>
     </div>
 
     <div class="col">
-      <AppButton type="info" class="me-2">
+      <TextButton type="info" class="me-2">
         Button primary
-      </AppButton>
+      </TextButton>
 
-      <AppButton type="info" display-style="secondary"  class="me-2">
+      <TextButton type="info" display-style="secondary"  class="me-2">
         Button secondary
-      </AppButton>
+      </TextButton>
 
-      <AppButton type="info" display-style="tertiary">
+      <TextButton type="info" display-style="tertiary">
         Button tertiary
-      </AppButton>
+      </TextButton>
     </div>
 
     <div class="col">
-      <AppButton type="warning" class="me-2">
+      <TextButton type="warning" class="me-2">
         Button primary
-      </AppButton>
+      </TextButton>
 
-      <AppButton type="warning" display-style="secondary"  class="me-2">
+      <TextButton type="warning" display-style="secondary"  class="me-2">
         Button secondary
-      </AppButton>
+      </TextButton>
 
-      <AppButton type="warning" display-style="tertiary">
+      <TextButton type="warning" display-style="tertiary">
         Button tertiary
-      </AppButton>
+      </TextButton>
     </div>
 
     <div class="col">
-      <AppButton type="danger" class="me-2">
+      <TextButton type="danger" class="me-2">
         Button primary
-      </AppButton>
+      </TextButton>
 
-      <AppButton type="danger" display-style="secondary"  class="me-2">
+      <TextButton type="danger" display-style="secondary"  class="me-2">
         Button secondary
-      </AppButton>
+      </TextButton>
 
-      <AppButton type="danger" display-style="tertiary">
+      <TextButton type="danger" display-style="tertiary">
         Button tertiary
-      </AppButton>
+      </TextButton>
     </div>
-  </div>
+  </section>
+
+  <SecondaryTitle>Icon buttons</SecondaryTitle>
+
+  <p>Can display buttons with icons only but also supports displaying text together with an icon</p>
+
+  <section class="row row-cols-1 g-3">
+    <div class="col">
+      <IconButton icon="circle-info" class="me-2"/>
+
+      <IconButton icon="circle-info" display-style="secondary"  class="me-2">
+        Button secondary
+      </IconButton>
+
+      <IconButton icon="circle-info" display-style="tertiary">
+        Button tertiary
+      </IconButton>
+    </div>
+
+    <div class="col">
+      <IconButton icon="circle-info" type="info" class="me-2"/>
+
+      <IconButton icon="circle-info" type="info" display-style="secondary"  class="me-2">
+        Button secondary
+      </IconButton>
+
+      <IconButton icon="circle-info" type="info" display-style="tertiary">
+        Button tertiary
+      </IconButton>
+    </div>
+
+    <div class="col">
+      <IconButton icon="check" type="success" class="me-2"/>
+
+      <IconButton icon="check" type="success" display-style="secondary"  class="me-2">
+        Button secondary
+      </IconButton>
+
+      <IconButton icon="check" type="success" display-style="tertiary">
+        Button tertiary
+      </IconButton>
+    </div>
+
+    <div class="col">
+      <IconButton icon="triangle-exclamation" type="warning" class="me-2"/>
+
+      <IconButton icon="triangle-exclamation" type="warning" display-style="secondary"  class="me-2">
+        Button secondary
+      </IconButton>
+
+      <IconButton icon="triangle-exclamation" type="warning" display-style="tertiary">
+        Button tertiary
+      </IconButton>
+    </div>
+
+    <div class="col">
+      <IconButton icon="xmark" type="danger" class="me-2"/>
+
+      <IconButton icon="xmark" type="danger" display-style="secondary"  class="me-2">
+        Button secondary
+      </IconButton>
+
+      <IconButton icon="xmark" type="danger" display-style="tertiary">
+        Button tertiary
+      </IconButton>
+    </div>
+  </section>
 
 </template>
