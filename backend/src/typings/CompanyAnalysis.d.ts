@@ -1,12 +1,12 @@
 export interface companyAnalysis {
   companyAnalysisID: string,
   industry: string,
-  nrOfEmployees: string,
+  serviceInformation?: string,
+  nrOfEmployees: number,
   stage: string,
-  businessGoals?: string,
-  paintPoints?: string[],
+  businessGoals?: string[],
+  painPoints?: string[],
   competitors?: string[],
   targetAudience?: string,
-  serviceInformation?: string,
   budget?: number
 }

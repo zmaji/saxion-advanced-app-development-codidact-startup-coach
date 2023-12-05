@@ -12,8 +12,11 @@ const companyAnalysisScheme: Schema<companyAnalysis> = new Schema({
     type: String,
     required: true,
   },
-  nrOfEmployees: {
+  serviceInformation: {
     type: String,
+  },
+  nrOfEmployees: {
+    type: Number,
     required: true,
   },
   stage: {
@@ -21,18 +24,15 @@ const companyAnalysisScheme: Schema<companyAnalysis> = new Schema({
     required: true,
   },
   businessGoals: {
-    type: String,
+    type: [String],
   },
-  paintPoints: {
+  painPoints: {
     type: [String],
   },
   competitors: {
     type: [String],
   },
   targetAudience: {
-    type: String,
-  },
-  serviceInformation: {
     type: String,
   },
   budget: {

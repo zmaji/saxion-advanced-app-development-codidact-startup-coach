@@ -2,9 +2,13 @@
   {
     "companyAnalysisID": "2165e04d-e505-4a43-8551-579aa182f9bc",
     "industry": "Technology",
-    "nrOfEmployees": "2",
+    "serviceInformation": "Software development and consulting",
+    "nrOfEmployees": 2,
     "stage": "Start-up",
-    "businessGoals": "Expand market share and increase revenue",
+    "businessGoals": [
+      "Expand market share and increase revenue",
+      "Make the world better"
+    ],
     "paintPoints": [
       "Customer support efficiency",
       "Product scalability"
@@ -14,7 +18,6 @@
       "Competitor B"
     ],
     "targetAudience": "Tech-savvy professionals",
-    "serviceInformation": "Software development and consulting",
     "budget": 3000
   }
 ]
