@@ -8,6 +8,10 @@ const companySchema: Schema<Company> = new Schema({
     unique: true,
     immutable: true,
   },
+  companyAnalysis: {
+    type: String,
+    immutable: true,
+  },
   roadmap: {
     type: String,
     immutable: true,
