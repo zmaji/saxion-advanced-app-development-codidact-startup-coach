@@ -21,22 +21,22 @@ const companyAnalysisScheme: Schema<companyAnalysis> = new Schema({
     required: true,
   },
   businessGoals: {
-    type: String
+    type: String,
   },
   paintPoints: {
-    type: [String]
+    type: [String],
   },
   competitors: {
-    type: [String]
+    type: [String],
   },
   targetAudience: {
-    type: String
+    type: String,
   },
   serviceInformation: {
-    type: String
+    type: String,
   },
   budget: {
-    type: Number
+    type: Number,
   },
 }, {
   collection: 'companyAnalyses',
