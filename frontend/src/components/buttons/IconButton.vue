@@ -2,12 +2,14 @@
   import type { RouteLocationRaw } from 'vue-router';
   import type { buttonTypes, buttonSizes, buttonDisplayStyles } from '.';
 
-  import { computed } from 'vue';
+  import { computed, useSlots } from "vue";
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
   interface Props {
     size?: buttonSizes;
     renderAs?: 'button' | 'a';
     buttonType?: 'submit' | 'button' | null;
+    icon: string;
     type?: buttonTypes;
     displayStyle?: buttonDisplayStyles;
     to?: RouteLocationRaw;
@@ -22,7 +24,10 @@
     to: '#',
   });
 
-  const dynamicDomClasses = computed<string[]>(() => {
+  const slots = useSlots();
+  const hasDefualtSlot = !!slots['default'];
+
+  const dynamicDomClasses = computed<string>(() => {
     switch (props.displayStyle) {
     case 'secondary':
       return `
@@ -49,17 +54,22 @@
   <button
     v-if="props.renderAs === 'button'"
     :type="buttonType ? buttonType : 'submit'"
+    class="px-3"
     :class="dynamicDomClasses"
   >
+    <font-awesome-icon :icon="icon" :class="hasDefualtSlot ? 'me-2' : null"/>
+
     <slot></slot>
   </button>
-
 
   <RouterLink
     v-else
     :class="dynamicDomClasses"
+    class="px-3"
     :to="to"
   >
+    <font-awesome-icon :icon="icon" :class="hasDefualtSlot ? 'me-1' : null"/>
+
     <slot></slot>
   </RouterLink>
 </template>

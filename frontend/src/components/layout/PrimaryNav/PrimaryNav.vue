@@ -2,7 +2,7 @@
   import { RouterLink, useRoute } from 'vue-router'
   import { computed } from 'vue';
 
-  import { AppButton } from '@/components';
+  import { TextButton } from '@/components';
 
   const route = useRoute();
 
@@ -44,14 +44,14 @@
       </div>
 
       <div class="d-none d-md-flex">
-        <AppButton
+        <TextButton
           class="me-2"
           type="primary"
           renderAs="a"
           :to="{ name: 'login'}"
         >
           Login
-        </AppButton>
+        </TextButton>
       </div>
     </div>
   </nav>

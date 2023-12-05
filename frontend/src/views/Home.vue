@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { AppButton } from '../components';
+  import { TextButton } from '../components';
 </script>
 
 <template>
@@ -11,22 +11,22 @@
 
           <h2 class="pt-2">Boost your start-up</h2>
 
-          <appButton
+          <TextButton
             class="me-2"
             type="primary"
             renderAs="a"
             :to="{ name: 'login'}"
           >
             Login
-          </appButton>
+          </TextButton>
 
-          <AppButton
+          <TextButton
             type="success"
             renderAs="a"
             :to="{ name: 'register'}"
           >
             Register
-          </AppButton>
+          </TextButton>
         </div>
       </div>
     </div>
