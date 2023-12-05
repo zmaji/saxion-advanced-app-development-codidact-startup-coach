@@ -12,4 +12,6 @@ CMD mongoimport --host=mongo --db=codidact-startup-coach-db --collection=compani
   mongoimport --host=mongo --db=codidact-startup-coach-db --collection=modules --type=json --file=Modules.json --jsonArray --mode upsert --upsertFields moduleID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
   echo "Modules seeded successfully" && \
   mongoimport --host=mongo --db=codidact-startup-coach-db --collection=steps --type=json --file=Steps.json --jsonArray --mode upsert --upsertFields stepID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
-  echo "Steps seeded successfully"
+  echo "Steps seeded successfully" && \
+  mongoimport --host=mongo --db=codidact-startup-coach-db --collection=companyAnalyses --type=json --file=CompanyAnalyses.json --jsonArray --mode upsert --upsertFields companyAnalysisID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
+  echo "Company analyses seeded successfully"
