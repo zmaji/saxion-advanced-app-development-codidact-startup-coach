@@ -22,7 +22,7 @@
     to: '#',
   });
 
-  const dynamicDomClasses = computed<string[]>(() => {
+  const dynamicDomClasses = computed<string>(() => {
     switch (props.displayStyle) {
     case 'secondary':
       return `

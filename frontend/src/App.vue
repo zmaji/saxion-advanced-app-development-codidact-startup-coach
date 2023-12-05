@@ -22,7 +22,7 @@
     router.beforeEach((to, from, next) => {
       const appName = import.meta.env.VITE_APP_NAME as string;
 
-      document.title = appName ? `${appName} ~ ${to.meta.title}` : `${to.meta.title}`;
+      document.title = appName ? `${appName} - ${to.meta.title}` : `${to.meta.title}`;
 
       next();
     });
