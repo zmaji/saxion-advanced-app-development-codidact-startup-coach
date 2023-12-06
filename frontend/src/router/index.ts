@@ -25,7 +25,7 @@ const router = createRouter({
       component: Login,
       meta: {
         title: 'Inloggen',
-        showNavigationBars: true,
+        showNavigationBars: false,
       },
     },
     {
@@ -34,7 +34,7 @@ const router = createRouter({
       component: Register,
       meta: {
         title: 'Registreren',
-        showNavigationBars: true,
+        showNavigationBars: false,
       },
     },
     {

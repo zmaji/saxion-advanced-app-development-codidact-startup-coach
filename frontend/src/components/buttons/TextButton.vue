@@ -50,7 +50,7 @@
     v-if="props.renderAs === 'button'"
     :type="buttonType ? buttonType : 'submit'"
     :class="dynamicDomClasses"
-     class="px-3"
+     class="px-4 py-2"
   >
     <slot></slot>
   </button>
@@ -59,7 +59,7 @@
   <RouterLink
     v-else
     :class="dynamicDomClasses"
-    class="px-3"
+    class="px-4 py-2"
     :to="to"
   >
     <slot></slot>
