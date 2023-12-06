@@ -10,13 +10,40 @@ import {
 import { reactive, ref } from 'vue';
 
 let currentStep = ref(0);
+let showForm = ref(false);
+let showInformation = ref(true);
+let finishedAnalysis = ref(false);
 
 const nextStep = () => {
   currentStep.value += 1;
+  showInformation.value = false;
+  showForm.value = true;
 };
 
-const prevStep = () => {
+const previousStep = () => {
+  if (currentStep.value === 1) {
+    showInformation.value = true;
+    showForm.value = false;
+    alert('U gaat terug naar het overzicht.');
+  }
   currentStep.value -= 1;
+};
+
+const continueAnalysis = () => {
+  showForm.value = true;
+  showInformation.value = false;
+};
+
+const restartAnalysis = () => {
+  finishedAnalysis.value = false;
+  showInformation.value = false;
+  showForm.value = true;
+  currentStep.value = 1;
+};
+
+const goToOverview = () => {
+  showInformation.value = true;
+  showForm.value = false;
 };
 
 let formData = reactive({
@@ -33,14 +60,20 @@ let formData = reactive({
 
 const submitForm = () => {
   // TODO: Form logic
-  // alert('Form submitted successfully!');
+  finishedAnalysis.value = true;
+  showInformation.value = true;
+  showForm.value = false;
+  alert('Form submitted successfully!');
 };
 
 </script>
 
 <template>
-  <!-- Step 0: Overview -->
-  <div v-if="currentStep === 0">
+  CURRENT STEP {{ currentStep }}
+  FINISHED ANALYSIS {{ finishedAnalysis }}
+  SHOW INFO {{ showInformation }}
+  SHOW FORM {{ showForm }}
+  <div v-if="!showForm && showInformation">
     <PageTitle>Bedrijfsoverzicht</PageTitle>
 
     <SecondaryTitle>Behoefteanalyse</SecondaryTitle>
@@ -50,25 +83,38 @@ const submitForm = () => {
       vulputate, turpis vel suscipit mattis, risus mauris dignissim felis, ut molestie urna libero eu magna.</p>
 
     <div class="row">
-      <div class="col">
-        <SubTitle type="secondary">0/5 stappen voltooid</SubTitle>
+      <div v-if="!finishedAnalysis" class="col">
+        <SubTitle type="secondary" v-if="currentStep === 0">0/3 stappen voltooid</SubTitle>
+        <SubTitle type="secondary" v-if="currentStep === 1">0/3 stappen voltooid</SubTitle>
+
+        <SubTitle type="warning" v-if="currentStep === 2 && currentStep < 4">1/3 stappen voltooid</SubTitle>
+        <SubTitle type="warning" v-if="currentStep === 3 && currentStep < 4">2/3 stappen voltooid</SubTitle>
       </div>
-      <div class="col">
-        <SubTitle type="warning">1/5 stappen voltooid</SubTitle>
-      </div>
-      <div class="col">
-        <SubTitle type="success">5/5 stappen voltooid</SubTitle>
+
+      <div v-else class="col">
+        <SubTitle type="success" v-if="finishedAnalysis === true">3/3 stappen voltooid</SubTitle>
       </div>
     </div>
 
-    <TextButton class="me-2" @click="nextStep">
-      Start de analyse
-    </TextButton>
+    <div>
+      <TextButton v-if="currentStep === 0" class="me-2" @click="nextStep">Start de analyse</TextButton>
+
+      <TextButton v-if="currentStep > 0 && !finishedAnalysis" class="me-2" @click="continueAnalysis">Ga verder
+      </TextButton>
+      <TextButton v-if="currentStep > 0" class="me-2" type="warning" @click="restartAnalysis">Herstart de analyse
+      </TextButton>
+    </div>
   </div>
 
   <!-- Step 1: Bedrijfsgegevens -->
-  <div v-if="currentStep === 1">
-    <PageTitle>Behoefteanalyse</PageTitle>
+  <div v-if="currentStep === 1 && showForm">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <PageTitle>Behoefteanalyse</PageTitle>
+
+      <TextButton type="warning" @click="goToOverview">
+        Terug naar overzicht
+      </TextButton>
+    </div>
 
     <form @submit.prevent="submitForm" class="rounded py-5 shadow-sm bg-white">
       <div class="row">
@@ -99,12 +145,25 @@ const submitForm = () => {
         </div>
       </div>
 
+      <div class="progress-bar mt-5">
+        <template v-if="currentStep > 0">
+          <template v-for="(step, index) in 3" :key="index">
+            <div v-if="index === 0" class="progress-circle not-active"
+              :class="{ 'active': currentStep === 1, 'completed': currentStep > 1 }"></div>
+            <div v-else class="progress-line"></div>
+            <div v-if="index > 0" class="progress-circle not-active"
+              :class="{ 'active': currentStep === index + 1, 'completed': currentStep > index + 1 }"></div>
+          </template>
+        </template>
+      </div>
+
       <div class="row justify-content-center mt-4">
         <div class="col-auto">
-          <TextButton display-style="secondary" class="me-2" @click="prevStep">
+          <TextButton display-style="secondary" class="me-2" @click="previousStep">
             Vorige
           </TextButton>
         </div>
+
         <div class="col-auto">
           <TextButton @click="nextStep">
             Volgende
@@ -116,8 +175,14 @@ const submitForm = () => {
   </div>
 
   <!-- Step 2: Doelen -->
-  <div v-if="currentStep === 2">
-    <PageTitle>Behoefteanalyse</PageTitle>
+  <div v-if="currentStep === 2 && showForm">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <PageTitle>Behoefteanalyse</PageTitle>
+
+      <TextButton type="warning" @click="goToOverview">
+        Terug naar overzicht
+      </TextButton>
+    </div>
 
     <form @submit.prevent="submitForm" class="rounded py-5 shadow-sm bg-white">
       <div class="row">
@@ -149,12 +214,24 @@ const submitForm = () => {
         </div>
       </div>
 
+      <div class="progress-bar mt-5">
+        <template v-if="currentStep > 0">
+          <template v-for="(step, index) in 3" :key="index">
+            <div v-if="index === 0" class="progress-circle not-active" :class="{ 'completed': currentStep > 1 }"></div>
+            <div v-else class="progress-line"></div>
+            <div v-if="index > 0" class="progress-circle not-active"
+              :class="{ 'active': currentStep === index + 1, 'completed': currentStep > index + 1 }"></div>
+          </template>
+        </template>
+      </div>
+
       <div class="row justify-content-center mt-4">
         <div class="col-auto">
-          <TextButton display-style="secondary" class="me-2" @click="prevStep">
+          <TextButton display-style="secondary" class="me-2" @click="previousStep">
             Vorige
           </TextButton>
         </div>
+
         <div class="col-auto">
           <TextButton @click="nextStep">
             Volgende
@@ -166,8 +243,14 @@ const submitForm = () => {
   </div>
 
   <!-- Step 3: Doelgroep -->
-  <div v-if="currentStep === 3">
-    <PageTitle>Behoefteanalyse</PageTitle>
+  <div v-if="currentStep === 3 && showForm">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <PageTitle>Behoefteanalyse</PageTitle>
+
+      <TextButton type="warning" @click="goToOverview">
+        Terug naar overzicht
+      </TextButton>
+    </div>
 
     <form @submit.prevent="submitForm" class="rounded py-5 shadow-sm bg-white">
       <div class="row">
@@ -198,30 +281,32 @@ const submitForm = () => {
         </div>
       </div>
 
+      <div class="progress-bar mt-5">
+        <template v-if="currentStep > 0">
+          <template v-for="(step, index) in 3" :key="index">
+            <div v-if="index === 0" class="progress-circle not-active" :class="{ 'completed': currentStep > 1 }"></div>
+            <div v-else class="progress-line"></div>
+            <div v-if="index > 0" class="progress-circle not-active"
+              :class="{ 'active': currentStep === index + 1, 'completed': currentStep > index + 1 }"></div>
+          </template>
+        </template>
+      </div>
+
       <div class="row justify-content-center mt-4">
         <div class="col-auto">
-          <TextButton display-style="secondary" class="me-2" @click="prevStep">
+          <TextButton display-style="secondary" class="me-2" @click="previousStep">
             Vorige
           </TextButton>
         </div>
+
         <div class="col-auto">
-          <TextButton type="success" @click="nextStep">
+          <TextButton type="success" @click="submitForm">
             Voltooi analyse
           </TextButton>
         </div>
       </div>
 
     </form>
-  </div>
-
-  <div class="progress-bar">
-    <template v-for="(step, index) in 3" :key="index">
-      <div v-if="index === 0" class="progress-circle not-active"
-        :class="{ 'active': currentStep === 1, 'completed': currentStep > 1 }"></div>
-      <div v-else class="progress-line"></div>
-      <div v-if="index > 0" class="progress-circle not-active"
-        :class="{ 'active': currentStep === index + 1, 'completed': currentStep > index + 1 }"></div>
-    </template>
   </div>
 </template>
 
@@ -240,6 +325,14 @@ const submitForm = () => {
   border-radius: 50%;
 }
 
+.progress-line {
+  width: 20px;
+  height: 2px;
+  background-color: #ddd;
+  margin: 0 5px;
+  display: inline-block;
+}
+
 .not-active {
   background-color: var(--bs-secondary);
 }
@@ -250,13 +343,5 @@ const submitForm = () => {
 
 .completed {
   background-color: var(--bs-success);
-}
-
-.progress-line {
-  width: 20px;
-  height: 2px;
-  background-color: #ddd;
-  margin: 0 5px;
-  display: inline-block;
 }
 </style>
