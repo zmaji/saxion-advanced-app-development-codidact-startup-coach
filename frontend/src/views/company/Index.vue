@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import {
   TextButton,
   PageTitle,
@@ -13,14 +12,39 @@ let currentStep = ref(0);
 let showForm = ref(false);
 let showInformation = ref(true);
 let finishedAnalysis = ref(false);
+let canValidate = ref(false);
 
-const nextStep = () => {
-  currentStep.value += 1;
+const startAnalysis = () => {
   showInformation.value = false;
   showForm.value = true;
+  currentStep.value += 1;
+}
+
+const nextStep = () => {
+  const currentStepFields = Object.values(formData).slice(
+    (currentStep.value - 1) * 3,
+    currentStep.value * 3
+  );
+
+  const isStepValid = currentStepFields.every((field) => {
+    canValidate.value = true;
+    field.valid = field.value !== '';
+    return field.valid;
+  });
+
+  if (isStepValid) {
+    currentStep.value += 1;
+    showInformation.value = false;
+    showForm.value = true;
+    canValidate.value = false;
+  } else {
+    alert('Vul alle verplichte velden in.');
+  }
 };
 
 const previousStep = () => {
+  canValidate.value = true;
+
   if (currentStep.value === 1) {
     showInformation.value = true;
     showForm.value = false;
@@ -35,44 +59,104 @@ const continueAnalysis = () => {
 };
 
 const restartAnalysis = () => {
+  resetForm();
   finishedAnalysis.value = false;
   showInformation.value = false;
   showForm.value = true;
   currentStep.value = 1;
+  alert('U herstart de analyse.');
 };
 
 const goToOverview = () => {
   showInformation.value = true;
   showForm.value = false;
+  alert('U herstart de analyse.');
 };
 
 let formData = reactive({
-  industry: '',
-  nrOfEmployees: '',
-  stage: '',
-  serviceInformation: '',
-  businessGoals: '',
-  painPoints: '',
-  targetAudience: '',
-  competitors: '',
-  budget: '',
+  industry: {
+    value: '',
+    valid: false,
+    errorMessage: 'Vul een geldige industrie in.',
+  },
+  nrOfEmployees: {
+    value: '',
+    valid: false,
+    errorMessage: 'Vul een geldig aantal werknemers in.',
+  },
+  stage: {
+    value: '',
+    valid: false,
+    errorMessage: 'Vul een geldige fase in.',
+  },
+  serviceInformation: {
+    value: '',
+    valid: false,
+    errorMessage: 'Vul geldige service-informatie in.',
+  },
+  businessGoals: {
+    value: '',
+    valid: false,
+    errorMessage: 'Vul geldige zakelijke doelen in.',
+  },
+  painPoints: {
+    value: '',
+    valid: false,
+    errorMessage: 'Vul geldige pijnpunten in.',
+  },
+  targetAudience: {
+    value: '',
+    valid: false,
+    errorMessage: 'Vul een geldige doelgroep in.',
+  },
+  competitors: {
+    value: '',
+    valid: false,
+    errorMessage: 'Vul geldige informatie over concurrenten in.',
+  },
+  budget: {
+    value: '',
+    valid: false,
+    errorMessage: 'Vul een geldig budget in.',
+  },
 });
 
 const submitForm = () => {
-  // TODO: Form logic
-  finishedAnalysis.value = true;
-  showInformation.value = true;
-  showForm.value = false;
-  alert('Form submitted successfully!');
+  const currentStepFields = Object.values(formData).slice(
+    (currentStep.value - 1) * 3,
+    currentStep.value * 3
+  );
+
+  const isFormValid = currentStepFields.every((field) => {
+    canValidate.value = true;
+    field.valid = field.value !== '';
+    return field.valid;
+  });
+
+  if (isFormValid) {
+    finishedAnalysis.value = true;
+    showInformation.value = true;
+    showForm.value = false;
+    canValidate.value = false;
+    alert('Analyse succesvol opgeslagen.');
+  } else {
+    alert('Vul alle verplichte velden in.');
+  }
 };
 
+const resetForm = () => {
+  for (const key in formData) {
+    // @ts-ignore
+    formData[key].value = '';
+    // @ts-ignore
+    formData[key].valid = false;
+  }
+  currentStep.value = 1;
+  canValidate.value = false;
+};
 </script>
 
 <template>
-  CURRENT STEP {{ currentStep }}
-  FINISHED ANALYSIS {{ finishedAnalysis }}
-  SHOW INFO {{ showInformation }}
-  SHOW FORM {{ showForm }}
   <div v-if="!showForm && showInformation">
     <PageTitle>Bedrijfsoverzicht</PageTitle>
 
@@ -97,7 +181,7 @@ const submitForm = () => {
     </div>
 
     <div>
-      <TextButton v-if="currentStep === 0" class="me-2" @click="nextStep">Start de analyse</TextButton>
+      <TextButton v-if="currentStep === 0" class="me-2" @click="startAnalysis">Start de analyse</TextButton>
 
       <TextButton v-if="currentStep > 0 && !finishedAnalysis" class="me-2" @click="continueAnalysis">Ga verder
       </TextButton>
@@ -128,18 +212,26 @@ const submitForm = () => {
 
           <div class="col-7">
             <div class="mb-3">
-              <label for="industry" class="form-label">Industrie</label>
-              <input type="text" class="form-control" id="industry" v-model="formData.industry" required>
+              <div class="mb-3">
+                <label for="industry" class="form-label">Industrie</label>
+                <input type="text" class="form-control" id="industry" v-model="formData.industry.value"
+                  :class="{ 'is-invalid': !formData.industry.valid && canValidate }">
+                <div class="invalid-feedback">{{ formData.industry.errorMessage }}</div>
+              </div>
             </div>
 
             <div class="mb-3">
               <label for="nrOfEmployees" class="form-label">Aantal werknemers</label>
-              <input type="text" class="form-control" id="nrOfEmployees" v-model="formData.nrOfEmployees" required>
+              <input type="text" class="form-control" id="nrOfEmployees" v-model="formData.nrOfEmployees.value"
+                :class="{ 'is-invalid': !formData.nrOfEmployees.valid && canValidate }">
+              <div class="invalid-feedback">{{ formData.nrOfEmployees.errorMessage }}</div>
             </div>
 
             <div class="mb-3">
               <label for="stage" class="form-label">Fase</label>
-              <input type="text" class="form-control" id="stage" v-model="formData.stage" required>
+              <input type="text" class="form-control" id="stage" v-model="formData.stage.value"
+                :class="{ 'is-invalid': !formData.stage.valid && canValidate }">
+              <div class="invalid-feedback">{{ formData.stage.errorMessage }}</div>
             </div>
           </div>
         </div>
@@ -197,18 +289,23 @@ const submitForm = () => {
           <div class="col-8">
             <div class="mb-3">
               <label for="serviceInformation" class="form-label">Service informatie</label>
-              <input type="text" class="form-control" id="serviceInformation" v-model="formData.serviceInformation"
-                required>
+              <input type="text" class="form-control" id="serviceInformation" v-model="formData.serviceInformation.value"
+                :class="{ 'is-invalid': !formData.serviceInformation.valid && canValidate }" required>
+              <div class="invalid-feedback">{{ formData.serviceInformation.errorMessage }}</div>
             </div>
 
             <div class="mb-3">
               <label for="businessGoals" class="form-label">Doelen</label>
-              <input type="text" class="form-control" id="businessGoals" v-model="formData.businessGoals" required>
+              <input type="text" class="form-control" id="businessGoals" v-model="formData.businessGoals.value"
+                :class="{ 'is-invalid': !formData.businessGoals.valid && canValidate }" required>
+              <div class="invalid-feedback">{{ formData.businessGoals.errorMessage }}</div>
             </div>
 
             <div class="mb-3">
               <label for="painPoints" class="form-label">Pijnpunten</label>
-              <input type="text" class="form-control" id="painPoints" v-model="formData.painPoints" required>
+              <input type="text" class="form-control" id="painPoints" v-model="formData.painPoints.value"
+                :class="{ 'is-invalid': !formData.painPoints.valid && canValidate }" required>
+              <div class="invalid-feedback">{{ formData.painPoints.errorMessage }}</div>
             </div>
           </div>
         </div>
@@ -265,17 +362,23 @@ const submitForm = () => {
           <div class="col-8">
             <div class="mb-3">
               <label for="targetAudience" class="form-label">Doelgroep</label>
-              <input type="text" class="form-control" id="targetAudience" v-model="formData.targetAudience" required>
+              <input type="text" class="form-control" id="targetAudience" v-model="formData.targetAudience.value"
+                :class="{ 'is-invalid': !formData.targetAudience.valid && canValidate }" required>
+              <div class="invalid-feedback">{{ formData.targetAudience.errorMessage }}</div>
             </div>
 
             <div class="mb-3">
               <label for="competitors" class="form-label">Concurrentie</label>
-              <input type="text" class="form-control" id="competitors" v-model="formData.competitors" required>
+              <input type="text" class="form-control" id="competitors" v-model="formData.competitors.value"
+                :class="{ 'is-invalid': !formData.competitors.valid && canValidate }" required>
+              <div class="invalid-feedback">{{ formData.competitors.errorMessage }}</div>
             </div>
 
             <div class="mb-3">
               <label for="budget" class="form-label">Budget</label>
-              <input type="text" class="form-control" id="budget" v-model="formData.budget" required>
+              <input type="text" class="form-control" id="budget" v-model="formData.budget.value"
+                :class="{ 'is-invalid': !formData.budget.valid && canValidate }" required>
+              <div class="invalid-feedback">{{ formData.budget.errorMessage }}</div>
             </div>
           </div>
         </div>
@@ -343,5 +446,13 @@ const submitForm = () => {
 
 .completed {
   background-color: var(--bs-success);
+}
+
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.invalid-feedback {
+  color: #dc3545;
 }
 </style>
