@@ -13,6 +13,7 @@ let showForm = ref(false);
 let showInformation = ref(true);
 let finishedAnalysis = ref(false);
 let canValidate = ref(false);
+let showOverview = ref(false);
 
 const startAnalysis = () => {
   showInformation.value = false;
@@ -43,6 +44,7 @@ const nextStep = () => {
 };
 
 const previousStep = () => {
+  showOverview.value = false;
   canValidate.value = true;
 
   if (currentStep.value === 1) {
@@ -70,58 +72,67 @@ const restartAnalysis = () => {
 const goToOverview = () => {
   showInformation.value = true;
   showForm.value = false;
-  alert('U herstart de analyse.');
+  alert('U gaat terug naar het overzicht.');
 };
 
 let formData = reactive({
   industry: {
+    label: 'Industrie',
     value: '',
     valid: false,
     errorMessage: 'Vul een geldige industrie in.',
   },
   nrOfEmployees: {
+    label: 'Aantal werknemers',
     value: '',
     valid: false,
     errorMessage: 'Vul een geldig aantal werknemers in.',
   },
   stage: {
+    label: 'Fase',
     value: '',
     valid: false,
     errorMessage: 'Vul een geldige fase in.',
   },
   serviceInformation: {
+    label: 'Service informatie',
     value: '',
     valid: false,
     errorMessage: 'Vul geldige service-informatie in.',
   },
   businessGoals: {
+    label: 'Doelen',
     value: '',
     valid: false,
     errorMessage: 'Vul geldige zakelijke doelen in.',
   },
   painPoints: {
+    label: 'Pijnpunten',
     value: '',
     valid: false,
     errorMessage: 'Vul geldige pijnpunten in.',
   },
   targetAudience: {
+    label: 'Doelgroep',
     value: '',
     valid: false,
     errorMessage: 'Vul een geldige doelgroep in.',
   },
   competitors: {
+    label: 'Competitie',
     value: '',
     valid: false,
     errorMessage: 'Vul geldige informatie over concurrenten in.',
   },
   budget: {
+    label: 'Budget',
     value: '',
     valid: false,
     errorMessage: 'Vul een geldig budget in.',
   },
 });
 
-const submitForm = () => {
+const reviewForm = () => {
   const currentStepFields = Object.values(formData).slice(
     (currentStep.value - 1) * 3,
     currentStep.value * 3
@@ -134,14 +145,18 @@ const submitForm = () => {
   });
 
   if (isFormValid) {
-    finishedAnalysis.value = true;
-    showInformation.value = true;
     showForm.value = false;
+    showOverview.value = true;
     canValidate.value = false;
-    alert('Analyse succesvol opgeslagen.');
-  } else {
-    alert('Vul alle verplichte velden in.');
   }
+}
+
+const submitForm = () => {
+  showOverview.value = false;
+  finishedAnalysis.value = true;
+  showInformation.value = true;
+  showForm.value = false;
+  alert('Analyse succesvol opgeslagen.');
 };
 
 const resetForm = () => {
@@ -154,6 +169,7 @@ const resetForm = () => {
   currentStep.value = 1;
   canValidate.value = false;
 };
+
 </script>
 
 <template>
@@ -403,13 +419,52 @@ const resetForm = () => {
         </div>
 
         <div class="col-auto">
-          <TextButton type="success" @click="submitForm">
-            Voltooi analyse
+          <TextButton type="primary" @click="reviewForm">
+            Controleer analyse
           </TextButton>
         </div>
       </div>
-
     </form>
+  </div>
+
+  <!-- Controleer gegevens -->
+  <div v-if="showOverview">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <PageTitle>Behoefteanalyse</PageTitle>
+    </div>
+
+    <div class="row rounded py-5 shadow-sm bg-white">
+      <div class="col-1"></div>
+
+      <div class="col-7">
+        <SubHeader>Controleer uw gegevens</SubHeader>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget imperdiet neque, ac ultrices nunc. Praesent
+          non turpis elementum, vestibulum augue sit amet, interdum justo.</p>
+
+        <div v-for="(field, key) in formData" :key="key">
+          <div class="d-flex justify-content">
+            <div class="form-label me-1">{{ field.label }}:</div>
+            <div>{{ field.value }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center mt-4">
+        <div class="col-auto">
+          <TextButton display-style="secondary" class="me-2" @click="previousStep">
+            Wijzig analyse
+          </TextButton>
+        </div>
+
+        <div class="col-auto">
+          <TextButton type="success" @click="submitForm">
+            Voltooi Analyse
+          </TextButton>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -454,5 +509,9 @@ const resetForm = () => {
 
 .invalid-feedback {
   color: #dc3545;
+}
+
+.form-label {
+  font-weight: 800;
 }
 </style>
