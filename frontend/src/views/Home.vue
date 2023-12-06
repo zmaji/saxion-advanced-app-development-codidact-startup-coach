@@ -1,49 +1,60 @@
 <script setup lang="ts">
-  import { TextButton } from '../components';
+  import { PageTitle, TextButton, SubHeader } from '../components';
 </script>
 
 <template>
-  <main class="home-bg">
-    <div class="container">
-      <div class="d-flex justify-content-center align-items-center">
-        <div class="text-white text-center">
-          <h1 class="home-title">Codidact Startup Coach</h1>
+  <main class="d-flex flex-row min-vh-100">
+    <div class="col col-md-6 col-lg-5 px-2 py-5 px-md-5 ps-lg-10">
+      <div class="container h-100">
+        <div class="d-flex align-items-center h-100">
+          <div class="col">
+            <PageTitle class="home-title">The Startup Coach</PageTitle>
 
-          <h2 class="pt-2">Boost your start-up</h2>
+            <SubHeader padding-bottom="pb-3">
+              Navigate Growth, Conquer Peaks: <br>
+              Your Startup's Odyssey.
+            </SubHeader>
 
-          <TextButton
-            class="me-2"
-            type="primary"
-            renderAs="a"
-            :to="{ name: 'login'}"
-          >
-            Login
-          </TextButton>
+            <div class="d-flex flex-md-row flex-column flex-wrap">
+              <TextButton
+                :to="{ name: 'login' }"
+                class="mb-3 mb-md-0 me-md-3"
+              >
+                Inloggen
+              </TextButton>
 
-          <TextButton
-            type="success"
-            renderAs="a"
-            :to="{ name: 'register'}"
-          >
-            Register
-          </TextButton>
+              <TextButton
+                :to="{ name: 'register' }"
+                display-style="secondary"
+              >
+                Registreren
+              </TextButton>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <div class="d-none d-md-block col page-background"/>
   </main>
 </template>
 
-<style>
-  .home-bg {
-    height: 100vh;
-    width: 100vw;
-    background: linear-gradient(to bottom, rgba(63,61,86,0.65), rgba(63,61,86,0.95)),
-    url(../images/home-bg.jpg)
-    no-repeat center/cover;
-    padding-top: 25vh;
+<style scoped>
+  .home-title {
+    font-size: 4rem!important;
   }
 
-  .home-title {
-    font-size: 4rem;
+  .page-background {
+    background: linear-gradient(to right, rgba(191, 204, 229, 0.65), transparent),
+    url(../images/home-bg.jpg)
+    no-repeat center/cover;
+  }
+
+  .page-background::before {
+    content: '';
+    display: block;
+    height: 100%;
+    background: url(../images/skewed-side.svg) no-repeat;
+    transform: scaleY(-1);
   }
 </style>

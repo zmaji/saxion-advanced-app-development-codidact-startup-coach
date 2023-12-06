@@ -3,6 +3,7 @@ import type { App } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+  faArrowLeft,
   faCheck,
   faCircleCheck,
   faXmark,
@@ -13,6 +14,7 @@ import {
 
 // Icons
 library.add(
+  faArrowLeft,
   faCheck,
   faCircleCheck,
   faXmark,

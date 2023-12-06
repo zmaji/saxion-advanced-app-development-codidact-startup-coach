@@ -45,6 +45,7 @@
       <main
         v-show="showMainElement"
         :class="showNavigationBars ? 'container py-5 mt-3' : null"
+        class="min-vh-100"
       >
         <RouterView v-if="showMainElement"/>
       </main>
