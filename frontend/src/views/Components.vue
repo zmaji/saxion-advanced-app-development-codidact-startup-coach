@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import {
-  TextButton,
-  IconButton,
-  PageTitle,
-  SubHeader,
-  SubTitle,
-  SecondaryTitle
-} from '@/components';
+  import {
+    TextButton,
+    IconButton,
+    PageTitle,
+    SubHeader,
+    SubTitle,
+    SecondaryTitle
+  } from '@/components';
 </script>
 
 <template>

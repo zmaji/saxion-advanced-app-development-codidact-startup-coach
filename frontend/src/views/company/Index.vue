@@ -1,174 +1,182 @@
 <script setup lang="ts">
-import {
-  TextButton,
-  PageTitle,
-  SubTitle,
-  SecondaryTitle,
-  SubHeader
-} from '@/components';
-import { reactive, ref } from 'vue';
+  import { reactive, ref } from 'vue';
 
-let currentStep = ref(0);
-let showForm = ref(false);
-let showInformation = ref(true);
-let finishedAnalysis = ref(false);
-let canValidate = ref(false);
-let showOverview = ref(false);
+  import {
+    TextButton,
+    PageTitle,
+    SubTitle,
+    SecondaryTitle,
+    SubHeader
+  } from '@/components';
 
-const startAnalysis = () => {
-  showInformation.value = false;
-  showForm.value = true;
-  currentStep.value += 1;
-}
 
-const nextStep = () => {
-  const currentStepFields = Object.values(formData).slice(
-    (currentStep.value - 1) * 3,
-    currentStep.value * 3
-  );
+  let currentStep = ref(0);
+  let showForm = ref(false);
+  let showInformation = ref(true);
+  let finishedAnalysis = ref(false);
+  let canValidate = ref(false);
+  let showOverview = ref(false);
 
-  const isStepValid = currentStepFields.every((field) => {
-    canValidate.value = true;
-    field.valid = field.value !== '';
-    return field.valid;
-  });
-
-  if (isStepValid) {
-    currentStep.value += 1;
+  const startAnalysis = () => {
     showInformation.value = false;
     showForm.value = true;
-    canValidate.value = false;
-  } else {
-    alert('Vul alle verplichte velden in.');
+    currentStep.value += 1;
   }
-};
 
-const previousStep = () => {
-  showOverview.value = false;
-  canValidate.value = true;
+  const nextStep = () => {
+    const currentStepFields = Object.values(formData).slice(
+      (currentStep.value - 1) * 3,
+      currentStep.value * 3
+    );
 
-  if (currentStep.value === 1) {
+    const isStepValid = currentStepFields.every((field) => {
+      canValidate.value = true;
+      field.valid = field.value !== '';
+
+      return field.valid;
+    });
+
+    if (isStepValid) {
+      currentStep.value += 1;
+      showInformation.value = false;
+      showForm.value = true;
+      canValidate.value = false;
+    } else {
+      alert('Vul alle verplichte velden in.');
+    }
+  };
+
+  const previousStep = () => {
+    canValidate.value = true;
+
+    if (currentStep.value === 1) {
+      showInformation.value = true;
+      showForm.value = false;
+      alert('U gaat terug naar het overzicht.');
+    }
+    currentStep.value -= 1;
+  };
+
+  const continueAnalysis = () => {
+    showForm.value = true;
+    showInformation.value = false;
+  };
+
+  const restartAnalysis = () => {
+    resetForm();
+    finishedAnalysis.value = false;
+    showInformation.value = false;
+    showForm.value = true;
+    currentStep.value = 1;
+    alert('U herstart de analyse.');
+  };
+
+  const goToOverview = () => {
     showInformation.value = true;
     showForm.value = false;
     alert('U gaat terug naar het overzicht.');
-  }
-  currentStep.value -= 1;
-};
+  };
 
-const continueAnalysis = () => {
-  showForm.value = true;
-  showInformation.value = false;
-};
-
-const restartAnalysis = () => {
-  resetForm();
-  finishedAnalysis.value = false;
-  showInformation.value = false;
-  showForm.value = true;
-  currentStep.value = 1;
-  alert('U herstart de analyse.');
-};
-
-const goToOverview = () => {
-  showInformation.value = true;
-  showForm.value = false;
-  alert('U gaat terug naar het overzicht.');
-};
-
-let formData = reactive({
-  industry: {
-    label: 'Industrie',
-    value: '',
-    valid: false,
-    errorMessage: 'Vul een geldige industrie in.',
-  },
-  nrOfEmployees: {
-    label: 'Aantal werknemers',
-    value: '',
-    valid: false,
-    errorMessage: 'Vul een geldig aantal werknemers in.',
-  },
-  stage: {
-    label: 'Fase',
-    value: '',
-    valid: false,
-    errorMessage: 'Vul een geldige fase in.',
-  },
-  serviceInformation: {
-    label: 'Service informatie',
-    value: '',
-    valid: false,
-    errorMessage: 'Vul geldige service-informatie in.',
-  },
-  businessGoals: {
-    label: 'Doelen',
-    value: '',
-    valid: false,
-    errorMessage: 'Vul geldige zakelijke doelen in.',
-  },
-  painPoints: {
-    label: 'Pijnpunten',
-    value: '',
-    valid: false,
-    errorMessage: 'Vul geldige pijnpunten in.',
-  },
-  targetAudience: {
-    label: 'Doelgroep',
-    value: '',
-    valid: false,
-    errorMessage: 'Vul een geldige doelgroep in.',
-  },
-  competitors: {
-    label: 'Competitie',
-    value: '',
-    valid: false,
-    errorMessage: 'Vul geldige informatie over concurrenten in.',
-  },
-  budget: {
-    label: 'Budget',
-    value: '',
-    valid: false,
-    errorMessage: 'Vul een geldig budget in.',
-  },
-});
-
-const reviewForm = () => {
-  const currentStepFields = Object.values(formData).slice(
-    (currentStep.value - 1) * 3,
-    currentStep.value * 3
-  );
-
-  const isFormValid = currentStepFields.every((field) => {
-    canValidate.value = true;
-    field.valid = field.value !== '';
-    return field.valid;
+  let formData = reactive({
+    industry: {
+      label: 'Industrie',
+      value: '',
+      valid: false,
+      errorMessage: 'Vul een geldige industrie in.',
+    },
+    nrOfEmployees: {
+      label: 'Aantal werknemers',
+      value: '',
+      valid: false,
+      errorMessage: 'Vul een geldig aantal werknemers in.',
+    },
+    stage: {
+      label: 'Fase',
+      value: '',
+      valid: false,
+      errorMessage: 'Vul een geldige fase in.',
+    },
+    serviceInformation: {
+      label: 'Service informatie',
+      value: '',
+      valid: false,
+      errorMessage: 'Vul geldige service-informatie in.',
+    },
+    businessGoals: {
+      label: 'Doelen',
+      value: '',
+      valid: false,
+      errorMessage: 'Vul geldige zakelijke doelen in.',
+    },
+    painPoints: {
+      label: 'Pijnpunten',
+      value: '',
+      valid: false,
+      errorMessage: 'Vul geldige pijnpunten in.',
+    },
+    targetAudience: {
+      label: 'Doelgroep',
+      value: '',
+      valid: false,
+      errorMessage: 'Vul een geldige doelgroep in.',
+    },
+    competitors: {
+      label: 'Competitie',
+      value: '',
+      valid: false,
+      errorMessage: 'Vul geldige informatie over concurrenten in.',
+    },
+    budget: {
+      label: 'Budget',
+      value: '',
+      valid: false,
+      errorMessage: 'Vul een geldig budget in.',
+    },
   });
 
-  if (isFormValid) {
+  const reviewForm = () => {
+    const currentStepFields = Object.values(formData).slice(
+      (currentStep.value - 1) * 3,
+      currentStep.value * 3
+    );
+
+    const isFormValid = currentStepFields.every((field) => {
+      canValidate.value = true;
+      field.valid = field.value !== '';
+
+      return field.valid;
+    });
+
+    if (isFormValid) {
+      showForm.value = false;
+      showOverview.value = true;
+      canValidate.value = false;
+    }
+  }
+
+  const closeOverview = () => {
+    showForm.value = true;
+    showOverview.value = false;
+  }
+
+  const submitForm = () => {
+    showOverview.value = false;
+    finishedAnalysis.value = true;
+    showInformation.value = true;
     showForm.value = false;
-    showOverview.value = true;
+    alert('Analyse succesvol opgeslagen.');
+  };
+
+  const resetForm = () => {
+    for (const key in formData) {
+      // @ts-ignore
+      formData[key].value = '';
+      // @ts-ignore
+      formData[key].valid = false;
+    }
+    currentStep.value = 1;
     canValidate.value = false;
-  }
-}
-
-const submitForm = () => {
-  showOverview.value = false;
-  finishedAnalysis.value = true;
-  showInformation.value = true;
-  showForm.value = false;
-  alert('Analyse succesvol opgeslagen.');
-};
-
-const resetForm = () => {
-  for (const key in formData) {
-    // @ts-ignore
-    formData[key].value = '';
-    // @ts-ignore
-    formData[key].valid = false;
-  }
-  currentStep.value = 1;
-  canValidate.value = false;
-};
+  };
 
 </script>
 
@@ -178,8 +186,10 @@ const resetForm = () => {
 
     <SecondaryTitle>Behoefteanalyse</SecondaryTitle>
 
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget imperdiet neque, ac ultrices nunc. Praesent non
-      turpis elementum, vestibulum augue sit amet, interdum justo. Nunc gravida eros in lorem interdum sagittis. Fusce
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Sed eget imperdiet neque, ac ultrices nunc. Praesent non
+      turpis elementum, vestibulum augue sit amet, interdum justo.
+      Nunc gravida eros in lorem interdum sagittis. Fusce
       vulputate, turpis vel suscipit mattis, risus mauris dignissim felis, ut molestie urna libero eu magna.</p>
 
     <div class="row">
@@ -223,7 +233,8 @@ const resetForm = () => {
         <div class="col-7">
           <SubHeader>Stap 1: Bedrijfsgegevens</SubHeader>
 
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget imperdiet neque, ac ultrices nunc. Praesent
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Sed eget imperdiet neque, ac ultrices nunc. Praesent
             non turpis elementum, vestibulum augue sit amet, interdum justo.</p>
 
           <div class="col-7">
@@ -299,7 +310,8 @@ const resetForm = () => {
         <div class="col-7">
           <SubHeader>Stap 2: Doelen</SubHeader>
 
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget imperdiet neque, ac ultrices nunc. Praesent
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Sed eget imperdiet neque, ac ultrices nunc. Praesent
             non turpis elementum, vestibulum augue sit amet, interdum justo.</p>
 
           <div class="col-8">
@@ -372,7 +384,8 @@ const resetForm = () => {
         <div class="col-7">
           <SubHeader>Stap 3: Doelgroep</SubHeader>
 
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget imperdiet neque, ac ultrices nunc. Praesent
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Sed eget imperdiet neque, ac ultrices nunc. Praesent
             non turpis elementum, vestibulum augue sit amet, interdum justo.</p>
 
           <div class="col-8">
@@ -452,7 +465,7 @@ const resetForm = () => {
 
       <div class="row justify-content-center mt-4">
         <div class="col-auto">
-          <TextButton display-style="secondary" class="me-2" @click="previousStep">
+          <TextButton display-style="secondary" class="me-2" @click="closeOverview">
             Wijzig analyse
           </TextButton>
         </div>
