@@ -25,9 +25,27 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<companyAna
   }
 };
 
+// eslint-disable-next-line max-len
+const createCompanyAnalysis = async (companyAnalysisData: companyAnalysis): Promise<companyAnalysis | null> => {
+  try {
+    const newCompanyAnalysis = new CompanyAnalysisModel(companyAnalysisData);
+    const companyAnalysis = await newCompanyAnalysis.save();
+
+    if (companyAnalysis) {
+      return companyAnalysis;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Something went wrong creating a company analysis:', error);
+    throw error;
+  }
+};
+
 const CompanyAnalysisController = {
   getCompanyAnalyses,
   getCompanyAnalysis,
+  createCompanyAnalysis,
 };
 
 export default CompanyAnalysisController;

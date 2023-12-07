@@ -44,4 +44,19 @@ router.get('/:companyAnalysisID', async (req: Request, res: Response) => {
   }
 });
 
+router.post('', async (req: Request, res: Response) => {
+  try {
+    const companyAnalysis = await CompanyAnalysisController.createCompanyAnalysis(req.body);
+
+    if (companyAnalysis) {
+      res.status(StatusCodes.CREATED).json(companyAnalysis);
+    } else {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create company analysis' });
+    }
+  } catch (error) {
+    console.error('Error creating company analysis:', error);
+    res.status(StatusCodes.BAD_REQUEST).json({ error: 'Fields were not filled in properly' });
+  }
+});
+
 export default router;
