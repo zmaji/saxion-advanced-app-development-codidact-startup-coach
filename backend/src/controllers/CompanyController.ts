@@ -20,7 +20,7 @@ const getCompany = async (companyID: string): Promise<Company | null> => {
 
     return null;
   } catch (error) {
-    console.error('Something went wrong getting a comment:', error);
+    console.error('Something went wrong getting a company:', error);
     throw error;
   }
 };
