@@ -38,6 +38,7 @@ const authenticateUser = async (
       }
     } else {
       console.error('Something went wrong authenticating a user: Missing username or email address');
+
       return null;
     }
   } catch (error) {
