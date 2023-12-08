@@ -4,7 +4,7 @@
 
 <template>
   <main class="d-flex flex-row min-vh-100">
-    <div class="col col-md-6 col-lg-5 px-2 py-5 px-md-5 ps-lg-10">
+    <div class="col col-md-6 col-lg-7 col-xl-5 px-2 py-5 px-md-5 ps-lg-10">
       <div class="container h-100">
         <IconButton
           icon="arrow-left"
@@ -20,23 +20,23 @@
             <PageTitle padding-bottom="pb-3">Registreer een nieuw account</PageTitle>
 
             <form>
-              <div class="pb-4 col-lg-8">
+              <div class="pb-4 col-lg-10 col-xl-8">
                 <label for="username" class="form-label">Gebruikersnaam</label>
                 <input type="text" class="form-control" id="username" placeholder="Uw gebruikersnaam">
               </div>
 
-              <div class="pb-4 col-lg-8">
+              <div class="pb-4 col-lg-10 col-xl-8">
                 <label for="email" class="form-label">E-mail</label>
                 <input type="email" class="form-control" id="email" placeholder="Uw e-mailadres">
               </div>
 
 
-              <div class="pb-4 col-lg-8">
+              <div class="pb-4 col-lg-10 col-xl-8">
                 <label for="password" class="form-label">Wachtwoord</label>
                 <input type="password" class="form-control" id="password" placeholder="Uw wachtwoord">
               </div>
 
-              <div class="pb-4 col-lg-8">
+              <div class="pb-4 col-lg-10 col-xl-8">
                 <label for="repeat-password" class="form-label">Herhaal wachtwoord</label>
                 <input type="password" class="form-control" id="repeat-password" placeholder="Uw wachtwoord">
               </div>
@@ -78,5 +78,7 @@
     display: block;
     height: 100%;
     background: url(../images/skewed-side.svg) no-repeat;
+    background-size: cover;
+    margin: -1px;
   }
 </style>

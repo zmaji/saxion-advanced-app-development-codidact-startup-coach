@@ -1,30 +1,38 @@
 <script setup lang="ts">
+  import { ref } from 'vue';
+
   import { PageTitle, TextButton, IconButton } from '@/components';
   import httpService from '@/plugins/http/httpService';
   import router from '@/router';
   import { useTokenStore } from '@/stores/token';
-  import { ref } from 'vue';
 
   const userName = ref('');
   const password = ref('');
   const error = ref('');
 
   const login = async () => {
-    try{
-      const response = await httpService.postRequest('/credentials', {userName: userName.value, password: password.value}, false);
+    try {
+      const response = await httpService.postRequest(
+        '/credentials',
+        {
+          userName: userName.value,
+          password: password.value
+        },
+        false
+      );
 
       if (response.status === 200) {
         useTokenStore().setToken(response.data.token);
-        router.push({ name: 'company.overview' });
+        await router.push({ name: 'company.overview' });
       } else {
         error.value = response.data.error;
       }
     } catch (e) {
       let errorMessage = (e as Error & { response?: { data?: { error?: string } } })?.response?.data?.error;
       if (errorMessage === 'Missing required fields') {
-        errorMessage = "Vul alstublieft alle velden in";
+        errorMessage = 'Vul alstublieft alle velden in';
       } else if (errorMessage === 'Invalid credentials') {
-        errorMessage = "De ingevoerde gegevens zijn onjuist";
+        errorMessage = 'De ingevoerde gegevens zijn onjuist';
       }
       error.value = errorMessage || 'An error occurred during login';
     }
@@ -33,7 +41,7 @@
 
 <template>
   <main class="d-flex flex-row min-vh-100">
-    <div class="col col-md-6 col-lg-5 px-2 py-5 px-md-5 ps-lg-10">
+    <div class="col col-md-6 col-lg-7 col-xl-5 px-2 py-5 px-md-5 ps-lg-10">
       <div class="container h-100">
         <IconButton
           icon="arrow-left"
@@ -49,18 +57,36 @@
             <PageTitle padding-bottom="pb-3">Login op uw account</PageTitle>
 
             <form>
-              <div class="pb-4 col-lg-8">
+              <div class="pb-4 col-lg-10 col-xl-8">
                 <label for="username" class="form-label">Gebruikersnaam</label>
-                <input type="text" class="form-control" id="username" placeholder="Uw gebruikersnaam" v-model="userName">
+                <input
+                  type="text"
+                  class="form-control"
+                  :class="error && !userName ? 'border border-danger' : null"
+                  id="username"
+                  placeholder="Uw gebruikersnaam"
+                  v-model="userName"
+                >
+
+                <small v-show="(error && !userName)" class="text-danger">U moet uw gebruikersnaam invullen</small>
               </div>
 
-              <div class="pb-4 col-lg-8">
+              <div class="pb-4 col-lg-10 col-xl-8">
                 <label for="password" class="form-label">Wachtwoord</label>
-                <input type="password" class="form-control" id="password" placeholder="Uw wachtwoord" v-model="password">
-              </div>
+                <input
+                  type="password"
+                  class="form-control"
+                  :class="error && !password ? 'border border-danger' : null"
+                  id="password"
+                  placeholder="Uw wachtwoord"
+                  v-model="password"
+                >
 
+                <small v-if="error && !password" class="text-danger">Het wachtwoord moet ingevuld worden</small>
+              </div>
+              
               <div class="pb-4 col-lg-8" v-if="error">
-                <p class="text-danger">{{ error }}</p>
+                <p class="alert alert-danger">{{ error }}</p>
               </div>
 
               <div class="d-flex flex-md-row flex-column flex-wrap">
@@ -100,5 +126,7 @@
     display: block;
     height: 100%;
     background: url(../images/skewed-side.svg) no-repeat;
+    background-size: cover;
+    margin: -1px;
   }
 </style>

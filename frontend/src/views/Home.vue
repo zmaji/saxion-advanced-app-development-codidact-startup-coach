@@ -56,5 +56,7 @@
     height: 100%;
     background: url(../images/skewed-side.svg) no-repeat;
     transform: scaleY(-1);
+    background-size: cover;
+    margin: -1px;
   }
 </style>
