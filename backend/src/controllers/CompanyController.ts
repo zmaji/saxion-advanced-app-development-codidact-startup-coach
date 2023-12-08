@@ -28,13 +28,13 @@ const getCompany = async (companyID: string): Promise<Company | null> => {
 const updateCompany = async (companyID: string, companyData: Company): Promise<Company | null> => {
   try {
     const updatedCompany = await CompanyModel.findOneAndUpdate(
-      { companyID },
-      companyData,
-      { new: true },
+        { companyID },
+        companyData,
+        { new: true },
     );
 
     if (updatedCompany) {
-      return updatedCompany
+      return updatedCompany;
     }
 
     return null;
@@ -47,7 +47,7 @@ const updateCompany = async (companyID: string, companyData: Company): Promise<C
 const CompanyController = {
   getCompanies,
   getCompany,
-  updateCompany
+  updateCompany,
 };
 
 export default CompanyController;

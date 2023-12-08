@@ -1,7 +1,6 @@
 import type { companyAnalysis } from '../typings/CompanyAnalysis';
 
 import { v4 as uuidv4 } from 'uuid';
-
 import CompanyAnalysisModel from '../models/CompanyAnalysisModel';
 
 const getCompanyAnalyses = async (): Promise<companyAnalysis[]> => {
