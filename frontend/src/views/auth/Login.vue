@@ -21,11 +21,9 @@
         false
       );
 
-      if (response.status === 200) {
+      if (response) {
         useTokenStore().setToken(response.data.token);
         await router.push({ name: 'company.overview' });
-      } else {
-        error.value = response.data.error;
       }
     } catch (e) {
         const errorMappings: { [key: string]: string } = {
