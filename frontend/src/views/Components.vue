@@ -13,7 +13,7 @@
 <template>
   <PageTitle>Componenten overzicht (PageTitle)</PageTitle>
 
-  <SubTitle>Alle elementen hier zijn een compoment, dit element ook! (SubTitle)</SubTitle>
+  <SubTitle type="primary">Alle elementen hier zijn een compoment, dit element ook! (SubTitle)</SubTitle>
 
   <SecondaryTitle>Buttons (SecondaryTitle)</SecondaryTitle>
 
@@ -26,7 +26,7 @@
         Button primary
       </TextButton>
 
-      <TextButton display-style="secondary"  class="me-2">
+      <TextButton display-style="secondary" class="me-2">
         Button secondary
       </TextButton>
 
@@ -40,7 +40,7 @@
         Button primary
       </TextButton>
 
-      <TextButton type="success" display-style="secondary"  class="me-2">
+      <TextButton type="success" display-style="secondary" class="me-2">
         Button secondary
       </TextButton>
 
@@ -54,7 +54,7 @@
         Button primary
       </TextButton>
 
-      <TextButton type="info" display-style="secondary"  class="me-2">
+      <TextButton type="info" display-style="secondary" class="me-2">
         Button secondary
       </TextButton>
 
@@ -68,7 +68,7 @@
         Button primary
       </TextButton>
 
-      <TextButton type="warning" display-style="secondary"  class="me-2">
+      <TextButton type="warning" display-style="secondary" class="me-2">
         Button secondary
       </TextButton>
 
@@ -82,7 +82,7 @@
         Button primary
       </TextButton>
 
-      <TextButton type="danger" display-style="secondary"  class="me-2">
+      <TextButton type="danger" display-style="secondary" class="me-2">
         Button secondary
       </TextButton>
 
@@ -98,9 +98,9 @@
 
   <section class="row row-cols-1 g-3">
     <div class="col">
-      <IconButton icon="circle-info" class="me-2"/>
+      <IconButton icon="circle-info" class="me-2" />
 
-      <IconButton icon="circle-info" display-style="secondary"  class="me-2">
+      <IconButton icon="circle-info" display-style="secondary" class="me-2">
         Button secondary
       </IconButton>
 
@@ -110,9 +110,9 @@
     </div>
 
     <div class="col">
-      <IconButton icon="circle-info" type="info" class="me-2"/>
+      <IconButton icon="circle-info" type="info" class="me-2" />
 
-      <IconButton icon="circle-info" type="info" display-style="secondary"  class="me-2">
+      <IconButton icon="circle-info" type="info" display-style="secondary" class="me-2">
         Button secondary
       </IconButton>
 
@@ -122,9 +122,9 @@
     </div>
 
     <div class="col">
-      <IconButton icon="check" type="success" class="me-2"/>
+      <IconButton icon="check" type="success" class="me-2" />
 
-      <IconButton icon="check" type="success" display-style="secondary"  class="me-2">
+      <IconButton icon="check" type="success" display-style="secondary" class="me-2">
         Button secondary
       </IconButton>
 
@@ -134,9 +134,9 @@
     </div>
 
     <div class="col">
-      <IconButton icon="triangle-exclamation" type="warning" class="me-2"/>
+      <IconButton icon="triangle-exclamation" type="warning" class="me-2" />
 
-      <IconButton icon="triangle-exclamation" type="warning" display-style="secondary"  class="me-2">
+      <IconButton icon="triangle-exclamation" type="warning" display-style="secondary" class="me-2">
         Button secondary
       </IconButton>
 
@@ -146,9 +146,9 @@
     </div>
 
     <div class="col">
-      <IconButton icon="xmark" type="danger" class="me-2"/>
+      <IconButton icon="xmark" type="danger" class="me-2" />
 
-      <IconButton icon="xmark" type="danger" display-style="secondary"  class="me-2">
+      <IconButton icon="xmark" type="danger" display-style="secondary" class="me-2">
         Button secondary
       </IconButton>
 
@@ -157,5 +157,4 @@
       </IconButton>
     </div>
   </section>
-
 </template>
