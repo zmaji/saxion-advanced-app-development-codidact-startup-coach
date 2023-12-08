@@ -14,11 +14,7 @@ const getCompanies = async (): Promise<Company[]> => {
 const getCompany = async (companyID: string): Promise<Company | null> => {
   try {
     const result = await CompanyModel.findOne({ companyID }, { _id: 0 });
-    if (result) {
-      return result;
-    }
-
-    return null;
+    return result || null;
   } catch (error) {
     console.error('Something went wrong getting a company:', error);
     throw error;
