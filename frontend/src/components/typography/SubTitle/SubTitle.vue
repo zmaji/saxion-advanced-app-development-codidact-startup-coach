@@ -3,7 +3,6 @@
 
   import { computed } from 'vue';
 
-
   interface Props {
     marginBottom?: marginBottomOptions | null;
     marginTop?: marginTopOptions | null;

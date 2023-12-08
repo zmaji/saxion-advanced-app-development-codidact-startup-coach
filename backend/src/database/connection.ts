@@ -7,8 +7,9 @@ dotenv.config();
 
 const DB_HOST = process.env.DB_HOST;
 const DB_PORT = process.env.DB_PORT;
+const DB_NAME = process.env.DB_NAME;
 const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = process.env.DB_NAME;
+const DB_PASSWORD = process.env.DB_PASSWORD;
 
 class Database {
   constructor() {
@@ -17,7 +18,8 @@ class Database {
 
   private connect() {
     const mongoURI =
-      `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/?authMechanism=SCRAM-SHA-256&authSource=admin`;
+      // eslint-disable-next-line max-len
+      `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authMechanism=SCRAM-SHA-256&authSource=admin`;
     console.log('setting up database connection');
 
     mongoose.connect(mongoURI, {})

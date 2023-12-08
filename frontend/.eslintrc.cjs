@@ -34,11 +34,16 @@ module.exports = {
     'linebreak-style': 0,
     'new-cap': 'off',
     'object-curly-spacing': ['error', 'always'],
+    'space-before-blocks': ['error', 'always'],
+    'keyword-spacing': ['error', { 'before': true, 'after': true }],
     'max-len': ['error', {
       code: 120,
     }],
+    'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 1 }],
     'padding-line-between-statements': [
       'error',
+      { blankLine: 'always', 'prev': ['const', 'let', 'var'], 'next': ['if', 'try', 'switch'] },
+      { blankLine: 'always', 'prev': 'if', 'next': ['const', 'let', 'var'] },
       { blankLine: 'always', prev: '*', next: 'return' },
     ],
     'no-multi-spaces': ['error'],
@@ -50,7 +55,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.spec.ts'],
+      files: ['*.spec.ts', './srs/plugins/http/httpService.ts'],
       rules: {
         '@typescript-eslint/no-non-null-assertion': 'off',
         'import/order': importOrderRule,

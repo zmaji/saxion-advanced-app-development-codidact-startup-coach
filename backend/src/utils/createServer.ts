@@ -3,6 +3,8 @@ import type { Express, Request, Response } from 'express';
 import express from 'express';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
+import AuthRoutes from '../routes/Auth';
+import isLoggedIn from '../middleware/isLoggedIn';
 
 const createServer = () => {
   const app: Express = express();
@@ -21,7 +23,9 @@ const createServer = () => {
 
   app.use(express.json());
 
-  app.get('', (req: Request, res: Response) => {
+  app.use('/credentials', AuthRoutes);
+
+  app.get('', isLoggedIn, (req: Request, res: Response) => {
     res.send('Welcome to Express & TypeScript Server');
   });
 
