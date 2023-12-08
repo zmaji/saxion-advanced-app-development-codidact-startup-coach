@@ -6,8 +6,8 @@ const router = Router();
 
 router.post('', async (req: Request, res: Response) => {
   try {
-    const { userName, password } = req.body;
-    const token = await Auth.authenticateUser(userName, password);
+    const { userName, emailAddress, password } = req.body;
+    const token = await Auth.authenticateUser(userName, emailAddress, password);
 
     if (token) {
       res
@@ -16,7 +16,7 @@ router.post('', async (req: Request, res: Response) => {
     } else {
       res
           .status(StatusCodes.UNAUTHORIZED)
-          .json({ error: 'Authentication failed: Wrong username and/or password' });
+          .json({ error: req.body.userName });
     }
   } catch (error) {
     res

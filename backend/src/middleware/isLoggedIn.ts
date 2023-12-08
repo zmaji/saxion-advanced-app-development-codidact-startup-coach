@@ -64,3 +64,5 @@ const verifyToken = async (token: string) => {
 
   return null;
 };
+
+export default isLoggedIn;

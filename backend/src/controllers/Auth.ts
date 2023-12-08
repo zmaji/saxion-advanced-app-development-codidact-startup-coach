@@ -6,14 +6,17 @@ import UserModel from '../models/User';
 
 export const authenticateUser = async (
     password: string, 
-    userName: string | null, 
-    emailAddress: string | null
+    userName: string, 
+    emailAddress: string
   ): Promise<string | null> => {
   try {
     if ((userName || emailAddress) && password) {
-      const user: User | null = userName ? 
-      await UserModel.findOne({ userName: userName }) : 
-      await UserModel.findOne({ emailAddress: emailAddress });
+      // const user: User | null = userName ? 
+      // await UserModel.findOne({ userName: userName }) : 
+      // await UserModel.findOne({ emailAddress: emailAddress });
+
+      const user: User | null = await UserModel.findOne({ userName: userName });
+      console.log('User found:', user);
 
       if (user) {
         const result = bcrypt.compareSync(password, user.password);
