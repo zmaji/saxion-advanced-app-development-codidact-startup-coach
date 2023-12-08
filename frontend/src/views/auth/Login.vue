@@ -28,14 +28,17 @@
         error.value = response.data.error;
       }
     } catch (e) {
-      let errorMessage = (e as Error & { response?: { data?: { error?: string } } })?.response?.data?.error;
-      if (errorMessage === 'Missing required fields') {
-        errorMessage = 'Vul alstublieft alle velden in';
-      } else if (errorMessage === 'Invalid credentials') {
-        errorMessage = 'De ingevoerde gegevens zijn onjuist';
+        const errorMappings: { [key: string]: string } = {
+          'Missing required fields': 'Vul alstublieft alle velden in',
+          'Invalid credentials': 'De ingevoerde gegevens zijn onjuist',
+        };
+
+        let errorMessage =
+          (e as Error & { response?: { data?: { error?: string } } })?.response?.data?.error ||
+          'An error occurred during login';
+
+        error.value = errorMappings[errorMessage] || errorMessage;
       }
-      error.value = errorMessage || 'An error occurred during login';
-    }
   };
 </script>
 
