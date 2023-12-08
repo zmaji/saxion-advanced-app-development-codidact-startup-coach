@@ -12,7 +12,7 @@
     </div>
     <div class="col">
       <TextButton
-        :to="{ name: 'content.add' }"
+        :to="{ name: 'content.create' }"
         class="mb-3 mb-md-0 me-md-2">
           Content Toevoegen
       </TextButton>

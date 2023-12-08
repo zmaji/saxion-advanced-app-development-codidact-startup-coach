@@ -6,8 +6,8 @@ import Components from '@/views/Components.vue';
 import CompanyIndex from '@/views/company/Index.vue'
 import Register from '@/views/auth/Register.vue'
 import Login from '@/views/auth/Login.vue'
-import ContentIndex from '@/views/content/index.vue'
-import AddContent from '@/views/content/Add-Content.vue'
+import ContentIndex from '@/views/content/Index.vue'
+import ContentCreate from '@/views/content/Create.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,22 +74,30 @@ const router = createRouter({
       component: () => import('@/views/About.vue')
     },
     {
-      path: '/content-base',
-      name: 'content.base',
-      component: ContentIndex,
-      meta: {
-        title: 'Kennisbank',
-        showNavigationBars: true,
-      },
-    },
-    {
-      path: '/content-base-add',
-      name: 'content.add',
-      component: AddContent,
-      meta: {
-        title: 'Kennisbank',
-        showNavigationBars: true,
-      },
+      path: '/content',
+      name: 'content',
+      component: RouterView,
+      redirect: { name: 'content.overview' },
+      children: [
+        {
+          path: '',
+          name: 'content.overview',
+          component: ContentIndex,
+          meta: {
+            title: 'Kennisbank',
+            showNavigationBars: true,
+          },
+        },
+        {
+          path: 'create',
+          name: 'content.create',
+          component: ContentCreate,
+          meta: {
+            title: 'Content toevoegen',
+            showNavigationBars: true,
+          },
+        },
+      ]
     },
     {
       path: '/components',

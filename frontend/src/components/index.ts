@@ -11,6 +11,7 @@ export { default as PageTitle } from './typography/PageTitle/PageTitle.vue';
 export { default as SubTitle } from './typography/SubTitle/SubTitle.vue';
 export { default as SecondaryTitle } from './typography/SecondaryTitle/SecondaryTitle.vue';
 export { default as SubHeader } from './typography/SubHeader/SubHeader.vue';
+export { default as SmallHeader } from './typography/SmallHeader/SmallHeader.vue';
 
 // Other components
-export { default as ContentLabels } from './content/Content-labels.vue'
+export { default as LabelSelect } from './content/LabelSelect.vue'
