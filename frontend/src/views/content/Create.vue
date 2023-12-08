@@ -3,6 +3,7 @@
 
   import { PageTitle, SecondaryTitle, TextButton } from '@/components'
   import { LabelSelect } from '@/components'
+  import { CompanySelect } from '@/components'
 
 
   let accessLevel: Ref<string> = ref('');
@@ -71,7 +72,7 @@
       </div>
 
       <div v-if="accessLevel === 'restricted'">
-          
+          <CompanySelect/>
       </div>
 
       <div class="d-flex flex-md-row flex-column flex-wrap">

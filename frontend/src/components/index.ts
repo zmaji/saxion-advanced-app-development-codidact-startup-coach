@@ -1,3 +1,4 @@
+import { CompanySelect } from '@/components';
 /* eslint-disable import/prefer-default-export */
 export { default as TextButton } from '@/components/buttons/TextButton.vue';
 export { default as IconButton } from '@/components/buttons/IconButton.vue';
@@ -15,3 +16,4 @@ export { default as SmallHeader } from './typography/SmallHeader/SmallHeader.vue
 
 // Other components
 export { default as LabelSelect } from './content/LabelSelect.vue'
+export { default as CompanySelect } from './content/CompanySelect.vue'
