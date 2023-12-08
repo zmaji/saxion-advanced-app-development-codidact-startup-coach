@@ -1,13 +1,11 @@
 import type { Company } from '../typings/Company';
 
-import axios from 'axios';
-// import { BASE_URL } from '../../../config';
-const BASE_URL = 'http://127.0.0.1:3000';
+import httpService from '@/plugins/http/httpService';
 
 const getCompany = async (companyID: string): Promise<Company | undefined> => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const response = await axios.get(`${BASE_URL}/companies/${companyID}`);
+    const response = await httpService.getRequest(`/companies/${companyID}`);
 
     return response.data;
   } catch (error) {
@@ -18,7 +16,7 @@ const getCompany = async (companyID: string): Promise<Company | undefined> => {
 const updateCompany = async (companyID: string, companyData: any): Promise<Company | undefined> => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const response = await axios.put(`${BASE_URL}/companies/${companyID}`, companyData);
+    const response = await httpService.putRequest(`/companies/${companyID}`, companyData);
 
     return response.data;
   } catch (error) {
@@ -32,3 +30,4 @@ const CompanyController = {
 };
 
 export default CompanyController;
+

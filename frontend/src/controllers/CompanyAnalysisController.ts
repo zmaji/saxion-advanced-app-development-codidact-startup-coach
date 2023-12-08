@@ -1,14 +1,11 @@
 import type { companyAnalysis } from '../typings/CompanyAnalysis';
 
-import axios from 'axios';
-
-// import { BASE_URL } from '../../../config';
-const BASE_URL = 'http://127.0.0.1:3000';
+import httpService from '@/plugins/http/httpService';
 
 const getCompanyAnalysis = async (companyAnalysisID: string): Promise<companyAnalysis | undefined> => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const response = await axios.get(`${BASE_URL}/companyAnalyses/${companyAnalysisID}`);
+    const response = await httpService.getRequest(`/companyAnalyses/${companyAnalysisID}`);
 
     return response.data;
   } catch (error) {
@@ -19,11 +16,7 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<companyAna
 const createCompanyAnalysis = async (companyAnalysisData: FormData): Promise<companyAnalysis | null> => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const response = await axios.post<companyAnalysis | null>(`${BASE_URL}/companyAnalyses`, companyAnalysisData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-    });
+    const response = await httpService.postRequest(`/companyAnalyses`, companyAnalysisData);
 
     return response.data;
   } catch (error) {

@@ -15,15 +15,15 @@ const generateAuthToken = (user: User): string => {
 };
 
 const authenticateUser = async (
-    userName: string,
-    emailAddress: string,
-    password: string,
+  userName: string,
+  emailAddress: string,
+  password: string,
 ): Promise<string | null> => {
   try {
     if ((userName || emailAddress) && password) {
       const user: User | null = userName ?
-      await userModel.findOne({ userName: userName }) :
-      await userModel.findOne({ emailAddress: emailAddress });
+        await userModel.findOne({ userName: userName }) :
+        await userModel.findOne({ emailAddress: emailAddress });
 
       if (user) {
         const result = bcrypt.compareSync(password, user.password);
