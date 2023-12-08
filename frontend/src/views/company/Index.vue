@@ -1,228 +1,228 @@
 <script setup lang="ts">
-  import type { FormData, FormStep } from '@/typings/form';
+import type { FormData, FormStep } from '@/typings/form';
 
-  import { reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 
-  import {
-    TextButton,
-    PageTitle,
-    SubTitle,
-    SecondaryTitle,
-    SubHeader
-  } from '@/components';
+import {
+  TextButton,
+  PageTitle,
+  SubTitle,
+  SecondaryTitle,
+  SubHeader
+} from '@/components';
 
-  let currentStep = ref<FormStep | null>(null);
-  let currentStepFields = ref<FormData[] | null>(null);
-  let showForm = ref(false);
-  let showInformation = ref(true);
-  let finishedAnalysis = ref(false);
-  let canValidate = ref(false);
-  let showOverview = ref(false);
+let currentStep = ref<FormStep | null>(null);
+let currentStepFields = ref<FormData[] | null>(null);
+let showForm = ref(false);
+let showInformation = ref(true);
+let finishedAnalysis = ref(false);
+let canValidate = ref(false);
+let showOverview = ref(false);
 
-  let formSteps = reactive({
-    1: {
-      number: 1,
-      name: 'Bedrijfsgegevens',
-      description: 'Vul de benodigde informatie in met betrekking tot de bedrijfsgegevens.',
-      completed: false,
-    },
-    2: {
-      number: 2,
-      name: 'Doelen',
-      description: 'Definieer de doelen die het bedrijf in de toekomst wil bereiken.',
-      completed: false,
-    },
-    3: {
-      number: 3,
-      name: 'Doelgroep',
-      description: 'Identificeer en beschrijf de doelgroep van het bedrijf.',
-      completed: false,
-    },
-  } as Record<string, FormStep>);
+let formSteps = reactive({
+  1: {
+    number: 1,
+    name: 'Bedrijfsgegevens',
+    description: 'Vul de benodigde informatie in met betrekking tot de bedrijfsgegevens.',
+    completed: false,
+  },
+  2: {
+    number: 2,
+    name: 'Doelen',
+    description: 'Definieer de doelen die het bedrijf in de toekomst wil bereiken.',
+    completed: false,
+  },
+  3: {
+    number: 3,
+    name: 'Doelgroep',
+    description: 'Identificeer en beschrijf de doelgroep van het bedrijf.',
+    completed: false,
+  },
+} as Record<string, FormStep>);
 
-  let formData = reactive({
-    industry: {
-      label: 'Industrie',
-      step: formSteps[1],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul een geldige industrie in.',
-    },
-    nrOfEmployees: {
-      label: 'Aantal werknemers',
-      step: formSteps[1],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul een geldig aantal werknemers in.',
-    },
-    stage: {
-      label: 'Fase',
-      step: formSteps[1],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul een geldige fase in.',
-    },
-    serviceInformation: {
-      label: 'Service informatie',
-      step: formSteps[2],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige service-informatie in.',
-    },
-    businessGoals: {
-      label: 'Doelen',
-      step: formSteps[2],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige zakelijke doelen in.',
-    },
-    painPoints: {
-      label: 'Pijnpunten',
-      step: formSteps[2],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige pijnpunten in.',
-    },
-    targetAudience: {
-      label: 'Doelgroep',
-      step: formSteps[3],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul een geldige doelgroep in.',
-    },
-    competitors: {
-      label: 'Competitie',
-      step: formSteps[3],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige informatie over concurrenten in.',
-    },
-    budget: {
-      label: 'Budget',
-      step: formSteps[3],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul een geldig budget in.',
-    },
-  } as Record<string, FormData>);
+let formData = reactive({
+  industry: {
+    label: 'Industrie',
+    step: formSteps[1],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul een geldige industrie in.',
+  },
+  nrOfEmployees: {
+    label: 'Aantal werknemers',
+    step: formSteps[1],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul een geldig aantal werknemers in.',
+  },
+  stage: {
+    label: 'Fase',
+    step: formSteps[1],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul een geldige fase in.',
+  },
+  serviceInformation: {
+    label: 'Service informatie',
+    step: formSteps[2],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul geldige service-informatie in.',
+  },
+  businessGoals: {
+    label: 'Doelen',
+    step: formSteps[2],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul geldige zakelijke doelen in.',
+  },
+  painPoints: {
+    label: 'Pijnpunten',
+    step: formSteps[2],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul geldige pijnpunten in.',
+  },
+  targetAudience: {
+    label: 'Doelgroep',
+    step: formSteps[3],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul een geldige doelgroep in.',
+  },
+  competitors: {
+    label: 'Competitie',
+    step: formSteps[3],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul geldige informatie over concurrenten in.',
+  },
+  budget: {
+    label: 'Budget',
+    step: formSteps[3],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul een geldig budget in.',
+  },
+} as Record<string, FormData>);
 
-  const startAnalysis = () => {
-    showInformation.value = false;
-    showForm.value = true;
-    currentStep.value = formSteps[1];
-    currentStepFields.value = getCurrentStepFields();
-  }
+const startAnalysis = () => {
+  showInformation.value = false;
+  showForm.value = true;
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+}
 
-  const nextStep = () => {
-    currentStepFields.value = getCurrentStepFields();
+const nextStep = () => {
+  currentStepFields.value = getCurrentStepFields();
 
-    const isStepValid = currentStepFields.value.every((field) => {
-      canValidate.value = true;
-      field.isValid = field.value !== '';
-
-      return field.isValid;
-    });
-
-    if (isStepValid) {
-      currentStep.value!.completed = true;
-      currentStep.value = formSteps[currentStep.value!.number + 1]
-      currentStepFields.value = getCurrentStepFields();
-      showInformation.value = false;
-      showForm.value = true;
-      canValidate.value = false;
-    } else {
-      alert('Vul alle verplichte velden in.');
-      currentStep.value!.completed = false;
-    }
-  };
-
-  const previousStep = () => {
+  const isStepValid = currentStepFields.value.every((field) => {
     canValidate.value = true;
+    field.isValid = field.value !== '';
 
-    if (currentStep.value === formSteps[1]) {
-      showInformation.value = true;
-      showForm.value = false;
-      alert('U gaat terug naar het overzicht.');
-    } else {
-      currentStep.value = formSteps[currentStep.value!.number - 1]
-      currentStepFields.value = getCurrentStepFields();
-    }
-  };
+    return field.isValid;
+  });
 
-  const continueAnalysis = () => {
-    showForm.value = true;
-    showInformation.value = false;
-
-    if (!currentStep.value) {
-      currentStep.value = formSteps[1];
-      currentStepFields.value = getCurrentStepFields();
-    }
-  };
-
-  const restartAnalysis = () => {
-    resetForm();
-    finishedAnalysis.value = false;
+  if (isStepValid) {
+    currentStep.value!.completed = true;
+    currentStep.value = formSteps[currentStep.value!.number + 1]
+    currentStepFields.value = getCurrentStepFields();
     showInformation.value = false;
     showForm.value = true;
-    currentStep.value = formSteps[1];
-    currentStep.value.completed = false;
-    alert('U herstart de analyse.');
-  };
+    canValidate.value = false;
+  } else {
+    alert('Vul alle verplichte velden in.');
+    currentStep.value!.completed = false;
+  }
+};
 
-  const goToOverview = () => {
+const previousStep = () => {
+  canValidate.value = true;
+
+  if (currentStep.value === formSteps[1]) {
     showInformation.value = true;
     showForm.value = false;
     alert('U gaat terug naar het overzicht.');
-  };
-
-  const reviewForm = () => {
+  } else {
+    currentStep.value = formSteps[currentStep.value!.number - 1]
     currentStepFields.value = getCurrentStepFields();
-
-    const isFormValid = currentStepFields.value.every((field) => {
-      canValidate.value = true;
-      field.isValid = field.value.length > 0;
-      console.log(field)
-      console.log(field.value)
-      console.log(field.value.length)
-
-      return field.isValid;
-    });
-
-    if (isFormValid) {
-      showForm.value = false;
-      showOverview.value = true;
-      canValidate.value = false;
-    }
   }
+};
 
-  const closeOverview = () => {
-    showForm.value = true;
-    showOverview.value = false;
-  }
+const continueAnalysis = () => {
+  showForm.value = true;
+  showInformation.value = false;
 
-  const submitForm = () => {
-    showOverview.value = false;
-    finishedAnalysis.value = true;
-    showInformation.value = true;
-    showForm.value = false;
-    alert('Analyse succesvol opgeslagen.');
-  };
-
-  const resetForm = () => {
-    for (const key in formData) {
-      // @ts-ignore
-      formData[key].value = '';
-      // @ts-ignore
-      formData[key].isValid = false;
-    }
+  if (!currentStep.value) {
     currentStep.value = formSteps[1];
     currentStepFields.value = getCurrentStepFields();
-    canValidate.value = false;
-  };
-
-  const getCurrentStepFields = () => {
-    return Object.values(formData).filter((field) => field.step === currentStep.value);
   }
+};
+
+const restartAnalysis = () => {
+  resetForm();
+  finishedAnalysis.value = false;
+  showInformation.value = false;
+  showForm.value = true;
+  currentStep.value = formSteps[1];
+  currentStep.value.completed = false;
+  alert('U herstart de analyse.');
+};
+
+const goToOverview = () => {
+  showInformation.value = true;
+  showForm.value = false;
+  alert('U gaat terug naar het overzicht.');
+};
+
+const reviewForm = () => {
+  currentStepFields.value = getCurrentStepFields();
+
+  const isFormValid = currentStepFields.value.every((field) => {
+    canValidate.value = true;
+    field.isValid = field.value.length > 0;
+    console.log(field)
+    console.log(field.value)
+    console.log(field.value.length)
+
+    return field.isValid;
+  });
+
+  if (isFormValid) {
+    showForm.value = false;
+    showOverview.value = true;
+    canValidate.value = false;
+  }
+}
+
+const closeOverview = () => {
+  showForm.value = true;
+  showOverview.value = false;
+}
+
+const submitForm = () => {
+  showOverview.value = false;
+  finishedAnalysis.value = true;
+  showInformation.value = true;
+  showForm.value = false;
+  alert('Analyse succesvol opgeslagen.');
+};
+
+const resetForm = () => {
+  for (const key in formData) {
+    // @ts-ignore
+    formData[key].value = '';
+    // @ts-ignore
+    formData[key].isValid = false;
+  }
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+  canValidate.value = false;
+};
+
+const getCurrentStepFields = () => {
+  return Object.values(formData).filter((field) => field.step === currentStep.value);
+}
 </script>
 
 <template>
@@ -276,7 +276,7 @@
 
     <form @submit.prevent="submitForm" class="rounded py-5 shadow-sm bg-white">
       <div class="row">
-        <div class="col-1"/>
+        <div class="col-1" />
 
         <div class="col-7">
           <SubHeader>Stap {{ currentStep.number }}: {{ currentStep.name }}</SubHeader>
@@ -287,13 +287,8 @@
             <div class="pb-3" v-for="(formField, key) in currentStepFields" :key="key">
               <label :for="formField.label" class="form-label">{{ formField.label }}</label>
 
-              <input
-                type="text"
-                class="form-control"
-                :id="formField.label"
-                v-model="formField.value"
-                :class="{ 'is-invalid': !formField.isValid && canValidate }"
-              >
+              <input type="text" class="form-control" :id="formField.label" v-model="formField.value"
+                :class="{ 'is-invalid': !formField.isValid && canValidate }">
 
               <small class="invalid-feedback">{{ formField.errorMessage }}</small>
             </div>
@@ -304,27 +299,20 @@
       <div class="d-flex flex-row align-items-center justify-content-center pt-5">
         <template v-if="currentStep.number > 0">
           <template v-for="(step, key, index) in formSteps" :key="key">
-            <div
-              v-if="index === 0" class="progress-circle not-active"
-              :class="{ 'active': currentStep.number === 1, 'completed': currentStep.number > 1 }"
-            />
+            <div v-if="index === 0" class="progress-circle not-active"
+              :class="{ 'active': currentStep.number === 1, 'completed': currentStep.number > 1 }" />
 
-            <div v-else class="progress-line"/>
+            <div v-else class="progress-line" />
 
-            <div
-              v-if="index > 0"
-              class="progress-circle not-active"
-              :class="{ 'active': currentStep.number === index + 1, 'completed': currentStep.number > index + 1 }"
-            />
+            <div v-if="index > 0" class="progress-circle not-active"
+              :class="{ 'active': currentStep.number === index + 1, 'completed': currentStep.number > index + 1 }" />
           </template>
         </template>
       </div>
 
       <div class="d-flex flex-wrap justify-content-center pt-4">
-        <TextButton
-          v-if="currentStep && currentStep.number === 1"
-          type="secondary" display-style="secondary" class="me-4"
-        >
+        <TextButton v-if="currentStep && currentStep.number === 1" type="secondary" display-style="secondary"
+          class="me-4">
           Vorige
         </TextButton>
 
@@ -374,13 +362,13 @@
       </div>
 
       <div class="d-inline-flex flex-wrap justify-content-center">
-          <TextButton display-style="secondary" class="me-4" @click="closeOverview">
-            Wijzig analyse
-          </TextButton>
+        <TextButton display-style="secondary" class="me-4" @click="closeOverview">
+          Wijzig analyse
+        </TextButton>
 
-          <TextButton type="success" @click="submitForm">
-            Voltooi Analyse
-          </TextButton>
+        <TextButton type="success" @click="submitForm">
+          Voltooi Analyse
+        </TextButton>
       </div>
     </div>
   </div>
