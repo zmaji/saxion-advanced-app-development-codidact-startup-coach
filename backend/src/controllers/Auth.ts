@@ -2,21 +2,18 @@ import type { User } from '../typings/User';
 
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import UserModel from '../models/User';
+import userModel from '../models/User';
 
 export const authenticateUser = async (
-    password: string, 
-    userName: string, 
-    emailAddress: string
-  ): Promise<string | null> => {
+    userName: string,
+    emailAddress: string,
+    password: string,
+): Promise<string | null> => {
   try {
     if ((userName || emailAddress) && password) {
-      // const user: User | null = userName ? 
-      // await UserModel.findOne({ userName: userName }) : 
-      // await UserModel.findOne({ emailAddress: emailAddress });
-
-      const user: User | null = await UserModel.findOne({ userName: userName });
-      console.log('User found:', user);
+      const user: User | null = userName ?
+      await userModel.findOne({ userName: userName }) :
+      await userModel.findOne({ emailAddress: emailAddress });
 
       if (user) {
         const result = bcrypt.compareSync(password, user.password);
@@ -27,7 +24,7 @@ export const authenticateUser = async (
             email: user.emailAddress,
             fullname: user.fullName,
             company: user.company,
-            roles: user.roles
+            roles: user.roles,
           }, user.secret);
         } else {
           return null;
@@ -37,6 +34,7 @@ export const authenticateUser = async (
       }
     } else {
       console.error('Something went wrong authenticating a user: Missing username or email address');
+
       return null;
     }
   } catch (error) {
@@ -46,7 +44,7 @@ export const authenticateUser = async (
 };
 
 const Auth = {
-  authenticateUser
+  authenticateUser,
 };
 
 export default Auth;
