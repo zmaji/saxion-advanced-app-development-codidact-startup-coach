@@ -53,7 +53,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.spec.ts'],
+      files: ['*.spec.ts', './srs/plugins/http/httpService.ts'],
       rules: {
         '@typescript-eslint/no-non-null-assertion': 'off',
         'import/order': importOrderRule,

@@ -1,5 +1,8 @@
-import { useTokenStore } from "@/stores/token";
-import axios from "axios";
+/* eslint-disable no-useless-catch */
+
+import axios from 'axios';
+
+import { useTokenStore } from '@/stores/token';
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL_API;
 
