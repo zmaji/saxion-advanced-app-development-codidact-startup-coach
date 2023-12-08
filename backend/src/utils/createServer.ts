@@ -4,7 +4,6 @@ import express from 'express';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
 import AuthRoutes from '../routes/Auth';
-import IsLoggedIn from '../middleware/isLoggedIn';
 import isLoggedIn from '../middleware/isLoggedIn';
 
 const createServer = () => {
