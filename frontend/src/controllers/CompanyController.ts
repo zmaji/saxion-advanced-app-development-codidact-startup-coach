@@ -5,6 +5,7 @@ import axios from 'axios';
 const BASE_URL = 'http://127.0.0.1:3000';
 
 const getCompany = async (companyID: string): Promise<Company | undefined> => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const response = await axios.get(`${BASE_URL}/companies/${companyID}`);
 
@@ -15,6 +16,7 @@ const getCompany = async (companyID: string): Promise<Company | undefined> => {
 };
 
 const updateCompany = async (companyID: string, companyData: any): Promise<Company | undefined> => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const response = await axios.put(`${BASE_URL}/companies/${companyID}`, companyData);
 

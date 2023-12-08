@@ -6,6 +6,7 @@ import axios from 'axios';
 const BASE_URL = 'http://127.0.0.1:3000';
 
 const getCompanyAnalysis = async (companyAnalysisID: string): Promise<companyAnalysis | undefined> => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const response = await axios.get(`${BASE_URL}/companyAnalyses/${companyAnalysisID}`);
 
@@ -16,6 +17,7 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<companyAna
 };
 
 const createCompanyAnalysis = async (companyAnalysisData: FormData): Promise<companyAnalysis | null> => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const response = await axios.post<companyAnalysis | null>(`${BASE_URL}/companyAnalyses`, companyAnalysisData, {
       headers: {
