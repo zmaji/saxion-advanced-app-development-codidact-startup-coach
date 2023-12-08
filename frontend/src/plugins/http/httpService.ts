@@ -8,6 +8,7 @@ const baseUrl = import.meta.env.VITE_APP_BASE_URL_API;
 
 const setAuthorizationHeader = () => {
   const token = useTokenStore().getToken;
+
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }

@@ -26,17 +26,17 @@
         await router.push({ name: 'company.overview' });
       }
     } catch (e) {
-        const errorMappings: { [key: string]: string } = {
-          'Missing required fields': 'Vul alstublieft alle velden in',
-          'Invalid credentials': 'De ingevoerde gegevens zijn onjuist',
-        };
+      const errorMappings: { [key: string]: string } = {
+        'Missing required fields': 'Vul alstublieft alle velden in',
+        'Invalid credentials': 'De ingevoerde gegevens zijn onjuist',
+      };
 
-        let errorMessage =
-          (e as Error & { response?: { data?: { error?: string } } })?.response?.data?.error ||
-          'An error occurred during login';
+      let errorMessage =
+        (e as Error & { response?: { data?: { error?: string } } })?.response?.data?.error ||
+        'An error occurred during login';
 
-        error.value = errorMappings[errorMessage] || errorMessage;
-      }
+      error.value = errorMappings[errorMessage] || errorMessage;
+    }
   };
 </script>
 

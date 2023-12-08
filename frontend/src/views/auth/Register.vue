@@ -30,7 +30,6 @@
                 <input type="email" class="form-control" id="email" placeholder="Uw e-mailadres">
               </div>
 
-
               <div class="pb-4 col-lg-10 col-xl-8">
                 <label for="password" class="form-label">Wachtwoord</label>
                 <input type="password" class="form-control" id="password" placeholder="Uw wachtwoord">

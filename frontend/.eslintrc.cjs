@@ -34,12 +34,12 @@ module.exports = {
     'linebreak-style': 0,
     'new-cap': 'off',
     'object-curly-spacing': ['error', 'always'],
-    "space-before-blocks": ["error", "always"],
-    "keyword-spacing": ["error", { "before": true, "after": true }],
+    'space-before-blocks': ['error', 'always'],
+    'keyword-spacing': ['error', { 'before': true, 'after': true }],
     'max-len': ['error', {
       code: 120,
     }],
-    "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }],
+    'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 1 }],
     'padding-line-between-statements': [
       'error',
       { blankLine: 'always', 'prev': ['const', 'let', 'var'], 'next': ['if', 'try', 'switch'] },
