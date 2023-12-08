@@ -30,11 +30,7 @@ const createCompanyAnalysis = async (companyAnalysisData: companyAnalysis): Prom
     const newCompanyAnalysis = new CompanyAnalysisModel(companyAnalysisData);
     const companyAnalysis = await newCompanyAnalysis.save();
 
-    if (companyAnalysis) {
-      return companyAnalysis;
-    }
-
-    return null;
+    return companyAnalysis || null;
   } catch (error) {
     console.error('Something went wrong creating a company analysis:', error);
     throw error;
