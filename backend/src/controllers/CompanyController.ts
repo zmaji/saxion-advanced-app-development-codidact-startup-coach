@@ -33,11 +33,7 @@ const updateCompany = async (companyID: string, companyData: Company): Promise<C
         { new: true },
     );
 
-    if (updatedCompany) {
-      return updatedCompany;
-    }
-
-    return null;
+    return updatedCompany || null;
   } catch (error) {
     console.error('Something went wrong updating a company', error);
     throw error;
