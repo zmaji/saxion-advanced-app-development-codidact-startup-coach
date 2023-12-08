@@ -15,6 +15,7 @@ const getCompanyAnalyses = async (): Promise<companyAnalysis[]> => {
 const getCompanyAnalysis = async (companyAnalysisID: string): Promise<companyAnalysis | null> => {
   try {
     const result = await CompanyAnalysisModel.findOne({ companyAnalysisID }, { _id: 0 });
+
     return result || null;
   } catch (error) {
     console.error('Something went wrong getting a company analysis:', error);

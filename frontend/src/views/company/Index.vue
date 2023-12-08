@@ -14,7 +14,6 @@
     SubHeader
   } from '@/components';
 
-
   let currentStep = ref<FormStep | null>(null);
   let currentStepFields = ref<FormData[] | null>(null);
   let showForm = ref(false);
@@ -244,6 +243,7 @@
         const companyData = {
           companyAnalysis: newCompanyAnalysis.companyAnalysisID
         }
+
         if (currentCompany.value) {
           await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
         }

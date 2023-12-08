@@ -16,7 +16,7 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<companyAna
 const createCompanyAnalysis = async (companyAnalysisData: FormData): Promise<companyAnalysis | null> => {
   // eslint-disable-next-line no-useless-catch
   try {
-    const response = await httpService.postRequest(`/companyAnalyses`, companyAnalysisData);
+    const response = await httpService.postRequest('/companyAnalyses', companyAnalysisData);
 
     return response.data;
   } catch (error) {
