@@ -2,7 +2,7 @@
   import type { RouteLocationRaw } from 'vue-router';
   import type { buttonTypes, buttonSizes, buttonDisplayStyles } from '.';
 
-  import { computed, useSlots } from "vue";
+  import { computed, useSlots } from 'vue';
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
   interface Props {
