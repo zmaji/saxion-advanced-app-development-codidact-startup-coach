@@ -36,7 +36,7 @@ const userSchema: Schema<User> = new Schema({
     required: true,
   },
 }, {
-  collection: 'steps',
+  collection: 'users',
   versionKey: false,
 });
 
