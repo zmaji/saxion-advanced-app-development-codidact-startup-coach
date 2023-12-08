@@ -9,7 +9,7 @@ const DB_HOST = process.env.DB_HOST;
 const DB_PORT = process.env.DB_PORT;
 const DB_NAME = process.env.DB_NAME;
 const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_PASSWORD = process.env.DB_NAME;
 
 class Database {
   constructor() {
@@ -20,16 +20,15 @@ class Database {
     const mongoURI =
       // eslint-disable-next-line max-len
       `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authMechanism=SCRAM-SHA-256&authSource=admin`;
-    console.log(mongoURI);
     console.log('setting up database connection');
 
     mongoose.connect(mongoURI, {})
-        .then(() => {
-          console.log('Database connection successful to ' + DB_HOST + ':' + DB_PORT);
-        })
-        .catch((err) => {
-          console.log('Database connection error:', err);
-        });
+      .then(() => {
+        console.log('Database connection successful to ' + DB_HOST + ':' + DB_PORT);
+      })
+      .catch((err) => {
+        console.log('Database connection error:', err);
+      });
   }
 }
 
