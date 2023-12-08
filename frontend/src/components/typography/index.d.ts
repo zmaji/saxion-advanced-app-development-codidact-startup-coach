@@ -1,3 +1,5 @@
+export type colorTypes = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'danger';
+
 export type paddingBottomOptions = 'pb-1' | 'pb-2' | 'pb-3' | 'pb-4' | 'pb-5'
   | 'pb-6' | 'pb-7' | 'pb-8' | 'pb-9' | 'pb-10';
 export type paddingTopOption = 'pt-1' | 'pt-2' | 'pt-3' | 'pt-4' | 'pt-5'
