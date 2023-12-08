@@ -10,33 +10,22 @@
   let selectedCompanies: Ref<ContentCompany[]> = ref([])
   let companyOptions: Ref<ContentCompany[]> = ref([
     {
-      labelID: 1,
+      companyID: 1,
       name: 'Saxion',
     },
     {
-      labelID: 2,
+      companyID: 2,
       name: 'Inversable',
     },
     {
-      labelID: 3,
+      companyID: 3,
       name: 'Topicus',
     },
     {
-      labelID: 4,
+      companyID: 4,
       name: 'Google',
     },
   ]);
-
-  // const addCompany = (newCompany: string) => {
-    
-  //   const result = {
-  //     labelID: companyOptions.value.length + 1,
-  //     name: newCompany
-  //   };
-
-  //   companyOptions.value.push(result);
-  //   selectedCompanies.value.push(result);
-  // }
 
   const removeCompany = (selectedCompany: ContentCompany): void => {
     const index = selectedCompanies.value.findIndex(company => company.companyID === selectedCompany.companyID);
@@ -54,7 +43,7 @@
     tag-placeholder="Dit bedrijf bestaat niet"
     placeholder="Selecteer bedrijven om uit te nodigen"
     label="name"
-    track-by="labelID"
+    track-by="companyID"
     class="pb-2"
     :options="companyOptions"
     :multiple="true"
@@ -62,7 +51,7 @@
     :close-on-select="false"
   />
 
-  <SmallHeader>Geselecteerde companies</SmallHeader>
+  <SmallHeader>Geselecteerde bedrijven</SmallHeader>
 
   <div class="d-flex flex-direction-row flex-wrap">
     <div

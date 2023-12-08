@@ -1,7 +1,12 @@
 <script setup lang="ts">
   import { Ref, ref } from 'vue';
 
-  import { PageTitle, SecondaryTitle, TextButton } from '@/components'
+  import {
+    PageTitle,
+    SecondaryTitle,
+    TextButton,
+    UserSelect
+  } from '@/components';
   import { LabelSelect } from '@/components'
   import { CompanySelect } from '@/components'
 
@@ -61,29 +66,47 @@
 
     <div class="col">
       <SecondaryTitle> Toegangsniveau </SecondaryTitle>
+    </div>
+
+    <div class="col"> 
+    <!-- Een lege col om de divs te alignen  -->
+    </div>
+    <div class="col">
       <div class="pb-3 col-lg-10">
-        <label class="pb-2" for="category">Zichtbaarheid</label>
-        <select class="form-select" id="category" v-model="accessLevel">
+        <label class="pb-2" for="accessLevel">Zichtbaarheid</label>
+        <select class="form-select" id="accessLevel" v-model="accessLevel">
           <option selected value="">Selecteer toegangsniveau (Standaard Openbaar)</option>
           <option value="private">Privé</option>
           <option value="restricted">Beperkt</option>
           <option value="public">Openbaar</option>
         </select>
       </div>
+    </div>
 
+    <div class="col">
       <div v-if="accessLevel === 'restricted'">
-          <CompanySelect/>
+          <label class="pb-2" for="company"> Welke bedrijven mogen uw content zien</label>
+            <CompanySelect/>
       </div>
+    </div>
+      
+    
+    <div class="col">
+      <div v-if="accessLevel === 'restricted'">
+          <label class="pb-2" for="user"> Welke gebruikers mogen uw content zien</label>
+            <UserSelect/>
+      </div>
+    </div>
+    
 
-      <div class="d-flex flex-md-row flex-column flex-wrap">
+  </div>
+  <div class="d-flex flex-md-row flex-column flex-wrap">
         <TextButton class="mb-3 mb-md-0 me-md-2"> Toevoegen </TextButton>
 
         <TextButton :to="{ name: 'content.overview' }" display-style="tertiary">
           Annuleren
         </TextButton>
       </div>
-    </div>
-  </div>
 </template>
 
 <style scoped></style>

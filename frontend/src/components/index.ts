@@ -17,3 +17,4 @@ export { default as SmallHeader } from './typography/SmallHeader/SmallHeader.vue
 // Other components
 export { default as LabelSelect } from './content/LabelSelect.vue'
 export { default as CompanySelect } from './content/CompanySelect.vue'
+export { default as UserSelect } from './content/UserSelect.vue'
