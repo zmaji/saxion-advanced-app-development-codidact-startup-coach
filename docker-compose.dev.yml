@@ -26,9 +26,11 @@ services:
     depends_on:
       - mongo
     environment:
-      DB_HOST: mongo
+      DB_HOST: api-mongo
       DB_PORT: 27017
       DB_NAME: codidact-startup-coach-db
+      DB_USER: root
+      DB_PASSWORD: admin
 
   frontend:
     image: codidact-startup-coach-frontend:latest

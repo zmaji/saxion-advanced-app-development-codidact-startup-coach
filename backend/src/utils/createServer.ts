@@ -5,6 +5,8 @@ import cors from 'cors';
 import fileUpload from 'express-fileupload';
 import AuthRoutes from '../routes/Auth';
 import isLoggedIn from '../middleware/isLoggedIn';
+import CompanyRoutes from '../routes/CompanyRouter';
+import CompanyAnalysesRoutes from '../routes/CompanyAnalysisRouter';
 
 const createServer = () => {
   const app: Express = express();
@@ -29,7 +31,11 @@ const createServer = () => {
     res.send('Welcome to Express & TypeScript Server');
   });
 
+  app.use('/companies', CompanyRoutes);
+  app.use('/companyAnalyses', CompanyAnalysesRoutes);
+
   return app;
 };
 
 export default createServer;
+
