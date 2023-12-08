@@ -30,8 +30,6 @@
   const hasDefualtSlot = !!slots['default'];
 
   const dynamicDomClasses = computed<string>(() => {
-    const classString = '';
-
     switch (props.displayStyle) {
     case 'secondary':
       return `
