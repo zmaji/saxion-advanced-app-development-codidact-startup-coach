@@ -15,9 +15,9 @@ const generateAuthToken = (user: User): string => {
 };
 
 const authenticateUser = async (
-  userName: string,
-  emailAddress: string,
-  password: string,
+    userName: string,
+    emailAddress: string,
+    password: string,
 ): Promise<string | null> => {
   try {
     if ((userName || emailAddress) && password) {
