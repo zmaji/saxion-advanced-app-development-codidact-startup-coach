@@ -1,5 +1,7 @@
 <script setup lang="ts">
   import { PageTitle, SecondaryTitle, TextButton } from '@/components'
+  import { ContentLabels } from '@/components'
+  
 </script>
 
 <template>
@@ -73,8 +75,9 @@
 
       <div class="col">
         <div class="pb-3 col-lg-10">
-          <label class="pb-2" for="content-label">Content Labels</label>
-
+          <label class="pb-2" for="content-labels">Content Labels</label>
+          
+          <ContentLabels></ContentLabels>
           <!-- <select class="form-select" size="5" id="content-label">
             <option class="pb-2" value="" selected>Selecteer één of meer labels</option>
 
