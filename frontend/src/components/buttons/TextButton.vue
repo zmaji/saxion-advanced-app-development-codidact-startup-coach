@@ -55,7 +55,6 @@
     <slot></slot>
   </button>
 
-
   <RouterLink
     v-else
     :class="dynamicDomClasses"
