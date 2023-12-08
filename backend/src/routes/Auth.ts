@@ -8,28 +8,28 @@ router.post('', async (req: Request, res: Response) => {
   try {
     const { userName, emailAddress, password } = req.body;
 
-    if((!userName && !emailAddress) || !password) {
-      res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({ error: 'Missing required fields' });
+    if ((!userName && !emailAddress) || !password) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'Missing required fields' });
     }
 
     const token = await authController.authenticateUser(userName, emailAddress, password);
 
     if (token) {
-      res
-          .status(StatusCodes.OK)
-          .json({ token });
+      return res
+        .status(StatusCodes.OK)
+        .json({ token });
     } else {
-      res
-          .status(StatusCodes.UNAUTHORIZED)
-          .json({ error: 'Invalid credentials' });
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ error: 'Invalid credentials' });
     }
   } catch (error) {
     console.error('An error occurred authenticating a user:', error);
-    res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'An error occurred' });
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: 'An error occurred' });
   }
 });
 

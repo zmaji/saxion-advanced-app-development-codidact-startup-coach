@@ -14,7 +14,7 @@ const generateAuthToken = (user: User): string => {
   }, user.secret);
 };
 
-export const authenticateUser = async (
+const authenticateUser = async (
     userName: string,
     emailAddress: string,
     password: string,

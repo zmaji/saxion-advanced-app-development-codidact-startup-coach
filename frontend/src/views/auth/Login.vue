@@ -1,5 +1,34 @@
 <script setup lang="ts">
   import { PageTitle, TextButton, IconButton } from '@/components';
+  import httpService from '@/plugins/http/httpService';
+  import router from '@/router';
+  import { useTokenStore } from '@/stores/token';
+  import { ref } from 'vue';
+
+  const userName = ref('');
+  const password = ref('');
+  const error = ref('');
+
+  const login = async () => {
+    try{
+      const response = await httpService.postRequest('/credentials', {userName: userName.value, password: password.value}, false);
+
+      if (response.status === 200) {
+        useTokenStore().setToken(response.data.token);
+        router.push({ name: 'company.overview' });
+      } else {
+        error.value = response.data.error;
+      }
+    } catch (e) {
+      let errorMessage = (e as Error & { response?: { data?: { error?: string } } })?.response?.data?.error;
+      if (errorMessage === 'Missing required fields') {
+        errorMessage = "Vul alstublieft alle velden in";
+      } else if (errorMessage === 'Invalid credentials') {
+        errorMessage = "De ingevoerde gegevens zijn onjuist";
+      }
+      error.value = errorMessage || 'An error occurred during login';
+    }
+  };
 </script>
 
 <template>
@@ -22,18 +51,22 @@
             <form>
               <div class="pb-4 col-lg-8">
                 <label for="username" class="form-label">Gebruikersnaam</label>
-                <input type="text" class="form-control" id="username" placeholder="Uw gebruikersnaam">
+                <input type="text" class="form-control" id="username" placeholder="Uw gebruikersnaam" v-model="userName">
               </div>
 
               <div class="pb-4 col-lg-8">
                 <label for="password" class="form-label">Wachtwoord</label>
-                <input type="password" class="form-control" id="password" placeholder="Uw wachtwoord">
+                <input type="password" class="form-control" id="password" placeholder="Uw wachtwoord" v-model="password">
+              </div>
+
+              <div class="pb-4 col-lg-8" v-if="error">
+                <p class="text-danger">{{ error }}</p>
               </div>
 
               <div class="d-flex flex-md-row flex-column flex-wrap">
                 <TextButton
-                  :to="{ name: 'company.overview' }"
                   class="mb-3 mb-md-0 me-md-2"
+                  @click="login"
                 >
                   Inloggen
                 </TextButton>
