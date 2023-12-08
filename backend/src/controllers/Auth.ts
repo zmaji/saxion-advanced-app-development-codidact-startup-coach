@@ -4,10 +4,16 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import UserModel from '../models/User';
 
-export const authenticateUser = async (userName: string, password: string): Promise<string | null> => {
+export const authenticateUser = async (
+    password: string, 
+    userName: string | null, 
+    emailAddress: string | null
+  ): Promise<string | null> => {
   try {
-    if (userName && password) {
-      const user: User | null = await UserModel.findOne({ userName: userName });
+    if ((userName || emailAddress) && password) {
+      const user: User | null = userName ? 
+      await UserModel.findOne({ userName: userName }) : 
+      await UserModel.findOne({ emailAddress: emailAddress });
 
       if (user) {
         const result = bcrypt.compareSync(password, user.password);
@@ -16,7 +22,9 @@ export const authenticateUser = async (userName: string, password: string): Prom
           return jwt.sign({
             userID: user.userID,
             email: user.emailAddress,
-            roles: user.roles,
+            fullname: user.fullName,
+            company: user.company,
+            roles: user.roles
           }, user.secret);
         } else {
           return null;
@@ -25,6 +33,7 @@ export const authenticateUser = async (userName: string, password: string): Prom
         return null;
       }
     } else {
+      console.error('Something went wrong authenticating a user: Missing username or email address');
       return null;
     }
   } catch (error) {
@@ -34,7 +43,7 @@ export const authenticateUser = async (userName: string, password: string): Prom
 };
 
 const Auth = {
-  authenticateUser,
+  authenticateUser
 };
 
 export default Auth;

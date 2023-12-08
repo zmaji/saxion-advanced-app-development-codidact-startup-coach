@@ -3,6 +3,7 @@ import type { User } from '../typings/User';
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
+import UserModel from '../models/User';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -44,7 +45,7 @@ const verifyToken = async (token: string) => {
 
   if (tokenPayload) {
     try {
-      const user: User | null = await userController.getUser(tokenPayload.userID);
+      const user: User | null = await UserModel.findOne({userID: tokenPayload.userID});
       if (user) {
         try {
           return jwt.verify(token, user.secret);
