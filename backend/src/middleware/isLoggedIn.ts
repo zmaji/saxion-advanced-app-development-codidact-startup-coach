@@ -45,7 +45,7 @@ const verifyToken = async (token: string) => {
 
   if (tokenPayload) {
     try {
-      const user: User | null = await UserModel.findOne({userID: tokenPayload.userID});
+      const user: User | null = await UserModel.findOne({ userID: tokenPayload.userID });
       if (user) {
         try {
           return jwt.verify(token, user.secret);
