@@ -21,14 +21,13 @@
         false
       );
 
-      if (response.status === 200) {
+      if (response) {
         useTokenStore().setToken(response.data.token);
         await router.push({ name: 'company.overview' });
-      } else {
-        error.value = response.data.error;
       }
     } catch (e) {
       let errorMessage = (e as Error & { response?: { data?: { error?: string } } })?.response?.data?.error;
+
       if (errorMessage === 'Missing required fields') {
         errorMessage = 'Vul alstublieft alle velden in';
       } else if (errorMessage === 'Invalid credentials') {

@@ -42,6 +42,8 @@ module.exports = {
     "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }],
     'padding-line-between-statements': [
       'error',
+      { blankLine: 'always', 'prev': ['const', 'let', 'var'], 'next': ['if', 'try', 'switch'] },
+      { blankLine: 'always', 'prev': 'if', 'next': ['const', 'let', 'var'] },
       { blankLine: 'always', prev: '*', next: 'return' },
     ],
     'no-multi-spaces': ['error'],
