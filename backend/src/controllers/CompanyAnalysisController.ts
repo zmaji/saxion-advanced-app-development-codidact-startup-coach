@@ -1,5 +1,7 @@
 import type { companyAnalysis } from '../typings/CompanyAnalysis';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import CompanyAnalysisModel from '../models/CompanyAnalysisModel';
 
 const getCompanyAnalyses = async (): Promise<companyAnalysis[]> => {
@@ -28,6 +30,8 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<companyAna
 // eslint-disable-next-line max-len
 const createCompanyAnalysis = async (companyAnalysisData: companyAnalysis): Promise<companyAnalysis | null> => {
   try {
+    companyAnalysisData.companyAnalysisID = uuidv4();
+
     const newCompanyAnalysis = new CompanyAnalysisModel(companyAnalysisData);
     const companyAnalysis = await newCompanyAnalysis.save();
 
