@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import type { Company } from '@/typings/Company';
+
 import type { FormData, FormStep } from '@/typings/form';
 
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
+
+import CompanyController from '../../controllers/CompanyController';
+import CompanyAnalysisController from '../../controllers/CompanyAnalysisController';
 
 import {
   TextButton,
@@ -11,6 +16,7 @@ import {
   SubHeader
 } from '@/components';
 
+
 let currentStep = ref<FormStep | null>(null);
 let currentStepFields = ref<FormData[] | null>(null);
 let showForm = ref(false);
@@ -18,6 +24,22 @@ let showInformation = ref(true);
 let finishedAnalysis = ref(false);
 let canValidate = ref(false);
 let showOverview = ref(false);
+
+// TODO: Logged in user -> current company -> id
+const currentCompanyID = ref<string>('2921da3b-4726-4347-8893-4324b7c30d00');
+const currentCompany = ref<Company | undefined>();
+
+const fetchCurrentCompany = async () => {
+  try {
+    const fetchedCompany = await CompanyController.getCompany(currentCompanyID.value);
+    currentCompany.value = fetchedCompany;
+
+  } catch (error) {
+    console.error('Error fetching current company:', error);
+  }
+};
+
+onMounted(fetchCurrentCompany);
 
 let formSteps = reactive({
   1: {
@@ -51,7 +73,7 @@ let formData = reactive({
   nrOfEmployees: {
     label: 'Aantal werknemers',
     step: formSteps[1],
-    value: '',
+    value: 0,
     isValid: false,
     errorMessage: 'Vul een geldig aantal werknemers in.',
   },
@@ -100,7 +122,7 @@ let formData = reactive({
   budget: {
     label: 'Budget',
     step: formSteps[3],
-    value: '',
+    value: 0,
     isValid: false,
     errorMessage: 'Vul een geldig budget in.',
   },
@@ -180,10 +202,8 @@ const reviewForm = () => {
 
   const isFormValid = currentStepFields.value.every((field) => {
     canValidate.value = true;
-    field.isValid = field.value.length > 0;
-    console.log(field)
-    console.log(field.value)
-    console.log(field.value.length)
+
+    field.isValid = typeof field.value === 'string' ? field.value.length > 0 : true;
 
     return field.isValid;
   });
@@ -200,12 +220,49 @@ const closeOverview = () => {
   showOverview.value = false;
 }
 
-const submitForm = () => {
+const submitForm = async () => {
   showOverview.value = false;
   finishedAnalysis.value = true;
   showInformation.value = true;
   showForm.value = false;
+
+  try {
+    const formFields = new FormData();
+
+    // TODO: Change logic based on Juul's input, could then be made dynamically as well 
+    formFields.append('industry', String(formData.industry.value));
+    formFields.append('serviceInformation', String(formData.serviceInformation.value));
+    formFields.append('nrOfEmployees', String(formData.nrOfEmployees.value));
+    formFields.append('stage', String(formData.stage.value));
+    formFields.append('businessGoals', JSON.stringify([String(formData.businessGoals.value)]));
+    formFields.append('painPoints', JSON.stringify([String(formData.painPoints.value)]));
+    formFields.append('competitors', JSON.stringify([String(formData.competitors.value)]));
+    formFields.append('targetAudience', String(formData.targetAudience.value));
+    formFields.append('budget', String(formData.budget.value));
+
+    const newCompanyAnalysis = await CompanyAnalysisController.createCompanyAnalysis(formFields);
+
+    if (newCompanyAnalysis) {
+      const companyData = {
+        companyAnalysis: newCompanyAnalysis.companyAnalysisID
+      }
+      if (currentCompany.value) {
+        await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
+      }
+    }
+  } catch (error) {
+    console.error('Error creating company analysis:', error);
+  }
   alert('Analyse succesvol opgeslagen.');
+};
+
+const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
+  try {
+    await CompanyController.updateCompany(companyID, companyData);
+    fetchCurrentCompany();
+  } catch (error) {
+    console.error('Error associating company analysis:', error);
+  }
 };
 
 const resetForm = () => {
@@ -288,7 +345,11 @@ const getCurrentStepFields = () => {
               <label :for="formField.label" class="form-label">{{ formField.label }}</label>
 
               <input type="text" class="form-control" :id="formField.label" v-model="formField.value"
-                :class="{ 'is-invalid': !formField.isValid && canValidate }">
+                :class="{ 'is-invalid': !formField.isValid && canValidate }"
+                v-if="formField.label !== 'Aantal werknemers' && formField.label !== 'Budget'">
+
+              <input type="number" class="form-control" :id="formField.label" v-model="formField.value"
+                :class="{ 'is-invalid': !formField.isValid && canValidate }" v-else>
 
               <small class="invalid-feedback">{{ formField.errorMessage }}</small>
             </div>

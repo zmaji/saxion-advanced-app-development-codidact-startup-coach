@@ -10,17 +10,17 @@ router.get('', async (req: Request, res: Response) => {
 
     if (result) {
       res
-          .status(StatusCodes.OK)
-          .json(result);
+        .status(StatusCodes.OK)
+        .json(result);
     } else {
       res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ error: 'Unable to find companies' });
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: 'Unable to find companies' });
     }
   } catch (error) {
     res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'An error occurred getting all companies' });
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: 'An error occurred getting all companies' });
   }
 });
 
@@ -30,17 +30,37 @@ router.get('/:companyID', async (req: Request, res: Response) => {
 
     if (result) {
       res
-          .status(StatusCodes.OK)
-          .json(result);
+        .status(StatusCodes.OK)
+        .json(result);
     } else {
       res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ error: `Unable to find company with ID ${req.params.companyID}` });
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: `Unable to find company with ID ${req.params.companyID}` });
     }
   } catch (error) {
     res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'An error occurred getting a company' });
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: 'An error occurred getting a company' });
+  }
+});
+
+router.put('/:companyID', async (req: Request, res: Response) => {
+  try {
+    const updatedCompany = await CompanyController.updateCompany(req.params.companyID, req.body);
+
+    if (updatedCompany) {
+      res
+        .status(StatusCodes.OK)
+        .json(updatedCompany);
+    } else {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: `Unable to update company with ID ${req.params.companyID}` });
+    }
+  } catch (error) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: 'An error occurred updating a company' });
   }
 });
 
