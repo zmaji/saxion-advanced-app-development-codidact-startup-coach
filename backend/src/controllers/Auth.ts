@@ -4,6 +4,16 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import userModel from '../models/User';
 
+const generateAuthToken = (user: User): string => {
+  return jwt.sign({
+    userID: user.userID,
+    email: user.emailAddress,
+    fullname: user.fullName,
+    company: user.company,
+    roles: user.roles,
+  }, user.secret);
+};
+
 export const authenticateUser = async (
     userName: string,
     emailAddress: string,
@@ -19,13 +29,7 @@ export const authenticateUser = async (
         const result = bcrypt.compareSync(password, user.password);
 
         if (result) {
-          return jwt.sign({
-            userID: user.userID,
-            email: user.emailAddress,
-            fullname: user.fullName,
-            company: user.company,
-            roles: user.roles,
-          }, user.secret);
+          return generateAuthToken(user);
         } else {
           return null;
         }
@@ -34,7 +38,6 @@ export const authenticateUser = async (
       }
     } else {
       console.error('Something went wrong authenticating a user: Missing username or email address');
-
       return null;
     }
   } catch (error) {
@@ -43,8 +46,8 @@ export const authenticateUser = async (
   }
 };
 
-const Auth = {
+const authController = {
   authenticateUser,
 };
 
-export default Auth;
+export default authController;
