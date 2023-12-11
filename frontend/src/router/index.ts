@@ -1,13 +1,15 @@
 import { createRouter, createWebHistory, RouterView } from 'vue-router';
 
-import RoadmapIndex from '@/views/roadmap/Index.vue'
-import Home from '@/views/Home.vue'
+import Home from '@/views/Home.vue';
+import Login from '@/views/auth/Login.vue';
+import Register from '@/views/auth/Register.vue';
+import knowledgeBaseIndex from '@/views/knowledgeBase/Index.vue';
+import RoadmapIndex from '@/views/roadmap/Index.vue';
 import Components from '@/views/Components.vue';
 import CompanyIndex from '@/views/company/Index.vue'
-import Register from '@/views/auth/Register.vue'
-import Login from '@/views/auth/Login.vue'
 import ContentIndex from '@/views/content/Index.vue'
 import ContentCreate from '@/views/content/Create.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +40,23 @@ const router = createRouter({
         title: 'Registreren',
         showNavigationBars: false,
       },
+    },
+    {
+      path: '/knowledge-base',
+      name: 'knowledgeBase',
+      component: RouterView,
+      redirect: { name: 'knowledgeBase.overview' },
+      children: [
+        {
+          path: ':categoryID?',
+          name: 'knowledgeBase.overview',
+          component: knowledgeBaseIndex,
+          meta: {
+            title: 'De kennnisbank',
+            showNavigationBars: true,
+          },
+        },
+      ]
     },
     {
       path: '/company',

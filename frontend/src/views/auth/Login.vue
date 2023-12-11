@@ -12,7 +12,7 @@
 
   const login = async () => {
     try {
-      const response = await httpService.postRequest(
+      const response = await httpService.postRequest<Record<string, string>>(
         '/credentials',
         {
           userName: userName.value,

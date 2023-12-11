@@ -1,10 +1,13 @@
 <script setup lang="ts">
+  import type { User } from '@/typings/User';
   import type { Company } from '@/typings/Company';
+  import type { companyAnalysis } from '@/typings/CompanyAnalysis';
   import type { FormData, FormStep } from '@/typings/form';
 
   import { onMounted, reactive, ref } from 'vue';
-  import CompanyController from '../../controllers/CompanyController';
-  import CompanyAnalysisController from '../../controllers/CompanyAnalysisController';
+  import httpService from '../../plugins/http/httpService';
+  import { useTokenStore } from '../../stores/token';
+  import { jwtDecode } from 'jwt-decode';
 
   import {
     TextButton,
@@ -18,19 +21,42 @@
   let currentStepFields = ref<FormData[] | null>(null);
   let showForm = ref(false);
   let showInformation = ref(true);
-  let finishedAnalysis = ref(false);
   let canValidate = ref(false);
   let showOverview = ref(false);
 
-  // TODO: Logged in user -> current company -> id
-  const currentCompanyID = ref<string>('2921da3b-4726-4347-8893-4324b7c30d00');
-  const currentCompany = ref<Company | undefined>();
+  const tokenStore = useTokenStore()
+  let currentUser = ref<User | null>(null)
+  let currentCompany = ref<Company | null>(null)
+  let currentAnalysis = ref<companyAnalysis | null>(null)
+
+  const getUser = async () => {
+    try {
+      const userToken = tokenStore.getToken;
+      currentUser.value = jwtDecode(userToken);
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+    }
+  };
+
+  const getAnalysis = async () => {
+    try {
+      const fetchedAnalysis = await httpService.getRequest<companyAnalysis>(
+        `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
+      );
+      currentAnalysis.value = fetchedAnalysis.data;
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+    }
+  };
 
   const fetchCurrentCompany = async () => {
     try {
-      const fetchedCompany = await CompanyController.getCompany(currentCompanyID.value);
-      currentCompany.value = fetchedCompany;
-
+      getUser();
+      const fetchedCompany = await httpService.getRequest<Company>(
+        `/companies/${currentUser.value?.company}`
+      );
+      currentCompany.value = fetchedCompany.data;
+      getAnalysis();
     } catch (error) {
       console.error('Error fetching current company:', error);
     }
@@ -180,7 +206,6 @@
 
   const restartAnalysis = () => {
     resetForm();
-    finishedAnalysis.value = false;
     showInformation.value = false;
     showForm.value = true;
     currentStep.value = formSteps[1];
@@ -219,7 +244,6 @@
 
   const submitForm = async () => {
     showOverview.value = false;
-    finishedAnalysis.value = true;
     showInformation.value = true;
     showForm.value = false;
 
@@ -237,11 +261,12 @@
       formFields.append('targetAudience', String(formData.targetAudience.value));
       formFields.append('budget', String(formData.budget.value));
 
-      const newCompanyAnalysis = await CompanyAnalysisController.createCompanyAnalysis(formFields);
+      const newCompanyAnalysis = await httpService.postRequest<companyAnalysis>('/companyAnalyses', formFields);
+      const newCompanyAnalysisData = newCompanyAnalysis.data
 
-      if (newCompanyAnalysis) {
+      if (newCompanyAnalysisData) {
         const companyData = {
-          companyAnalysis: newCompanyAnalysis.companyAnalysisID
+          companyAnalysis: newCompanyAnalysisData.companyAnalysisID
         }
 
         if (currentCompany.value) {
@@ -256,7 +281,7 @@
 
   const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
     try {
-      await CompanyController.updateCompany(companyID, companyData);
+      await httpService.putRequest<Company>(`/companies/${companyID}`, companyData);
       fetchCurrentCompany();
     } catch (error) {
       console.error('Error associating company analysis:', error);
@@ -265,9 +290,7 @@
 
   const resetForm = () => {
     for (const key in formData) {
-      // @ts-ignore
       formData[key].value = '';
-      // @ts-ignore
       formData[key].isValid = false;
     }
     currentStep.value = formSteps[1];
@@ -278,13 +301,54 @@
   const getCurrentStepFields = () => {
     return Object.values(formData).filter((field) => field.step === currentStep.value);
   }
+
+  const toCapital = (String: string) => {
+    return String.charAt(0).toUpperCase() + String.slice(1);
+  }
 </script>
 
 <template>
   <div v-if="!showForm && showInformation">
     <PageTitle>Bedrijfsoverzicht</PageTitle>
 
-    <SecondaryTitle>Behoefteanalyse</SecondaryTitle>
+    <SecondaryTitle>Algemene gegevens</SecondaryTitle>
+
+    <div v-if="currentCompany">
+      <div class="row">
+        <div v-for="(value, key) in currentCompany" :key="key">
+          <div v-if="key !== 'companyID' && key !== 'roadmap' && key !== 'companyAnalysis'">
+            <div class="fw-bold me-2">{{ toCapital(key) }}</div>
+            <p class="mb-0 pb-2">{{ value }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <SecondaryTitle>Behoeften</SecondaryTitle>
+
+    <!-- TODO: Change array logic based on Juul's input -->
+    <div v-if="currentAnalysis">
+      <div class=" row">
+        <div class="col-4 mb-4" v-for="( step, index ) in formSteps" :key="index">
+          <h3>{{ step.name }}</h3>
+          <div v-for="( field, fieldName ) in  formData " :key="fieldName">
+            <div v-if="field.step === step">
+              <div class="fw-bold me-2">{{ field.label }}</div>
+              <div v-if="currentAnalysis && Array.isArray(currentAnalysis[fieldName])">
+                <ul>
+                  <li v-for="( item, itemIndex ) in currentAnalysis[fieldName]" :key="itemIndex">
+                    {{ item }}
+                  </li>
+                </ul>
+              </div>
+              <template v-else>
+                <p class="mb-0 pb-2">{{ currentAnalysis[fieldName] }}</p>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <p>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -293,7 +357,7 @@
     </p>
 
     <div class="row">
-      <div v-if="!finishedAnalysis" class="col">
+      <div v-if="!currentAnalysis" class="col">
         <SubTitle type="secondary" v-if="!currentStep">Analyse nog niet begonnen</SubTitle>
 
         <SubTitle type="warning" v-if="currentStep">
@@ -303,18 +367,20 @@
       </div>
 
       <div v-else class="col">
-        <SubTitle type="success" v-if="finishedAnalysis === true">Analyse voltooid</SubTitle>
+        <SubTitle type="success" v-if="currentAnalysis !== null">Analyse voltooid</SubTitle>
       </div>
     </div>
 
     <div>
-      <TextButton v-if="!currentStep" class="me-2" @click="startAnalysis">Start de analyse</TextButton>
+      <TextButton v-if="!currentStep && !currentAnalysis" class="me-2" @click="startAnalysis">Start de analyse
+      </TextButton>
 
-      <TextButton v-if="currentStep && !finishedAnalysis" class="me-2" @click="continueAnalysis">
+      <TextButton v-if="currentStep && !currentAnalysis" class="me-2" @click="continueAnalysis">
         Ga verder
       </TextButton>
 
-      <TextButton v-if="currentStep" class="me-2" type="danger" display-style="secondary" @click="restartAnalysis">
+      <TextButton v-if="currentStep || currentAnalysis" class="me-2" type="danger" display-style="secondary"
+        @click="restartAnalysis">
         Herstart de analyse
       </TextButton>
     </div>
@@ -339,7 +405,7 @@
           <p>{{ currentStep.description }}</p>
 
           <div class="col-7">
-            <div class="pb-3" v-for="(formField, key) in currentStepFields" :key="key">
+            <div class="pb-3" v-for="( formField, key ) in  currentStepFields " :key="key">
               <label :for="formField.label" class="form-label">{{ formField.label }}</label>
 
               <input type="text" class="form-control" :id="formField.label" v-model="formField.value"
@@ -357,7 +423,7 @@
 
       <div class="d-flex flex-row align-items-center justify-content-center pt-5">
         <template v-if="currentStep.number > 0">
-          <template v-for="(step, key, index) in formSteps" :key="key">
+          <template v-for="( step, key, index ) in  formSteps " :key="key">
             <div v-if="index === 0" class="progress-circle not-active"
               :class="{ 'active': currentStep.number === 1, 'completed': currentStep.number > 1 }" />
 
@@ -406,11 +472,11 @@
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget imperdiet neque, ac ultrices nunc. Praesent
           non turpis elementum, vestibulum augue sit amet, interdum justo.</p>
 
-        <div v-for="(formStep, key) in formSteps" :key="key">
+        <div v-for="( formStep, key ) in  formSteps " :key="key">
           <div class="pb-3">
             <SubHeader class="pb-1">{{ formStep.name }}</SubHeader>
 
-            <div v-for="(formField, fieldKey) in formData" :key="fieldKey">
+            <div v-for="( formField, fieldKey ) in  formData " :key="fieldKey">
               <div v-if="formField.step === formStep" class="d-flex">
                 <div class="fw-bold me-2">{{ formField.label }}:</div>
                 <p class="mb-0 pb-2">{{ formField.value }}</p>

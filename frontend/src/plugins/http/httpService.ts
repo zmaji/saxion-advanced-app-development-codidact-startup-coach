@@ -1,5 +1,7 @@
 /* eslint-disable no-useless-catch */
 
+import type { AxiosResponse } from 'axios';
+
 import axios from 'axios';
 
 import { useTokenStore } from '@/stores/token';
@@ -14,7 +16,7 @@ const setAuthorizationHeader = () => {
   }
 };
 
-const getRequest = async (url: string, useToken: boolean = true) => {
+const getRequest = async<T>(url: string, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
     setAuthorizationHeader();
   }
@@ -25,7 +27,7 @@ const getRequest = async (url: string, useToken: boolean = true) => {
   }
 }
 
-const putRequest = async (url: string, data: any, useToken: boolean = true) => {
+const putRequest = async<T>(url: string, data: any, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
     setAuthorizationHeader();
   }
@@ -36,7 +38,7 @@ const putRequest = async (url: string, data: any, useToken: boolean = true) => {
   }
 }
 
-const postRequest = async (url: string, data: any, useToken: boolean = true) => {
+const postRequest = async<T>(url: string, data: any, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
     setAuthorizationHeader();
   }
@@ -47,7 +49,7 @@ const postRequest = async (url: string, data: any, useToken: boolean = true) => 
   }
 }
 
-const deleteRequest = async (url: string, useToken: boolean = true) => {
+const deleteRequest = async<T>(url: string, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
     setAuthorizationHeader();
   }

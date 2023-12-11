@@ -38,7 +38,7 @@
           </li>
 
           <li class="nav-item">
-            <RouterLink to="/about" class="nav-link">Over</RouterLink>
+            <RouterLink :to="{ name: 'knowledgeBase.overview' }" class="nav-link">categorieën</RouterLink>
           </li>
         </ul>
       </div>
@@ -59,7 +59,7 @@
 
 <style scoped>
  .navbar {
-   height: 5.5rem;
+   min-height: 5.7rem;
  }
 
  .nav-item {
