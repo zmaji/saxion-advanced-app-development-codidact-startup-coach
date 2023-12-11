@@ -3,10 +3,10 @@ import type { Express, Request, Response } from 'express';
 import express from 'express';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
-import AuthRoutes from '../routes/Auth';
+import authRoutes from '../routes/Auth';
 import isLoggedIn from '../middleware/isLoggedIn';
-import CompanyRoutes from '../routes/Company';
-import CompanyAnalysesRoutes from '../routes/CompanyAnalysis';
+import companyRoutes from '../routes/Company';
+import companyAnalysesRoutes from '../routes/CompanyAnalysis';
 
 const createServer = () => {
   const app: Express = express();
@@ -25,14 +25,14 @@ const createServer = () => {
 
   app.use(express.json());
 
-  app.use('/credentials', AuthRoutes);
+  app.use('/credentials', authRoutes);
 
   app.get('', isLoggedIn, (req: Request, res: Response) => {
     res.send('Welcome to Express & TypeScript Server');
   });
 
-  app.use('/companies', CompanyRoutes);
-  app.use('/companyAnalyses', CompanyAnalysesRoutes);
+  app.use('/companies', companyRoutes);
+  app.use('/companyAnalyses', companyAnalysesRoutes);
 
   return app;
 };
