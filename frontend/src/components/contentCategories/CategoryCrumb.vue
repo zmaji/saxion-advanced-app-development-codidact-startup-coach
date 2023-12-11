@@ -15,5 +15,8 @@
     </RouterLink>
   </li>
 
-  <CategoryCrumb v-if="category.parentCategory" :category="category.parentCategory"/>
+  <CategoryCrumb
+    v-if="category.subCategories && category.subCategories.length > 0"
+    :category="category.subCategories[0]"
+  />
 </template>

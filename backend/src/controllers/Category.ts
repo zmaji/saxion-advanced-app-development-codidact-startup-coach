@@ -33,33 +33,53 @@ const getAllParentCategories = async (categoryID: string): Promise<Category | nu
       return null;
     }
 
-    const buildCategoryWithParents = async (currentCategory: Category): Promise<Category | null> => {
+    const categoryParents: Category[] = [];
+    categoryParents.push(category);
+
+    const buildCategoryWithParents = async (currentCategory: Category): Promise<void> => {
       if (currentCategory.parentCategory) {
         const parentCategory = await categoryModel.findOne({
           categoryID: currentCategory.parentCategory,
         }, { _id: 0, __v: 0 });
 
-        if (!parentCategory) {
+        if (parentCategory) {
+          categoryParents.push(parentCategory);
+
+          await buildCategoryWithParents(parentCategory);
+        } else {
           console.error('Parent category not found');
-
-          return null;
         }
-
-        return {
-          categoryID: currentCategory.categoryID,
-          name: currentCategory.name,
-          parentCategory: await buildCategoryWithParents(parentCategory),
-        };
-      } else {
-        return {
-          categoryID: currentCategory.categoryID,
-          name: currentCategory.name,
-          parentCategory: null,
-        };
       }
     };
 
-    return await buildCategoryWithParents(category);
+    await buildCategoryWithParents(category);
+    categoryParents.reverse();
+
+    const categoryTree: Category[] = [];
+    let currentParentTree: Category[] = categoryTree;
+
+    for (const parentCategory of categoryParents) {
+      const newNode: Category = {
+        categoryID: parentCategory.categoryID,
+        name: parentCategory.name,
+        parentCategory: parentCategory?.parentCategory,
+        subCategories: [],
+      };
+
+      if (currentParentTree.length === 0) {
+        console.log('node', newNode);
+        currentParentTree.push(newNode);
+      } else {
+        const lastNode = currentParentTree[currentParentTree.length - 1];
+        lastNode?.subCategories?.push(newNode);
+      }
+
+      if (newNode.subCategories) {
+        currentParentTree = newNode.subCategories;
+      }
+    }
+
+    return categoryTree[0];
   } catch (error) {
     console.error('Something went wrong getting parent categories:', error);
     throw error;
