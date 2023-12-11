@@ -37,10 +37,10 @@ const updateCompany = async (companyID: string, companyData: Company): Promise<C
   }
 };
 
-const CompanyController = {
+const companyController = {
   getCompanies,
   getCompany,
   updateCompany,
 };
 
-export default CompanyController;
+export default companyController;
