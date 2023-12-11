@@ -1,7 +1,7 @@
 export interface Category {
-  categoryID: string,
-  parentCategoryID?: string,
-  name: string,
-  subcategories?: Category[]
-  parentCategory?: Category | null
+  categoryID: string;
+  parentCategoryID?: string;
+  parentCategory?: Category;
+  name: string;
+  subCategories?: Category[];
 }
