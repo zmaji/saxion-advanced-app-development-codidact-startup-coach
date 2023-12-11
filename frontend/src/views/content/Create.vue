@@ -1,5 +1,9 @@
 <script setup lang="ts">
-  import { Ref, ref } from 'vue';
+  import type { Content } from '@/typings/content';
+  import type { ContentLabel } from '@/typings/label';
+  import type { Ref } from 'vue';
+
+  import { reactive, ref } from 'vue';
 
   import {
     PageTitle,
@@ -10,9 +14,32 @@
   import { LabelSelect } from '@/components'
   import { CompanySelect } from '@/components'
 
+  interface NewContent {
+    contentID?: string | null;
+    user: string | null;
+    title: string | null;
+    description: string | null;
+    category: string | null;
+    labels: ContentLabel[] | null;
+    accessLevel: string | null;
+    attachment: string | null;
+    createdAt: string | null;
+  }
+
+  const contentTemplate: NewContent = reactive({
+    contentID: null,
+    user: null,
+  })
 
   let accessLevel: Ref<string> = ref('');
+  let contentLabels: Ref<ContentLabel[]> = ref<ContentLabel[]>([])
 
+  const addSelectedLabels = (selectedLabels: ContentLabel[]) => {
+    console.log('incoming',contentLabels);
+    
+    contentLabels.value = selectedLabels;
+  }
+  
 </script>
 
 <template>
@@ -60,8 +87,12 @@
     <div class="col">
       <SecondaryTitle> Content labels </SecondaryTitle>
 
+      <div v-for="(label, key) in contentLabels" :key="key" >
+          {{ label }}
+      </div>
+      
       <label class="form-label">Content labels</label>
-      <LabelSelect />
+      <LabelSelect :model-value="contentLabels" @update:modelValue="addSelectedLabels" />
     </div>
 
     <div class="col">
@@ -86,7 +117,7 @@
     <div class="col">
       <div v-if="accessLevel === 'restricted'">
           <label class="pb-2" for="company"> Welke bedrijven mogen uw content zien</label>
-            <CompanySelect/>
+            <CompanySelect />
       </div>
     </div>
       

@@ -1,11 +1,20 @@
 <script setup lang="ts">
   import type { ContentLabel } from '@/typings/content';
 
+  import { Ref, ref, watch } from 'vue';
   import VueMultiselect from 'vue-multiselect'
-  import { Ref, ref } from 'vue';
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
+  
   import { SmallHeader } from '@/components';
+
+  interface Props {
+    modelValue?: ContentLabel[]
+  }
+  const props = withDefaults(defineProps<Props>(), {
+    modelValue: undefined
+  }) 
+
+  const emit = defineEmits<{(event: 'update:modelValue', value: ContentLabel[]): void,}>();
 
   let selectedLabels: Ref<ContentLabel[]> = ref([])
   let labelOptions: Ref<ContentLabel[]> = ref([
@@ -38,6 +47,10 @@
     selectedLabels.value.push(result);
   }
 
+  watch(selectedLabels, () => {
+    emit('update:modelValue', selectedLabels.value);
+  }, { deep: true });
+
   const removeLabel = (selectedLabel: ContentLabel): void => {
     const index = selectedLabels.value.findIndex(label => label.labelID === selectedLabel.labelID);
 
@@ -45,6 +58,7 @@
       selectedLabels.value.splice(index, 1);
     }
   }
+
 
 </script>
 
