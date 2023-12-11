@@ -48,11 +48,7 @@
         </RouterLink>
       </li>
 
-      <CategoryCrumb :category="categories"/>
+      <CategoryCrumb v-if="route.params.categoryID" :category="categories"/>
     </ol>
   </nav>
 </template>
-
-<style scoped>
-
-</style>

@@ -59,7 +59,7 @@
 
 <style scoped>
  .navbar {
-   height: 5.5rem;
+   min-height: 5.7rem;
  }
 
  .nav-item {
