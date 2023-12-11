@@ -1,10 +1,10 @@
 import type { Category } from '../typings/Category';
 
-import CategoryModel from '../models/Category';
+import categoryModel from '../models/Category';
 
 const getAllCategories = async (): Promise<Category[]> => {
   try {
-    const categories = await CategoryModel.find({}, { _id: 0 });
+    const categories = await categoryModel.find({}, { _id: 0 });
 
     const buildCategoryTree = (categoryID: string | null): Category[] => {
       const children = categories.filter((category) => category.parentCategory === categoryID);
@@ -16,19 +16,16 @@ const getAllCategories = async (): Promise<Category[]> => {
       }));
     };
 
-    const mainCategories = buildCategoryTree(null);
-
-    return mainCategories;
+    return buildCategoryTree(null);
   } catch (error) {
     console.error('Something went wrong getting all categories:', error);
     throw error;
   }
 };
 
-
 const getAllParentCategories = async (categoryID: string): Promise<Category | null> => {
   try {
-    const category = await CategoryModel.findOne({ categoryID }, { _id: 0, __v: 0 });
+    const category = await categoryModel.findOne({ categoryID }, { _id: 0, __v: 0 });
 
     if (!category) {
       console.error('Category not found');
@@ -38,9 +35,10 @@ const getAllParentCategories = async (categoryID: string): Promise<Category | nu
 
     const buildCategoryWithParents = async (currentCategory: Category): Promise<Category | null> => {
       if (currentCategory.parentCategory) {
-        const parentCategory = await CategoryModel.findOne({
+        const parentCategory = await categoryModel.findOne({
           categoryID: currentCategory.parentCategory,
         }, { _id: 0, __v: 0 });
+
         if (!parentCategory) {
           console.error('Parent category not found');
 
@@ -70,13 +68,12 @@ const getAllParentCategories = async (categoryID: string): Promise<Category | nu
 
 const getCategoryById = async (categoryID: string): Promise<Category | null> => {
   try {
-    return await CategoryModel.findOne({ categoryID }, { _id: 0, __v: 0 })?.lean();
+    return await categoryModel.findOne({ categoryID }, { _id: 0, __v: 0 })?.lean();
   } catch (error) {
     console.error('Something went wrong getting the category by ID:', error);
     throw error;
   }
 };
-
 
 const categoryController = {
   getAllCategories,
