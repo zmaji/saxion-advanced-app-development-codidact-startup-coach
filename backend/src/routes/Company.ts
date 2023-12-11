@@ -1,12 +1,12 @@
 import { Router, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import CompanyController from '../controllers/Company';
+import companyController from '../controllers/Company';
 
 const router = Router();
 
 router.get('', async (req: Request, res: Response) => {
   try {
-    const result = await CompanyController.getCompanies();
+    const result = await companyController.getCompanies();
 
     if (result) {
       res
@@ -26,7 +26,7 @@ router.get('', async (req: Request, res: Response) => {
 
 router.get('/:companyID', async (req: Request, res: Response) => {
   try {
-    const result = await CompanyController.getCompany(req.params.companyID);
+    const result = await companyController.getCompany(req.params.companyID);
 
     if (result) {
       res
@@ -46,7 +46,7 @@ router.get('/:companyID', async (req: Request, res: Response) => {
 
 router.put('/:companyID', async (req: Request, res: Response) => {
   try {
-    const updatedCompany = await CompanyController.updateCompany(req.params.companyID, req.body);
+    const updatedCompany = await companyController.updateCompany(req.params.companyID, req.body);
 
     if (updatedCompany) {
       res
