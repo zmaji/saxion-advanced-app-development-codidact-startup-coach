@@ -40,7 +40,7 @@ const getUser = async () => {
 
 const getAnalysis = async () => {
   try {
-    const fetchedAnalysis = await httpService.getRequest(`/companyAnalyses/${currentCompany.value?.companyAnalysis}`);
+    const fetchedAnalysis = await httpService.getRequest<companyAnalysis>(`/companyAnalyses/${currentCompany.value?.companyAnalysis}`);
     currentAnalysis.value = fetchedAnalysis.data;
   } catch (error) {
     console.error('Error fetching current user:', error);
@@ -50,7 +50,7 @@ const getAnalysis = async () => {
 const fetchCurrentCompany = async () => {
   try {
     getUser();
-    const fetchedCompany = await httpService.getRequest(`/companies/${currentUser.value?.company}`);
+    const fetchedCompany = await httpService.getRequest<Company>(`/companies/${currentUser.value?.company}`);
     currentCompany.value = fetchedCompany.data;
     getAnalysis();
   } catch (error) {
@@ -257,7 +257,7 @@ const submitForm = async () => {
     formFields.append('targetAudience', String(formData.targetAudience.value));
     formFields.append('budget', String(formData.budget.value));
 
-    const newCompanyAnalysis = await httpService.postRequest('/companyAnalyses', formFields);
+    const newCompanyAnalysis = await httpService.postRequest<companyAnalysis>('/companyAnalyses', formFields);
     const newCompanyAnalysisData = newCompanyAnalysis.data
 
     if (newCompanyAnalysisData) {
@@ -277,7 +277,7 @@ const submitForm = async () => {
 
 const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
   try {
-    await httpService.putRequest(`/companies/${companyID}`, companyData);
+    await httpService.putRequest<Company>(`/companies/${companyID}`, companyData);
     fetchCurrentCompany();
   } catch (error) {
     console.error('Error associating company analysis:', error);

@@ -1,41 +1,40 @@
 <script setup lang="ts">
-  import type { Ref } from 'vue';
-  import type { Category } from '@/typings/Content';
+import type { Category } from '@/typings/Content';
 
-  import { onMounted, ref, watch } from 'vue';
-  import { useRoute } from 'vue-router';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
-  import httpService from '@/plugins/http/httpService';
-  import { CategoryCrumb } from '@/components';
+import httpService from '@/plugins/http/httpService';
+import { CategoryCrumb } from '@/components';
 
-  const route = useRoute();
-  const categories: Ref<Category[]> = ref<Category[]>([]);
+const route = useRoute();
+const category = ref<Category>();
 
-  const fetchCategories = async () => {
-    try {
-      const response = await httpService.getRequest<Category[]>(
-        `/categories/${route.params.categoryID}/parents`,
-        false
-      );
+const fetchCategories = async () => {
+  try {
+    const response = await httpService.getRequest<Category>(
+      `/categories/${route.params.categoryID}/parents`,
+      false
+    );
 
-      if (response && response.data) {
-        categories.value = response.data;
-      }
-    } catch (e) {
-      console.error(e);
+    if (response && response.data) {
+      category.value = response.data;
     }
+  } catch (e) {
+    console.error(e);
   }
+}
 
-  onMounted(async () => {
+onMounted(async () => {
+  await fetchCategories();
+});
+
+watch(() => route.params.categoryID, async (newVal, oldVal) => {
+  if (newVal) {
     await fetchCategories();
-  });
-
-  watch(() => route.params.categoryID, async (newVal, oldVal) => {
-    if (newVal) {
-      await fetchCategories();
-    }
-    console.log(`Route parameter changed from ${oldVal} to ${newVal}`);
-  });
+  }
+  console.log(`Route parameter changed from ${oldVal} to ${newVal}`);
+});
 </script>
 
 <template>
@@ -47,7 +46,7 @@
         </RouterLink>
       </li>
 
-      <CategoryCrumb v-if="route.params.categoryID" :category="categories"/>
+      <CategoryCrumb v-if="route.params.categoryID && category" :category="category" />
     </ol>
   </nav>
 </template>

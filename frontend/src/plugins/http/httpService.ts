@@ -16,7 +16,7 @@ const setAuthorizationHeader = () => {
   }
 };
 
-const getRequest = async<T> (url: string, useToken: boolean = true): Promise<AxiosResponse<T>> => {
+const getRequest = async<T>(url: string, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
     setAuthorizationHeader();
   }
@@ -27,7 +27,7 @@ const getRequest = async<T> (url: string, useToken: boolean = true): Promise<Axi
   }
 }
 
-const putRequest = async<T> (url: string, data: any, useToken: boolean = true): Promise<AxiosResponse<T>> => {
+const putRequest = async<T>(url: string, data: any, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
     setAuthorizationHeader();
   }
@@ -38,7 +38,7 @@ const putRequest = async<T> (url: string, data: any, useToken: boolean = true): 
   }
 }
 
-const postRequest = async<T> (url: string, data: any, useToken: boolean = true): Promise<AxiosResponse<T>> => {
+const postRequest = async<T>(url: string, data: any, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
     setAuthorizationHeader();
   }
@@ -49,7 +49,7 @@ const postRequest = async<T> (url: string, data: any, useToken: boolean = true):
   }
 }
 
-const deleteRequest = async<T> (url: string, useToken: boolean = true): Promise<AxiosResponse<T>> => {
+const deleteRequest = async<T>(url: string, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
     setAuthorizationHeader();
   }
