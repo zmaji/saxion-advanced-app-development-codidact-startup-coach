@@ -25,7 +25,7 @@ const getAllCategories = async (): Promise<Category[]> => {
 
 const getAllParentCategories = async (categoryID: string): Promise<Category | null> => {
   try {
-    const category = await categoryModel.findOne({ categoryID }, { _id: 0, __v: 0 });
+    const category = await categoryModel.findOne({ categoryID }, { _id: 0 });
 
     if (!category) {
       console.error('Category not found');
@@ -40,7 +40,7 @@ const getAllParentCategories = async (categoryID: string): Promise<Category | nu
       if (currentCategory.parentCategory) {
         const parentCategory = await categoryModel.findOne({
           categoryID: currentCategory.parentCategory,
-        }, { _id: 0, __v: 0 });
+        }, { _id: 0 });
 
         if (parentCategory) {
           categoryParents.push(parentCategory);
@@ -67,7 +67,6 @@ const getAllParentCategories = async (categoryID: string): Promise<Category | nu
       };
 
       if (currentParentTree.length === 0) {
-        console.log('node', newNode);
         currentParentTree.push(newNode);
       } else {
         const lastNode = currentParentTree[currentParentTree.length - 1];
@@ -88,7 +87,7 @@ const getAllParentCategories = async (categoryID: string): Promise<Category | nu
 
 const getCategoryById = async (categoryID: string): Promise<Category | null> => {
   try {
-    return await categoryModel.findOne({ categoryID }, { _id: 0, __v: 0 })?.lean();
+    return await categoryModel.findOne({ categoryID }, { _id: 0 })?.lean();
   } catch (error) {
     console.error('Something went wrong getting the category by ID:', error);
     throw error;
