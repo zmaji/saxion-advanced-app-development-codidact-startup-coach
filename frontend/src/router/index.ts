@@ -45,7 +45,7 @@ const router = createRouter({
       redirect: { name: 'knowledgeBase.overview' },
       children: [
         {
-          path: '',
+          path: ':category?',
           name: 'knowledgeBase.overview',
           component: knowledgeBaseIndex,
           meta: {
