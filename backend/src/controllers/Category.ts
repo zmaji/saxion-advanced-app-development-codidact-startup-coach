@@ -68,10 +68,20 @@ const getAllParentCategories = async (categoryID: string): Promise<Category | nu
   }
 };
 
+const getCategoryById = async (categoryID: string): Promise<Category | null> => {
+  try {
+    return await CategoryModel.findOne({ categoryID }, { _id: 0, __v: 0 })?.lean();
+  } catch (error) {
+    console.error('Something went wrong getting the category by ID:', error);
+    throw error;
+  }
+};
+
 
 const categoryController = {
   getAllCategories,
   getAllParentCategories,
+  getCategoryById,  
 };
 
 export default categoryController;

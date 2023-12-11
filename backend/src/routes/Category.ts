@@ -39,4 +39,19 @@ router.get('/:categoryID/parents', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/:categoryID', async (req: Request, res: Response) => {
+    try {
+      const { categoryID } = req.params;
+      const result = await categoryController.getCategoryById(categoryID);
+  
+      if (result) {
+        res.status(StatusCodes.OK).json(result);
+      } else {
+        res.status(StatusCodes.NOT_FOUND).json({ error: 'Unable to find category by ID' });
+      }
+    } catch (error) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred getting category by ID' });
+    }
+  });
+
 export default router;
