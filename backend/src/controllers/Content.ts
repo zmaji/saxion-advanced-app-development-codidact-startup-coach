@@ -27,6 +27,7 @@ const createContent = async (contentData: Content): Promise<Content | null> => {
   try {
     contentData.contentID = uuidv4();
     const newContent = new ContentModel(contentData);
+    await newContent.save();
 
     return newContent || null;
   } catch (error) {

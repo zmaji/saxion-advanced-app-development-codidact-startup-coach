@@ -1,28 +1,29 @@
 <script setup lang="ts">
-  import type { ContentUser } from '@/typings/user';
-
+  import type { ContentUser } from '@/typings/User';
+  import type { Ref } from 'vue';
+  
   import VueMultiselect from 'vue-multiselect'
-  import { Ref, ref } from 'vue';
+  import { ref } from 'vue';
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
   import { SmallHeader } from '@/components';
 
   let selectedUsers: Ref<ContentUser[]> = ref([])
-  let userOptions: Ref<ContentUser[]> = ref([
+  let userOptions: Ref<ContentUser[]> = ref<ContentUser[]>([
     {
-      userID: 1,
+      userID: '1',
       name: 'Saied',
     },
     {
-      userID: 2,
+      userID: '2',
       name: 'Zikria',
     },
     {
-      userID: 3,
+      userID: '3',
       name: 'Nils',
     },
     {
-      userID: 4,
+      userID: '4',
       name: 'Maurice',
     },
   ]);

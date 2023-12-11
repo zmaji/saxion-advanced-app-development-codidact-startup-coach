@@ -40,7 +40,6 @@
         </div>
       </div>
   
-
       <div class="col">
         <div class="rounded p-3 shadow-sm bg-white"> 
           <h3>titel</h3>
@@ -50,7 +49,6 @@
         </div>
       </div>
   
-  
       <div class="col">
         <div class="rounded p-3 shadow-sm bg-white"> 
           <h3>titel</h3>
@@ -59,8 +57,7 @@
           
         </div>
       </div>
-  
-  
+   
     </div>
 </template>
 

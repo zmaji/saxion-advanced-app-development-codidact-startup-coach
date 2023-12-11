@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import type { Content } from '@/typings/content';
   import type { ContentLabel } from '@/typings/label';
   import type { Ref } from 'vue';
 
   import { reactive, ref } from 'vue';
-
+  
+  import httpService from '@/plugins/http/httpService';
   import {
     PageTitle,
     SecondaryTitle,
@@ -26,19 +26,39 @@
     createdAt: string | null;
   }
 
-  const contentTemplate: NewContent = reactive({
-    contentID: null,
-    user: null,
-  })
-
   let accessLevel: Ref<string> = ref('');
   let contentLabels: Ref<ContentLabel[]> = ref<ContentLabel[]>([])
 
+  const contentTemplate: NewContent = reactive({
+    contentID: null,
+    user: null,
+    title: null,
+    description: null,
+    category: null,
+    labels: contentLabels,
+    accessLevel: accessLevel,
+    attachment: null,
+    createdAt: null,
+  })
+
   const addSelectedLabels = (selectedLabels: ContentLabel[]) => {
-    console.log('incoming',contentLabels);
-    
     contentLabels.value = selectedLabels;
   }
+
+  const addContent = async () => {
+    try {
+      console.log(contentTemplate);
+      
+      const response = await httpService.postRequest('/content', {
+        contentData: contentTemplate
+      })
+      
+      console.log(response);
+
+    } catch (error) {
+      console.error(error);
+    }
+  } 
   
 </script>
 
@@ -55,41 +75,52 @@
         <div class="pb-3 col-lg-10">
           <label for="title" class="form-label">Titel</label>
 
-          <input type="text" class="form-control" id="title" placeholder="Bijvoorbeeld: Mijn Leuke Titel" />
+          <input 
+            v-model="contentTemplate.title"
+            type="text"
+            class="form-control"
+            id="title" 
+            placeholder="Bijvoorbeeld: Mijn Leuke Titel" 
+          />
         </div>
 
         <div class="pb-3 col-lg-10">
           <label for="description" class="form-label">Beschrijving</label>
 
-          <textarea type="text" class="form-control" id="description"
-           placeholder="Bijvoorbeeld: Mijn Content is handig !"
-            rows="5" style="resize: none" />
+          <textarea 
+            v-model="contentTemplate.description"
+            type="text" 
+            class="form-control" 
+            id="description"
+            placeholder="Bijvoorbeeld: Mijn Content is handig !"
+            rows="5" 
+            style="resize: none" 
+          />
         </div>
 
         <div class="pb-3 col-lg-10">
           <label class="pb-2" for="category">Categorie</label>
-          <select class="form-select" id="category">
+          <select class="form-select" id="category" v-model="contentTemplate.category">
             <option selected>Selecteer een categorie</option>
-            <option value="1">Software</option>
-            <option value="2">Zorg</option>
-            <option value="3">Business</option>
+            <option value="Software">Software</option>
+            <option value="Zorg">Zorg</option>
+            <option value="Business">Business</option>
           </select>
         </div>
 
         <div class="pb-3 col-lg-10">
           <label for="formFile" class="form-label">Bijlage</label>
 
-          <input class="form-control" type="file" id="formFile" />
+          <input 
+          class="form-control"
+          type="file"
+          id="formFile" />
         </div>
       </form>
     </div>
 
     <div class="col">
       <SecondaryTitle> Content labels </SecondaryTitle>
-
-      <div v-for="(label, key) in contentLabels" :key="key" >
-          {{ label }}
-      </div>
       
       <label class="form-label">Content labels</label>
       <LabelSelect :model-value="contentLabels" @update:modelValue="addSelectedLabels" />
@@ -121,7 +152,6 @@
       </div>
     </div>
       
-    
     <div class="col">
       <div v-if="accessLevel === 'restricted'">
           <label class="pb-2" for="user"> Welke gebruikers mogen uw content zien</label>
@@ -129,10 +159,11 @@
       </div>
     </div>
     
-
   </div>
   <div class="d-flex flex-md-row flex-column flex-wrap">
-        <TextButton class="mb-3 mb-md-0 me-md-2"> Toevoegen </TextButton>
+        <TextButton 
+        
+        class="mb-3 mb-md-0 me-md-2" @click="addContent"> Toevoegen </TextButton>
 
         <TextButton :to="{ name: 'content.overview' }" display-style="tertiary">
           Annuleren

@@ -1,33 +1,34 @@
 <script setup lang="ts">
-  import type { ContentCompany } from '@/typings/company';
-
+  import type { Company } from '@/typings/Company';
+  import type { Ref } from 'vue';
+  
   import VueMultiselect from 'vue-multiselect'
-  import { Ref, ref } from 'vue';
+  import { ref } from 'vue';
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
   import { SmallHeader } from '@/components';
 
-  let selectedCompanies: Ref<ContentCompany[]> = ref([])
-  let companyOptions: Ref<ContentCompany[]> = ref([
+  let selectedCompanies: Ref<Company[]> = ref([])
+  let companyOptions: Ref<Company[]> = ref<Company[]>([
     {
-      companyID: 1,
+      companyID: '1',
       name: 'Saxion',
     },
     {
-      companyID: 2,
+      companyID: '2',
       name: 'Inversable',
     },
     {
-      companyID: 3,
+      companyID: '3',
       name: 'Topicus',
     },
     {
-      companyID: 4,
+      companyID: '4',
       name: 'Google',
     },
   ]);
 
-  const removeCompany = (selectedCompany: ContentCompany): void => {
+  const removeCompany = (selectedCompany: Company): void => {
     const index = selectedCompanies.value.findIndex(company => company.companyID === selectedCompany.companyID);
 
     if (index !== -1) {
