@@ -6,24 +6,24 @@ const companySchema: Schema<Company> = new Schema({
   companyID: {
     type: String,
     unique: true,
-    immutable: true
+    immutable: true,
   },
   companyAnalysis: {
     type: String,
-    unique: true
+    unique: true,
   },
   roadmap: {
     type: String,
-    immutable: true
+    immutable: true,
   },
   name: {
     type: String,
-    required: true
+    required: true,
   },
   location: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 }, {
   collection: 'companies',
   versionKey: false,
