@@ -7,6 +7,5 @@ export interface User {
   password: string,
   secret: string,
   emailAddress: string,
-  fullName: string,
-  roles: string[]
+  fullName: string
 }

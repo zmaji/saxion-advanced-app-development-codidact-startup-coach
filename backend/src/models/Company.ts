@@ -10,7 +10,7 @@ const companySchema: Schema<Company> = new Schema({
   },
   companyAnalysis: {
     type: String,
-    immutable: true,
+    unique: true,
   },
   roadmap: {
     type: String,

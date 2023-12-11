@@ -1,7 +1,10 @@
 <script setup lang="ts">
+  import type { Company } from '@/typings/Company';
   import type { FormData, FormStep } from '@/typings/form';
 
-  import { reactive, ref } from 'vue';
+  import { onMounted, reactive, ref } from 'vue';
+  import CompanyController from '../../controllers/CompanyController';
+  import CompanyAnalysisController from '../../controllers/CompanyAnalysisController';
 
   import {
     TextButton,
@@ -18,6 +21,22 @@
   let finishedAnalysis = ref(false);
   let canValidate = ref(false);
   let showOverview = ref(false);
+
+  // TODO: Logged in user -> current company -> id
+  const currentCompanyID = ref<string>('2921da3b-4726-4347-8893-4324b7c30d00');
+  const currentCompany = ref<Company | undefined>();
+
+  const fetchCurrentCompany = async () => {
+    try {
+      const fetchedCompany = await CompanyController.getCompany(currentCompanyID.value);
+      currentCompany.value = fetchedCompany;
+
+    } catch (error) {
+      console.error('Error fetching current company:', error);
+    }
+  };
+
+  onMounted(fetchCurrentCompany);
 
   let formSteps = reactive({
     1: {
@@ -51,7 +70,7 @@
     nrOfEmployees: {
       label: 'Aantal werknemers',
       step: formSteps[1],
-      value: '',
+      value: 0,
       isValid: false,
       errorMessage: 'Vul een geldig aantal werknemers in.',
     },
@@ -100,7 +119,7 @@
     budget: {
       label: 'Budget',
       step: formSteps[3],
-      value: '',
+      value: 0,
       isValid: false,
       errorMessage: 'Vul een geldig budget in.',
     },
@@ -180,10 +199,8 @@
 
     const isFormValid = currentStepFields.value.every((field) => {
       canValidate.value = true;
-      field.isValid = field.value.length > 0;
-      console.log(field)
-      console.log(field.value)
-      console.log(field.value.length)
+
+      field.isValid = typeof field.value === 'string' ? field.value.length > 0 : true;
 
       return field.isValid;
     });
@@ -200,12 +217,50 @@
     showOverview.value = false;
   }
 
-  const submitForm = () => {
+  const submitForm = async () => {
     showOverview.value = false;
     finishedAnalysis.value = true;
     showInformation.value = true;
     showForm.value = false;
+
+    try {
+      const formFields = new FormData();
+
+      // TODO: Change logic based on Juul's input, could then be made dynamically as well 
+      formFields.append('industry', String(formData.industry.value));
+      formFields.append('serviceInformation', String(formData.serviceInformation.value));
+      formFields.append('nrOfEmployees', String(formData.nrOfEmployees.value));
+      formFields.append('stage', String(formData.stage.value));
+      formFields.append('businessGoals', JSON.stringify([String(formData.businessGoals.value)]));
+      formFields.append('painPoints', JSON.stringify([String(formData.painPoints.value)]));
+      formFields.append('competitors', JSON.stringify([String(formData.competitors.value)]));
+      formFields.append('targetAudience', String(formData.targetAudience.value));
+      formFields.append('budget', String(formData.budget.value));
+
+      const newCompanyAnalysis = await CompanyAnalysisController.createCompanyAnalysis(formFields);
+
+      if (newCompanyAnalysis) {
+        const companyData = {
+          companyAnalysis: newCompanyAnalysis.companyAnalysisID
+        }
+
+        if (currentCompany.value) {
+          await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
+        }
+      }
+    } catch (error) {
+      console.error('Error creating company analysis:', error);
+    }
     alert('Analyse succesvol opgeslagen.');
+  };
+
+  const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
+    try {
+      await CompanyController.updateCompany(companyID, companyData);
+      fetchCurrentCompany();
+    } catch (error) {
+      console.error('Error associating company analysis:', error);
+    }
   };
 
   const resetForm = () => {
@@ -276,7 +331,7 @@
 
     <form @submit.prevent="submitForm" class="rounded py-5 shadow-sm bg-white">
       <div class="row">
-        <div class="col-1"/>
+        <div class="col-1" />
 
         <div class="col-7">
           <SubHeader>Stap {{ currentStep.number }}: {{ currentStep.name }}</SubHeader>
@@ -287,13 +342,12 @@
             <div class="pb-3" v-for="(formField, key) in currentStepFields" :key="key">
               <label :for="formField.label" class="form-label">{{ formField.label }}</label>
 
-              <input
-                type="text"
-                class="form-control"
-                :id="formField.label"
-                v-model="formField.value"
+              <input type="text" class="form-control" :id="formField.label" v-model="formField.value"
                 :class="{ 'is-invalid': !formField.isValid && canValidate }"
-              >
+                v-if="formField.label !== 'Aantal werknemers' && formField.label !== 'Budget'">
+
+              <input type="number" class="form-control" :id="formField.label" v-model="formField.value"
+                :class="{ 'is-invalid': !formField.isValid && canValidate }" v-else>
 
               <small class="invalid-feedback">{{ formField.errorMessage }}</small>
             </div>
@@ -304,27 +358,20 @@
       <div class="d-flex flex-row align-items-center justify-content-center pt-5">
         <template v-if="currentStep.number > 0">
           <template v-for="(step, key, index) in formSteps" :key="key">
-            <div
-              v-if="index === 0" class="progress-circle not-active"
-              :class="{ 'active': currentStep.number === 1, 'completed': currentStep.number > 1 }"
-            />
+            <div v-if="index === 0" class="progress-circle not-active"
+              :class="{ 'active': currentStep.number === 1, 'completed': currentStep.number > 1 }" />
 
-            <div v-else class="progress-line"/>
+            <div v-else class="progress-line" />
 
-            <div
-              v-if="index > 0"
-              class="progress-circle not-active"
-              :class="{ 'active': currentStep.number === index + 1, 'completed': currentStep.number > index + 1 }"
-            />
+            <div v-if="index > 0" class="progress-circle not-active"
+              :class="{ 'active': currentStep.number === index + 1, 'completed': currentStep.number > index + 1 }" />
           </template>
         </template>
       </div>
 
       <div class="d-flex flex-wrap justify-content-center pt-4">
-        <TextButton
-          v-if="currentStep && currentStep.number === 1"
-          type="secondary" display-style="secondary" class="me-4"
-        >
+        <TextButton v-if="currentStep && currentStep.number === 1" type="secondary" display-style="secondary"
+          class="me-4">
           Vorige
         </TextButton>
 
@@ -374,13 +421,13 @@
       </div>
 
       <div class="d-inline-flex flex-wrap justify-content-center">
-          <TextButton display-style="secondary" class="me-4" @click="closeOverview">
-            Wijzig analyse
-          </TextButton>
+        <TextButton display-style="secondary" class="me-4" @click="closeOverview">
+          Wijzig analyse
+        </TextButton>
 
-          <TextButton type="success" @click="submitForm">
-            Voltooi Analyse
-          </TextButton>
+        <TextButton type="success" @click="submitForm">
+          Voltooi Analyse
+        </TextButton>
       </div>
     </div>
   </div>
