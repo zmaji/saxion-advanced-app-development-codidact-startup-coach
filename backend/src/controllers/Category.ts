@@ -7,7 +7,7 @@ const getAllCategories = async (): Promise<Category[]> => {
     const categories = await CategoryModel.find({}, { _id: 0 });
 
     const buildCategoryTree = (categoryID: string | null): Category[] => {
-      const children = categories.filter((category) => category.parentCategoryID === categoryID);
+      const children = categories.filter((category) => category.parentCategory === categoryID);
 
       return children.map((child) => ({
         categoryID: child.categoryID,
@@ -37,9 +37,9 @@ const getAllParentCategories = async (categoryID: string): Promise<Category | nu
     }
 
     const buildCategoryWithParents = async (currentCategory: Category): Promise<Category | null> => {
-      if (currentCategory.parentCategoryID) {
+      if (currentCategory.parentCategory) {
         const parentCategory = await CategoryModel.findOne({
-          categoryID: currentCategory.parentCategoryID,
+          categoryID: currentCategory.parentCategory,
         }, { _id: 0, __v: 0 });
         if (!parentCategory) {
           console.error('Parent category not found');
