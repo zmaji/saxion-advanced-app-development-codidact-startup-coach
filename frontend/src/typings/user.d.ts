@@ -9,8 +9,3 @@ export interface User {
   emailAddress: string,
   fullName: string
 }
-
-export interface ContentUser {
-  userID: string,
-  name: string
-}
