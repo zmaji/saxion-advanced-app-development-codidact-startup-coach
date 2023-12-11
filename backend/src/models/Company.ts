@@ -20,6 +20,10 @@ const companySchema: Schema<Company> = new Schema({
     type: String,
     required: true,
   },
+  location: {
+    type: String,
+    required: true,
+  },
 }, {
   collection: 'companies',
   versionKey: false,

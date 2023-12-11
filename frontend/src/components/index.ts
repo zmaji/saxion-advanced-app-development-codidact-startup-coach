@@ -18,3 +18,6 @@ export { default as SmallHeader } from './typography/SmallHeader/SmallHeader.vue
 export { default as LabelSelect } from './content/LabelSelect.vue'
 export { default as CompanySelect } from './content/CompanySelect.vue'
 export { default as UserSelect } from './content/UserSelect.vue'
+export { default as ContentCategory } from './contentCategories/ContentCategory.vue';
+export { default as CategoryBreadCrumb } from './contentCategories/CategoryBreadCrumb.vue';
+export { default as CategoryCrumb } from './contentCategories/CategoryCrumb.vue';

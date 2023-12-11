@@ -8,5 +8,6 @@ export interface companyAnalysis {
   painPoints?: string[],
   competitors?: string[],
   targetAudience?: string,
-  budget?: number
+  budget?: number,
+  [key: string]: string | string[] | number | undefined;
 }
