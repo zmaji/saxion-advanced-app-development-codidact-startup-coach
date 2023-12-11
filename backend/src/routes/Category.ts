@@ -54,4 +54,21 @@ router.get('/:categoryID', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/:parentCategoryID/subcategories', async (req: Request, res: Response) => {
+  try {
+    const { parentCategoryID } = req.params;
+    const result = await categoryController.getSubcategoriesByParentId(parentCategoryID);
+
+    if (result) {
+      res.status(StatusCodes.OK).json({ currentCategory: result });
+    } else {
+      res.status(StatusCodes.NOT_FOUND).json({ error: 'Unable to find subcategories by parent ID' });
+    }
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: 'An error occurred getting subcategories by parent ID',
+    });
+  }
+});
+
 export default router;

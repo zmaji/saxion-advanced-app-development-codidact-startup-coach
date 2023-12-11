@@ -75,10 +75,20 @@ const getCategoryById = async (categoryID: string): Promise<Category | null> => 
   }
 };
 
+const getSubcategoriesByParentId = async (parentCategoryID: string): Promise<Category | null> => {
+  try {
+    return (await getAllCategories()).filter((category) => category.categoryID === parentCategoryID)[0];
+  } catch (error) {
+    console.error('Something went wrong getting subcategories by parent ID:', error);
+    throw error;
+  }
+};
+
 const categoryController = {
   getAllCategories,
   getAllParentCategories,
   getCategoryById,
+  getSubcategoriesByParentId,
 };
 
 export default categoryController;
