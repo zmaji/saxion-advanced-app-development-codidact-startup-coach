@@ -1,10 +1,10 @@
 import type { Category } from '../typings/Category';
 
-import CategoryModel from '../models/Category';
+import categoryModel from '../models/Category';
 
 const getAllCategories = async (): Promise<Category[]> => {
   try {
-    const categories = await CategoryModel.find({}, { _id: 0 });
+    const categories = await categoryModel.find({}, { _id: 0 });
 
     const buildCategoryTree = (categoryID: string | null): Category[] => {
       const children = categories.filter((category) => category.parentCategory === categoryID);
@@ -28,7 +28,7 @@ const getAllCategories = async (): Promise<Category[]> => {
 
 const getAllParentCategories = async (categoryID: string): Promise<Category | null> => {
   try {
-    const category = await CategoryModel.findOne({ categoryID }, { _id: 0, __v: 0 });
+    const category = await categoryModel.findOne({ categoryID }, { _id: 0, __v: 0 });
 
     if (!category) {
       console.error('Category not found');
@@ -38,7 +38,7 @@ const getAllParentCategories = async (categoryID: string): Promise<Category | nu
 
     const buildCategoryWithParents = async (currentCategory: Category): Promise<Category | null> => {
       if (currentCategory.parentCategory) {
-        const parentCategory = await CategoryModel.findOne({
+        const parentCategory = await categoryModel.findOne({
           categoryID: currentCategory.parentCategory,
         }, { _id: 0, __v: 0 });
         if (!parentCategory) {
