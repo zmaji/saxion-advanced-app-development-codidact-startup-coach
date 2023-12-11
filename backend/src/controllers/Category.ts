@@ -78,7 +78,7 @@ const getCategoryById = async (categoryID: string): Promise<Category | null> => 
 const categoryController = {
   getAllCategories,
   getAllParentCategories,
-  getCategoryById,  
+  getCategoryById,
 };
 
 export default categoryController;
