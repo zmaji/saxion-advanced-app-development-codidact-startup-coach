@@ -13,3 +13,4 @@ export { default as SecondaryTitle } from './typography/SecondaryTitle/Secondary
 export { default as SubHeader } from './typography/SubHeader/SubHeader.vue';
 
 // Other components
+export { default as ContentCategory } from './contentCategories/ContentCategory.vue';
