@@ -7,6 +7,7 @@ import isLoggedIn from '../middleware/isLoggedIn';
 import authRoutes from '../routes/Auth';
 import companyRoutes from '../routes/Company';
 import companyAnalysesRoutes from '../routes/CompanyAnalysis';
+import categoryRoutes from '../routes/Category';
 
 const createServer = () => {
   const app: Express = express();
@@ -33,6 +34,7 @@ const createServer = () => {
 
   app.use('/companies', companyRoutes);
   app.use('/companyAnalyses', companyAnalysesRoutes);
+  app.use('/categories', categoryRoutes);
 
   return app;
 };
