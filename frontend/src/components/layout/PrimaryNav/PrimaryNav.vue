@@ -38,7 +38,7 @@
           </li>
 
           <li class="nav-item">
-            <RouterLink to="/about" class="nav-link">Over</RouterLink>
+            <RouterLink :to="{ name: 'knowledgeBase.overview' }" class="nav-link">categorieën</RouterLink>
           </li>
         </ul>
       </div>

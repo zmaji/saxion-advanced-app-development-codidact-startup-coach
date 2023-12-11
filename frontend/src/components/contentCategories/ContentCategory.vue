@@ -12,31 +12,45 @@
 
 <template>
   <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button
-        class="accordion-button collapsed"
-        type="button"
-        data-bs-toggle="collapse"
-        :data-bs-target="`#flush-collapse${category.categoryID}`"
-        aria-expanded="false"
-        :aria-controls="`flush-collapse${category.categoryID}`"
-      >
-        {{ category.name }}
-      </button>
-    </h2>
+    <div
+
+      class="accordion-header d-flex flex-row flex-wrap justify-content-between align-items-center"
+    >
+      <div class="px-4 py-3">
+        <RouterLink :to="{ name: 'knowledgeBase.overview', params: { category: category.name} }">
+          {{ category.name }}
+        </RouterLink>
+      </div>
+
+      <div v-if="category.subCategories && category.subCategories.length > 0">
+        <button
+          class="accordion-button collapsed shadow-none"
+          type="button"
+          data-bs-toggle="collapse"
+          :data-bs-target="`#flush-collapse${category.categoryID}`"
+          aria-expanded="false"
+          :aria-controls="`flush-collapse${category.categoryID}`"
+        />
+      </div>
+    </div>
 
     <div
       :id="`flush-collapse${category.categoryID}`"
       class="accordion-collapse collapse"
       :data-bs-parent="`#categories-accordion${categoryKey}`"
     >
-      <div class="accordion-body">
-        <ContentCategory
-          v-for="(subCategory, key) in category.subCategories" :key="key"
-          :category="subCategory"
-          :categoryKey="key"
-        />
-      </div>
+      <ContentCategory
+        v-for="(subCategory, key) in category.subCategories" :key="key"
+        :category="subCategory"
+        :categoryKey="key"
+        class="ps-3"
+      />
     </div>
   </div>
 </template>
+
+<style scoped>
+  .accordion-button:not(.collapsed) {
+    background-color: white!important;
+  }
+</style>

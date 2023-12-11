@@ -37,8 +37,12 @@
           name: 'Subcategory 1-2'
         }
       ]
+    },
+    {
+      categoryID: '2',
+      name: 'Main Category 2',
+      subCategories: []
     }
-
   ];
 
 </script>
@@ -52,31 +56,10 @@
 
   <div class="accordion accordion-flush" id="categories-accordion">
     <div class="accordion-item" v-for="(category, key) in categories" :key="key">
-      <h2 class="accordion-header">
-        <button
-          class="accordion-button collapsed"
-          type="button"
-          data-bs-toggle="collapse"
-          :data-bs-target="`#flush-collapse${category.categoryID}`"
-          aria-expanded="false"
-          :aria-controls="`flush-collapse${category.categoryID}`"
-        >
-          {{ category.name }}
-        </button>
-      </h2>
-
-      <div
-        :id="`flush-collapse${category.categoryID}`"
-        class="accordion-collapse collapse"
-        :data-bs-parent="`#categories-accordion${key}`"
-      >
-        <div class="accordion-body">
-          <ContentCategory
-            :category="category"
-            :categoryKey="key"
-          />
-        </div>
-      </div>
+      <ContentCategory
+        :category="category"
+        :categoryKey="key"
+      />
     </div>
   </div>
 </template>
