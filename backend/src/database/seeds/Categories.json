@@ -30,6 +30,11 @@
         "name": "Softwareontwikkeling"
     },
     {
+        "categoryID": "41dd981a-ee17-4cd5-947f-ddeed02c4115",
+        "parentCategoryID": "b8b7187e-7335-477e-b087-219d0d95910a",
+        "name": "Advanced App Development"
+    },
+    {
         "categoryID": "3248dc69-05c2-42f9-ad66-a3886c1fc0f1",
         "parentCategoryID": "6af3e807-a225-4490-83aa-3fbca8050ea8",
         "name": "Internet of Things (IoT)"

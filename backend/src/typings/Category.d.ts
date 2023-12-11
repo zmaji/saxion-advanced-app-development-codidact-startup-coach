@@ -3,4 +3,5 @@ export interface Category {
   parentCategoryID?: string,
   name: string,
   subcategories?: Category[]
+  parentCategory?: Category | null
 }

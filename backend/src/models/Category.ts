@@ -9,7 +9,7 @@ const categorySchema: Schema<Category> = new Schema({
     immutable: true,
   },
   parentCategoryID: {
-    type: String
+    type: String,
   },
   name: {
     type: String,
