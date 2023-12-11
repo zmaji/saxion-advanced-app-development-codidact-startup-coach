@@ -3,8 +3,8 @@ import type { Express, Request, Response } from 'express';
 import express from 'express';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
-import authRoutes from '../routes/Auth';
 import isLoggedIn from '../middleware/isLoggedIn';
+import authRoutes from '../routes/Auth';
 import companyRoutes from '../routes/Company';
 import companyAnalysesRoutes from '../routes/CompanyAnalysis';
 
