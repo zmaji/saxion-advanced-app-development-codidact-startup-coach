@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
   import type { Category } from '@/typings/Content';
 
   interface Props {
@@ -17,7 +16,7 @@
       class="accordion-header d-flex flex-row flex-wrap justify-content-between align-items-center"
     >
       <div class="px-4 py-3">
-        <RouterLink :to="{ name: 'knowledgeBase.overview', params: { category: category.name} }">
+        <RouterLink :to="{ name: 'knowledgeBase.overview', params: { categoryID: category.categoryID} }">
           {{ category.name }}
         </RouterLink>
       </div>
