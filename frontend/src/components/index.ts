@@ -13,3 +13,6 @@ export { default as SecondaryTitle } from './typography/SecondaryTitle/Secondary
 export { default as SubHeader } from './typography/SubHeader/SubHeader.vue';
 
 // Other components
+export { default as ContentCategory } from './contentCategories/ContentCategory.vue';
+export { default as CategoryBreadCrumb } from './contentCategories/CategoryBreadCrumb.vue';
+export { default as CategoryCrumb } from './contentCategories/CategoryCrumb.vue';

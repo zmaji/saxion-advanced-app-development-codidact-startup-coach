@@ -1,0 +1,47 @@
+[
+    {
+        "categoryID": "6af3e807-a225-4490-83aa-3fbca8050ea8",
+        "parentCategory": null,
+        "name": "Technologie"
+    },
+    {
+        "categoryID": "fa20e373-b7b6-45ee-9131-406a37494e4f",
+        "parentCategory": null,
+        "name": "Gezondheid en Welzijn"
+    },
+    {
+        "categoryID": "7a2b6015-ebce-4eb7-b531-f189a65c65c6",
+        "parentCategory": null,
+        "name": "Onderwijs"
+    },
+    {
+        "categoryID": "3568986f-ad02-44a3-a40c-a9a6d7d2936b",
+        "parentCategory": null,
+        "name": "Financiën"
+    },
+    {
+        "categoryID": "ca2899fd-c4f3-42a7-9d8a-fafa180f2b60",
+        "parentCategory": null,
+        "name": "Reizen"
+    },
+    {
+        "categoryID": "b8b7187e-7335-477e-b087-219d0d95910a",
+        "parentCategory": "6af3e807-a225-4490-83aa-3fbca8050ea8",
+        "name": "Softwareontwikkeling"
+    },
+    {
+        "categoryID": "41dd981a-ee17-4cd5-947f-ddeed02c4115",
+        "parentCategory": "b8b7187e-7335-477e-b087-219d0d95910a",
+        "name": "Advanced App Development"
+    },
+    {
+        "categoryID": "3248dc69-05c2-42f9-ad66-a3886c1fc0f1",
+        "parentCategory": "6af3e807-a225-4490-83aa-3fbca8050ea8",
+        "name": "Internet of Things (IoT)"
+    },
+    {
+        "categoryID": "75364dfa-376a-4173-8b1d-816575077461",
+        "parentCategory": "fa20e373-b7b6-45ee-9131-406a37494e4f",
+        "name": "Fitness en sport"
+    }
+]
