@@ -38,10 +38,10 @@ const createCompanyAnalysis = async (companyAnalysisData: companyAnalysis): Prom
   }
 };
 
-const CompanyAnalysis = {
+const CompanyAnalysisController = {
   getCompanyAnalyses,
   getCompanyAnalysis,
   createCompanyAnalysis,
 };
 
-export default CompanyAnalysis;
+export default CompanyAnalysisController;
