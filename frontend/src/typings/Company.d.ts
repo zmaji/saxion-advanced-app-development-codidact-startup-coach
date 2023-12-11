@@ -5,5 +5,6 @@ export interface Company {
   companyID: string,
   companyAnalysis?: companyAnalysis | string,
   roadmap?: Roadmap | string,
-  name: string
+  name: string,
+  location: string
 }
