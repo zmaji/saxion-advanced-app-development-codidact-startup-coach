@@ -17,13 +17,12 @@
         `/categories/${route.params.categoryID}/parents`,
         false
       );
-      console.log(response.data)
 
       if (response && response.data) {
         categories.value = response.data;
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
 

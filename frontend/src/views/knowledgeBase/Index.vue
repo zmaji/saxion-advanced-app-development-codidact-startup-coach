@@ -19,13 +19,12 @@
   const fetchCategories = async () => {
     try {
       const response = await httpService.getRequest<Category[]>('/categories', false);
-      console.log(response.data)
 
       if (response && response.data) {
         categories.value = response.data;
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   }
 
