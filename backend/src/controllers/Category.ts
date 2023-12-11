@@ -16,15 +16,12 @@ const getAllCategories = async (): Promise<Category[]> => {
       }));
     };
 
-    const mainCategories = buildCategoryTree(null);
-
-    return mainCategories;
+    return buildCategoryTree(null);
   } catch (error) {
     console.error('Something went wrong getting all categories:', error);
     throw error;
   }
 };
-
 
 const getAllParentCategories = async (categoryID: string): Promise<Category | null> => {
   try {
@@ -41,6 +38,7 @@ const getAllParentCategories = async (categoryID: string): Promise<Category | nu
         const parentCategory = await categoryModel.findOne({
           categoryID: currentCategory.parentCategory,
         }, { _id: 0, __v: 0 });
+
         if (!parentCategory) {
           console.error('Parent category not found');
 
@@ -67,7 +65,6 @@ const getAllParentCategories = async (categoryID: string): Promise<Category | nu
     throw error;
   }
 };
-
 
 const categoryController = {
   getAllCategories,
