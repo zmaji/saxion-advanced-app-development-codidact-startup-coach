@@ -5,8 +5,8 @@ import cors from 'cors';
 import fileUpload from 'express-fileupload';
 import AuthRoutes from '../routes/Auth';
 import isLoggedIn from '../middleware/isLoggedIn';
-import CompanyRoutes from '../routes/CompanyRouter';
-import CompanyAnalysesRoutes from '../routes/CompanyAnalysisRouter';
+import CompanyRoutes from '../routes/Company';
+import CompanyAnalysesRoutes from '../routes/CompanyAnalysis';
 
 const createServer = () => {
   const app: Express = express();

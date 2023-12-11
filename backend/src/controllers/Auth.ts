@@ -8,7 +8,7 @@ const generateAuthToken = (user: User): string => {
   return jwt.sign({
     userID: user.userID,
     email: user.emailAddress,
-    fullname: user.fullName,
+    fullName: user.fullName,
     company: user.company,
     roles: user.roles,
   }, user.secret);
