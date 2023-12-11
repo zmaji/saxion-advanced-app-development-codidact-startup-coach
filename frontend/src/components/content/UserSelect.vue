@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { ContentUser } from '@/typings/User';
+  import type { User } from '@/typings/User';
   import type { Ref } from 'vue';
   
   import VueMultiselect from 'vue-multiselect'
@@ -8,27 +8,47 @@
 
   import { SmallHeader } from '@/components';
 
-  let selectedUsers: Ref<ContentUser[]> = ref([])
-  let userOptions: Ref<ContentUser[]> = ref<ContentUser[]>([
+  let selectedUsers: Ref<User[]> = ref([])
+  let userOptions: Ref<User[]> = ref<User[]>([
     {
       userID: '1',
-      name: 'Saied',
+      company: '',
+      userName: '',
+      password: '',
+      secret: '',
+      emailAddress: '',
+      fullName: 'Saied',
     },
     {
       userID: '2',
-      name: 'Zikria',
+      company: '',
+      userName: '',
+      password: '',
+      secret: '',
+      emailAddress: '',
+      fullName: 'Zikria',
     },
     {
       userID: '3',
-      name: 'Nils',
+      company: '',
+      userName: '',
+      password: '',
+      secret: '',
+      emailAddress: '',
+      fullName: 'Maurice',
     },
     {
       userID: '4',
-      name: 'Maurice',
+      company: '',
+      userName: '',
+      password: '',
+      secret: '',
+      emailAddress: '',
+      fullName: 'Nils',
     },
   ]);
 
-  const removeUser = (selectedUser: ContentUser): void => {
+  const removeUser = (selectedUser: User): void => {
     const index = selectedUsers.value.findIndex(user => user.userID === selectedUser.userID);
 
     if (index !== -1) {
@@ -60,7 +80,7 @@
       :key="key"
       class="bg-secondary text-white px-3 py-1 rounded-pill me-2 mb-2"
     >
-      {{user.name}}
+      {{user.fullName}}
 
       <FontAwesomeIcon icon="circle-xmark" class="ps-2 label-icon" @click="removeUser(user)"/>
     </div>

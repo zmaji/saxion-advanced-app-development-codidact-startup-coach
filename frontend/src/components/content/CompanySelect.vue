@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { Company } from '@/typings/Company';
+  import type { Company } from '@/typings/company';
   import type { Ref } from 'vue';
   
   import VueMultiselect from 'vue-multiselect'
@@ -13,18 +13,22 @@
     {
       companyID: '1',
       name: 'Saxion',
+      location: ''
     },
     {
       companyID: '2',
       name: 'Inversable',
+      location: ''
     },
     {
       companyID: '3',
       name: 'Topicus',
+      location: ''
     },
     {
       companyID: '4',
       name: 'Google',
+      location: ''
     },
   ]);
 
