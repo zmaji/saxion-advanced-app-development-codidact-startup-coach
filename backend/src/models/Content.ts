@@ -14,7 +14,7 @@ const contentSchema: Schema<Content> = new Schema({
   },
   title: {
     type: String,
-    immutable: true,
+    required: true,
   },
   description: {
     type: String,
@@ -24,17 +24,13 @@ const contentSchema: Schema<Content> = new Schema({
     type: String,
     required: true,
   },
-  labels: {
-    type: [String],
-    required: true,
-  },
   accessLevel: {
     type: String,
     required: true,
   },
   attachment: {
     type: String,
-    required: true,
+    required: false,
   },
   createdAt: {
     type: String,
@@ -42,7 +38,7 @@ const contentSchema: Schema<Content> = new Schema({
   },
   editedAt: {
     type: String,
-    required: true,
+    required: false,
   },
 
 }, {

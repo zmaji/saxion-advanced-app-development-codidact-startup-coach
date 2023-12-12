@@ -19,4 +19,4 @@
     v-if="category.subCategories && category.subCategories.length > 0"
     :category="category.subCategories[0]"
   />
-</template>
+</template>@/typings/content

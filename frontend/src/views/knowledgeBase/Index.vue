@@ -54,4 +54,4 @@
 
 <style scoped>
 
-</style>
+</style>@/typings/content

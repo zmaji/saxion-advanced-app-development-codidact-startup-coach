@@ -58,7 +58,7 @@ router.post('/', async (req: Request, res: Response) => {
   } catch {
     res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'An error occurred getting creating content' });
+        .json({ error: 'An error occurred creating content' });
   }
 });
 

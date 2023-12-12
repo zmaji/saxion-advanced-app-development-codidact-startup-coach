@@ -52,4 +52,4 @@
   .accordion-button:not(.collapsed) {
     background-color: white!important;
   }
-</style>
+</style>@/typings/content

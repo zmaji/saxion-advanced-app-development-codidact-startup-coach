@@ -51,4 +51,4 @@
       <CategoryCrumb v-if="route.params.categoryID && category" :category="category" />
     </ol>
   </nav>
-</template>
+</template>@/typings/content

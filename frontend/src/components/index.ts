@@ -1,4 +1,3 @@
-import { CompanySelect } from '@/components';
 /* eslint-disable import/prefer-default-export */
 export { default as TextButton } from '@/components/buttons/TextButton.vue';
 export { default as IconButton } from '@/components/buttons/IconButton.vue';

@@ -172,3 +172,4 @@
 </template>
 
 <style scoped></style>
+@/typings/Label
