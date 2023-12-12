@@ -29,7 +29,6 @@
 
   let accessLevel: Ref<string> = ref('');
   let contentLabels: Ref<ContentLabel[]> = ref<ContentLabel[]>([])
-  let labelSelectKey: Ref<number> = ref(0);
 
   const contentTemplate: NewContent = reactive({
     contentID: null,
@@ -42,23 +41,6 @@
     attachment: null,
     createdAt: null,
   })
-
-  const resetContentTemplate = () => {
-    contentTemplate.contentID = null;
-    contentTemplate.user = null;
-    contentTemplate.title = null;
-    contentTemplate.description = null;
-    contentTemplate.category = null;
-    contentTemplate.labels = [];
-    contentTemplate.accessLevel = '';
-    contentTemplate.attachment = null;
-    contentTemplate.createdAt = null;
-    contentLabels.value = []
-
-    labelSelectKey.value += 1;
-    console.log(contentLabels.value);
-    
-  };
 
   const addSelectedLabels = (selectedLabels: ContentLabel[]) => {
     contentLabels.value = selectedLabels;
@@ -73,7 +55,7 @@
         JSON.parse(JSON.stringify(contentTemplate))
       );
 
-      resetContentTemplate();
+      navigateToContentOverview();
 
     } catch (error) {
       console.error(error);
@@ -132,7 +114,7 @@
       <SecondaryTitle> Content labels </SecondaryTitle>
 
       <label class="form-label">Content labels</label>
-      <LabelSelect :key="labelSelectKey" :model-value="contentLabels" @update:modelValue="addSelectedLabels" />
+      <LabelSelect :model-value="contentLabels" @update:modelValue="addSelectedLabels" />
     </div>
 
     <div class="col">
@@ -192,10 +174,8 @@
         Uw content is succesvol toegevoegd !
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-        @click="resetContentTemplate"> Blijven </button>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-        @click="navigateToContentOverview">Terug</button>
+        @click="navigateToContentOverview">Prima</button>
       </div>
     </div>
   </div>
@@ -203,4 +183,4 @@
 
 </template>
 
-<style scoped></style>@/typings/Label@/typings/Label
+<style scoped></style>
