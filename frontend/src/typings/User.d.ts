@@ -1,4 +1,4 @@
-import type { Company } from './Module';
+import type { Company } from './Company';
 
 export interface User {
   userID: string,
