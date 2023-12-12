@@ -29,6 +29,7 @@
 
   let accessLevel: Ref<string> = ref('');
   let contentLabels: Ref<ContentLabel[]> = ref<ContentLabel[]>([])
+  let labelSelectKey: Ref<number> = ref(0);
 
   const contentTemplate: NewContent = reactive({
     contentID: null,
@@ -53,6 +54,8 @@
     contentTemplate.attachment = null;
     contentTemplate.createdAt = null;
     contentLabels.value = []
+
+    labelSelectKey.value += 1;
     console.log(contentLabels.value);
     
   };
@@ -129,7 +132,7 @@
       <SecondaryTitle> Content labels </SecondaryTitle>
 
       <label class="form-label">Content labels</label>
-      <LabelSelect :model-value="contentLabels" @update:modelValue="addSelectedLabels" />
+      <LabelSelect :key="labelSelectKey" :model-value="contentLabels" @update:modelValue="addSelectedLabels" />
     </div>
 
     <div class="col">
