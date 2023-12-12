@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-  import type { Category } from '@/typings/Content';
+  import type { Category } from '@/typings/Category';
   import type { Ref } from 'vue';
 
   import { onMounted, ref } from 'vue';
@@ -40,18 +40,15 @@
 
   <SecondaryTitle>Secondary header</SecondaryTitle>
 
-  <CategoryBreadCrumb/>
+  <CategoryBreadCrumb />
 
   <div class="accordion accordion-flush" id="categories-accordion">
     <div class="accordion-item" v-for="(category, key) in categories" :key="key">
-      <ContentCategory
-        :category="category"
-        :categoryKey="key"
-      />
+      <ContentCategory :category="category" :categoryKey="key" />
     </div>
   </div>
 </template>
 
 <style scoped>
 
-</style>@/typings/content
+</style>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
+  import type { FormData, FormStep } from '@/typings/Form';
   import type { User } from '@/typings/User';
   import type { Company } from '@/typings/Company';
   import type { companyAnalysis } from '@/typings/CompanyAnalysis';
-  import type { FormData, FormStep } from '@/typings/form';
 
   import { onMounted, reactive, ref } from 'vue';
   import httpService from '../../plugins/http/httpService';

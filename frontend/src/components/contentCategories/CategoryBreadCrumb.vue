@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { Category } from '@/typings/Content';
+  import type { Category } from '@/typings/Category';
 
   import { onMounted, ref, watch } from 'vue';
   import { useRoute } from 'vue-router';
