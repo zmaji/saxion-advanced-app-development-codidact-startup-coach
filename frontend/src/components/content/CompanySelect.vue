@@ -76,4 +76,3 @@
     cursor: pointer;
   }
 </style>
-@/typings/Company
