@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { ContentLabel } from '@/typings/label';
+  import type { ContentLabel } from '@/typings/Label';
   import type { Ref } from 'vue';
 
   import { ref, watch } from 'vue'

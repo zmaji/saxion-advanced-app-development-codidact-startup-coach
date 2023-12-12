@@ -10,7 +10,6 @@ import CompanyIndex from '@/views/company/Index.vue'
 import ContentIndex from '@/views/content/Index.vue'
 import ContentCreate from '@/views/content/Create.vue'
 
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

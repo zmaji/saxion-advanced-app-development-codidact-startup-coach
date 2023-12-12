@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { ContentLabel } from '@/typings/label';
+  import type { ContentLabel } from '@/typings/Label';
   import type { Ref } from 'vue';
 
   import { reactive, ref } from 'vue';
@@ -49,10 +49,11 @@
     try {
       console.log(JSON.parse(JSON.stringify(contentTemplate)));
       
-      const response = await httpService.postRequest('/content', 
+      const response = await httpService.postRequest(
+        '/content',
         JSON.parse(JSON.stringify(contentTemplate))
-      )
-      
+      );
+
       console.log(response);
 
     } catch (error) {
