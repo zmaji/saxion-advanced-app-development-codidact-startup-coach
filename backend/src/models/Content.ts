@@ -42,10 +42,10 @@ const contentSchema: Schema<Content> = new Schema({
   },
 
 }, {
-  collection: 'content',
+  collection: 'contents',
   versionKey: false,
 });
 
-const ContentModel = mongoose.model<Content>('Content', contentSchema);
+const contentModel = mongoose.model<Content>('Content', contentSchema);
 
-export default ContentModel;
+export default contentModel;

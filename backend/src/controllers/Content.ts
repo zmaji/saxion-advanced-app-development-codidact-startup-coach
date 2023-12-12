@@ -1,11 +1,11 @@
 import type { Content } from '../typings/Content';
 
 import { v4 as uuidv4 } from 'uuid';
-import ContentModel from '../models/Content';
+import contentModel from '../models/Content';
 
 const getAllContent = async (): Promise<Content[]> => {
   try {
-    return await ContentModel.find({}, { _id: 0 });
+    return await contentModel.find({}, { _id: 0 });
   } catch (error) {
     console.error('Something went wrong getting content:', error);
     throw error;
@@ -14,9 +14,7 @@ const getAllContent = async (): Promise<Content[]> => {
 
 const getContent = async (contentID: string): Promise<Content | null> => {
   try {
-    const result = await ContentModel.findOne({ contentID }, { _id: 0 });
-
-    return result || null;
+    return await contentModel.findOne({ contentID }, { _id: 0 });
   } catch (error) {
     console.error('Something went wrong getting content:', error);
     throw error;
@@ -27,11 +25,11 @@ const createContent = async (contentData: Content): Promise<Content | null> => {
   try {
     contentData.contentID = uuidv4();
     contentData.createdAt = new Date().toISOString();
-    console.log(contentData);
-    const newContent = new ContentModel(contentData);
+    // Labels toevoegen
+    const newContent = new contentModel(contentData);
     await newContent.save();
 
-    return newContent || null;
+    return newContent;
   } catch (error) {
     console.error('Something went wrong creating new content:', error);
     throw error;
@@ -43,13 +41,13 @@ const updateContent = async (
     newContentData: Content,
 ): Promise<Content | null> => {
   try {
-    const newContent = await ContentModel.findOneAndUpdate(
+    const updatedContent = await contentModel.findOneAndUpdate(
         { contentID },
         newContentData,
         { new: true },
     );
 
-    return newContent || null;
+    return updatedContent;
   } catch (error) {
     console.error('Something went wrong creating new content:', error);
     throw error;
@@ -58,9 +56,7 @@ const updateContent = async (
 
 const deleteContent = async (contentID: string): Promise<Content | null> => {
   try {
-    const result = await ContentModel.findOneAndDelete({ contentID }, { _id: 0 }) || null;
-
-    return result || null;
+    return await contentModel.findOneAndDelete({ contentID }, { _id: 0 });
   } catch (error) {
     console.error('Something went wrong creating new content:', error);
     throw error;

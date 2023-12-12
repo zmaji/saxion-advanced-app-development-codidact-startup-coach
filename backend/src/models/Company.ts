@@ -29,6 +29,6 @@ const companySchema: Schema<Company> = new Schema({
   versionKey: false,
 });
 
-const CompanyModel = mongoose.model<Company>('Company', companySchema);
+const companyModel = mongoose.model<Company>('Company', companySchema);
 
-export default CompanyModel;
+export default companyModel;
