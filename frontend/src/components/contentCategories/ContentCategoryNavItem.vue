@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { Category } from '@/typings/Content';
+  import type { Category } from '@/typings/Category';
 
   interface Props {
     category: Category;
