@@ -11,7 +11,7 @@
   interface Props {
     modelValue?: ContentLabel[]
   }
-  const props = withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<Props>(), {
     modelValue: undefined
   }) 
 
@@ -101,4 +101,4 @@
   .label-icon:hover {
     cursor: pointer;
   }
-</style>@/typings/Label
+</style>

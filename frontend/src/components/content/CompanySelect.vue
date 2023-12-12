@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { Company } from '@/typings/company';
+  import type { Company } from '@/typings/Company';
   import type { Ref } from 'vue';
   
   import VueMultiselect from 'vue-multiselect'
