@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { RouterLink } from 'vue-router';
+  import { RouterLink, useRoute } from 'vue-router';
+
+  const route = useRoute();
 </script>
 
 <template>
@@ -10,7 +12,7 @@
       </h1>
     </div>
 
-    <ul class="sidebar-nav">
+    <ul class="sidebar-nav" v-if="route.name !== 'knowledgeBase.overview'">
       <li class="sidebar-nav-item">
         <RouterLink :to="{ name: 'company.overview' }" class="nav-link">Mijn bedrijf</RouterLink>
       </li>
@@ -30,6 +32,9 @@
       <li class="sidebar-nav-item">
         <RouterLink :to="{ name: 'components' }" class="nav-link">Componenten</RouterLink>
       </li>
+    </ul>
+
+    <ul v-else class="sidebar-nav" id="knowledge-base-nav">
     </ul>
   </nav>
 </template>
