@@ -10,7 +10,7 @@ const contentSchema: Schema<Content> = new Schema({
   },
   user: {
     type: String,
-    unique: true,
+    unique: false,
   },
   title: {
     type: String,
