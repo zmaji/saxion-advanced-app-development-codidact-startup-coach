@@ -1,11 +1,43 @@
 import type { Content } from '../typings/Content';
+import type { ContentLabel, Label } from '../typings/Label';
 
 import { v4 as uuidv4 } from 'uuid';
 import contentModel from '../models/Content';
+import contentLabelModel from '../models/ContentLabel';
+import labelModel from '../models/Label';
 
 const getAllContent = async (): Promise<Content[]> => {
   try {
-    return await contentModel.find({}, { _id: 0 });
+    const result: Content[] = await contentModel.find({}, { _id: 0 }).lean();
+    const contentLabels: ContentLabel[] = await contentLabelModel.find({}, { _id: 0 });
+    const labels: Label[] = await labelModel.find({}, { _id: 0 });
+
+    if (result) {
+      const contents: Content[] = [];
+
+      for (const content of result) {
+        const labelsOfContent = contentLabels.filter(
+            (contentLabel: ContentLabel) => contentLabel.contentID === content.contentID);
+        const relatedLabels: Label[] = [];
+
+        for (const contentLabel of labelsOfContent) {
+          const label = labels.find((label: Label) => label.labelID === contentLabel.labelID);
+
+          if (label) {
+            relatedLabels.push(label);
+          }
+        }
+
+        contents.push({
+          ...content,
+          labels: relatedLabels,
+        });
+      }
+
+      return contents;
+    }
+
+    return result;
   } catch (error) {
     console.error('Something went wrong getting content:', error);
     throw error;

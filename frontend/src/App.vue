@@ -36,7 +36,7 @@
 </script>
 
 <template>
-  <div :class="showNavigationBars ? 'd-flex flex-row' : null">
+  <div :class="showNavigationBars ? 'd-flex flex-row side-bar-spacer' : null">
     <SidebarNav v-if="showNavigationBars"/>
 
     <div :class="showNavigationBars ? 'flex-grow-1 bg-light' : null">
@@ -52,3 +52,11 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+  .side-bar-spacer {
+    @media (min-width: 992px) {
+      margin-left: 300px;
+    }
+  }
+</style>

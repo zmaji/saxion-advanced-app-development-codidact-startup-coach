@@ -1,20 +1,24 @@
 <script setup lang="ts">
 
   import type { Category } from '@/typings/Category';
+  import type { Content } from '@/typings/Content';
   import type { Ref } from 'vue';
+  import type { Label } from '@/typings/Label';
 
   import { onMounted, ref } from 'vue';
 
   import {
-    ContentCategory,
     CategoryBreadCrumb,
+    ContentCategoryNavItem,
     PageTitle,
-    SubTitle,
     SecondaryTitle
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
+  import ContentItem from '@/components/content/ContentItem.vue';
 
   const categories: Ref<Category[]> = ref<Category[]>([]);
+  const contents: Ref<Content[]> = ref<Content[]>([]);
+  const standardContents: Ref<Content[]> = ref<Content[]>([]);
 
   const fetchCategories = async () => {
     try {
@@ -28,27 +32,62 @@
     }
   }
 
+  const fetchContent = async () => {
+    try {
+      const response = await httpService.getRequest<Content[]>('/content', false);
+
+      if (response && response.data) {
+        contents.value = response.data.filter(
+          (content) => !content.labels.find((label: Label) => label.name === 'Standaard sjabloon')
+        );
+
+        standardContents.value = response.data.filter(
+          (content) => content.labels.find((label: Label) => label.name === 'Standaard sjabloon'));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   onMounted(() => {
     fetchCategories();
+    fetchContent();
   });
 </script>
 
 <template>
   <PageTitle>De kennisbank</PageTitle>
 
-  <SubTitle>Overzicht van roadmap</SubTitle>
+  <CategoryBreadCrumb/>
 
-  <SecondaryTitle>Secondary header</SecondaryTitle>
+  <SecondaryTitle>Zoeken en filteren</SecondaryTitle>
 
-  <CategoryBreadCrumb />
-
-  <div class="accordion accordion-flush" id="categories-accordion">
-    <div class="accordion-item" v-for="(category, key) in categories" :key="key">
-      <ContentCategory :category="category" :categoryKey="key" />
-    </div>
+  <div class="row row-cols-2 g-4 pt-3 pb-4">
+    <ContentItem
+      v-for="(content, key) in standardContents"
+      :key="key"
+      :content="content"
+    />
   </div>
+
+  <SecondaryTitle>Overige posts</SecondaryTitle>
+
+  <div class="row row-cols-2 g-4 pt-3 pb-4">
+    <ContentItem
+      v-for="(content, key) in contents"
+      :key="key"
+      :content="content"
+    />
+  </div>
+
+  <Teleport to="#knowledge-base-nav">
+    <div class="accordion accordion-flush m-0 p-0" id="categories-accordion">
+      <div class="accordion-item m-0 p-0" v-for="(category, key) in categories" :key="key">
+        <ContentCategoryNavItem
+          :category="category"
+          :categoryKey="key"
+        />
+      </div>
+    </div>
+  </Teleport>
 </template>
-
-<style scoped>
-
-</style>
