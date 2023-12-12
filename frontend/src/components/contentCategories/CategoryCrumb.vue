@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { Category } from '@/typings/Category';
+  import type { Category } from '@/typings/Category';
 
-interface Props {
-  category: Category
-}
+  interface Props {
+    category: Category
+  }
 
-withDefaults(defineProps<Props>(), {});
+  withDefaults(defineProps<Props>(), {});
 </script>
 
 <template>

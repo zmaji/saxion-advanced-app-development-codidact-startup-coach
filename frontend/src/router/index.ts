@@ -6,7 +6,9 @@ import Register from '@/views/auth/Register.vue';
 import knowledgeBaseIndex from '@/views/knowledgeBase/Index.vue';
 import RoadmapIndex from '@/views/roadmap/Index.vue';
 import Components from '@/views/Components.vue';
-import CompanyIndex from '@/views/company/Index.vue';
+import CompanyIndex from '@/views/company/Index.vue'
+import ContentIndex from '@/views/content/Index.vue'
+import ContentCreate from '@/views/content/Create.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -78,7 +80,7 @@ const router = createRouter({
             title: 'Bedrijfsroadmap',
             showNavigationBars: true,
           },
-        }
+        },
       ]
     },
     {
@@ -88,6 +90,32 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('@/views/About.vue')
+    },
+    {
+      path: '/content',
+      name: 'content',
+      component: RouterView,
+      redirect: { name: 'content.overview' },
+      children: [
+        {
+          path: '',
+          name: 'content.overview',
+          component: ContentIndex,
+          meta: {
+            title: 'Kennisbank',
+            showNavigationBars: true,
+          },
+        },
+        {
+          path: 'create',
+          name: 'content.create',
+          component: ContentCreate,
+          meta: {
+            title: 'Content toevoegen',
+            showNavigationBars: true,
+          },
+        },
+      ]
     },
     {
       path: '/components',

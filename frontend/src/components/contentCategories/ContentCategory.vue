@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { Category } from '@/typings/Category';
+  import type { Category } from '@/typings/Category';
 
-interface Props {
-  category: Category;
-  categoryKey: number;
-}
+  interface Props {
+    category: Category;
+    categoryKey: number;
+  }
 
-withDefaults(defineProps<Props>(), {});
+  withDefaults(defineProps<Props>(), {});
 </script>
 
 <template>
@@ -34,7 +34,7 @@ withDefaults(defineProps<Props>(), {});
 </template>
 
 <style scoped>
-.accordion-button:not(.collapsed) {
-  background-color: white !important;
-}
+  .accordion-button:not(.collapsed) {
+    background-color: white!important;
+  }
 </style>

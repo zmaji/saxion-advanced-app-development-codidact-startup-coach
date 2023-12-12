@@ -34,7 +34,7 @@
       <div class="collapse navbar-collapse justify-content-end pe-5" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <RouterLink to="/" class="nav-link">Kennisbank</RouterLink>
+            <RouterLink :to="{ name: 'content.overview' }" class="nav-link">Kennisbank</RouterLink>
           </li>
 
           <li class="nav-item">

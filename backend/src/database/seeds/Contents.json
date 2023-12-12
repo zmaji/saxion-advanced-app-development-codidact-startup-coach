@@ -1,0 +1,42 @@
+[
+    {
+        "contentID":"ea0abe91-b28d-47d0-a6ac-e9e4e3e8a8ae",
+        "user": "289f486d-38a2-43c4-b475-af7394890a8c",
+        "title": "Lorem Ipsum",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "category": "Sample Category",
+        "accessLevel": "private",
+        "attachment": "example.pdf",
+        "createdAt": "2023-12-12T08:00:00Z"
+    },
+    {
+        "contentID":"31bb0c9b-39ff-44e3-8e20-09b2e3c99b9a",
+        "user": "289f486d-38a2-43c4-b475-af7394890a8c",
+        "title": "Sample Title",
+        "description": "This is a test description.",
+        "category": "Testing",
+        "accessLevel": "public",
+        "attachment": "sample_image.jpg",
+        "createdAt": "2023-12-12T09:15:00Z"
+    },
+    {
+        "contentID":"bd4d00da-c6c5-4a8f-a811-acc89f91a4ab",
+        "user": "289f486d-38a2-43c4-b475-af7394890a8c",
+        "title": "Test Data",
+        "description": "Just some placeholder text for testing purposes.",
+        "category": "Dummy",
+        "accessLevel": "private",
+        "attachment": "example.docx",
+        "createdAt": "2023-12-12T10:30:00Z"
+    },
+    {
+        "contentID":"e97403bf-2789-43da-afda-866522c819da",
+        "user": "12c20d6e-1bc6-4d7a-acaf-2021afc7a242",
+        "title": "Random Title",
+        "description": "Random description for testing.",
+        "category": "Random",
+        "accessLevel": "private",
+        "attachment": "random_file.txt",
+        "createdAt": "2023-12-12T11:45:00Z"
+    }
+]

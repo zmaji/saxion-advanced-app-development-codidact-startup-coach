@@ -11,8 +11,12 @@ export { default as PageTitle } from './typography/PageTitle/PageTitle.vue';
 export { default as SubTitle } from './typography/SubTitle/SubTitle.vue';
 export { default as SecondaryTitle } from './typography/SecondaryTitle/SecondaryTitle.vue';
 export { default as SubHeader } from './typography/SubHeader/SubHeader.vue';
+export { default as SmallHeader } from './typography/SmallHeader/SmallHeader.vue';
 
 // Other components
+export { default as LabelSelect } from './content/LabelSelect.vue'
+export { default as CompanySelect } from './content/CompanySelect.vue'
+export { default as UserSelect } from './content/UserSelect.vue'
 export { default as ContentCategory } from './contentCategories/ContentCategory.vue';
 export { default as CategoryBreadCrumb } from './contentCategories/CategoryBreadCrumb.vue';
 export { default as CategoryCrumb } from './contentCategories/CategoryCrumb.vue';

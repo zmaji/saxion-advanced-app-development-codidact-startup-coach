@@ -1,4 +1,4 @@
-import type { Content } from './Content';
+import type { Content } from './content';
 
 export interface Step {
   stepID: string,

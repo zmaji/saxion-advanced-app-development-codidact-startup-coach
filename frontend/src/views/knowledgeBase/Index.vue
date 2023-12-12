@@ -1,36 +1,36 @@
 <script setup lang="ts">
 
-import type { Category } from '@/typings/Category';
-import type { Ref } from 'vue';
+  import type { Category } from '@/typings/Category';
+  import type { Ref } from 'vue';
 
-import { onMounted, ref } from 'vue';
+  import { onMounted, ref } from 'vue';
 
-import {
-  ContentCategory,
-  CategoryBreadCrumb,
-  PageTitle,
-  SubTitle,
-  SecondaryTitle
-} from '@/components';
-import httpService from '@/plugins/http/httpService';
+  import {
+    ContentCategory,
+    CategoryBreadCrumb,
+    PageTitle,
+    SubTitle,
+    SecondaryTitle
+  } from '@/components';
+  import httpService from '@/plugins/http/httpService';
 
-const categories: Ref<Category[]> = ref<Category[]>([]);
+  const categories: Ref<Category[]> = ref<Category[]>([]);
 
-const fetchCategories = async () => {
-  try {
-    const response = await httpService.getRequest<Category[]>('/categories', false);
+  const fetchCategories = async () => {
+    try {
+      const response = await httpService.getRequest<Category[]>('/categories', false);
 
-    if (response && response.data) {
-      categories.value = response.data;
+      if (response && response.data) {
+        categories.value = response.data;
+      }
+    } catch (e) {
+      console.error(e);
     }
-  } catch (e) {
-    console.error(e);
   }
-}
 
-onMounted(() => {
-  fetchCategories();
-});
+  onMounted(() => {
+    fetchCategories();
+  });
 </script>
 
 <template>
@@ -49,4 +49,6 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>

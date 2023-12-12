@@ -9,7 +9,8 @@ import {
   faXmark,
   faInfo,
   faTriangleExclamation,
-  faCircleInfo
+  faCircleInfo,
+  faCircleXmark
 } from '@fortawesome/free-solid-svg-icons';
 
 // Icons
@@ -19,8 +20,9 @@ library.add(
   faCircleCheck,
   faXmark,
   faInfo,
+  faTriangleExclamation,
   faCircleInfo,
-  faTriangleExclamation
+  faCircleXmark
 );
 
 export default {
