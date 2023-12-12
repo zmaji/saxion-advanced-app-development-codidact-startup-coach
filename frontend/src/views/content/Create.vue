@@ -3,7 +3,8 @@
   import type { Ref } from 'vue';
 
   import { reactive, ref } from 'vue';
-  
+
+  import router from '@/router/index';
   import httpService from '@/plugins/http/httpService';
   import {
     PageTitle,
@@ -41,6 +42,21 @@
     createdAt: null,
   })
 
+  const resetContentTemplate = () => {
+    contentTemplate.contentID = null;
+    contentTemplate.user = null;
+    contentTemplate.title = null;
+    contentTemplate.description = null;
+    contentTemplate.category = null;
+    contentTemplate.labels = [];
+    contentTemplate.accessLevel = '';
+    contentTemplate.attachment = null;
+    contentTemplate.createdAt = null;
+    contentLabels.value = []
+    console.log(contentLabels.value);
+    
+  };
+
   const addSelectedLabels = (selectedLabels: ContentLabel[]) => {
     contentLabels.value = selectedLabels;
   }
@@ -48,19 +64,23 @@
   const addContent = async () => {
     try {
       console.log(JSON.parse(JSON.stringify(contentTemplate)));
-      
-      const response = await httpService.postRequest(
+
+      await httpService.postRequest(
         '/content',
         JSON.parse(JSON.stringify(contentTemplate))
       );
 
-      console.log(response);
+      resetContentTemplate();
 
     } catch (error) {
       console.error(error);
     }
-  } 
-  
+  }
+
+  const navigateToContentOverview = () => {
+    router.push({ name: 'content.overview' })
+  }
+
 </script>
 
 <template>
@@ -76,27 +96,15 @@
         <div class="pb-3 col-lg-10">
           <label for="title" class="form-label">Titel</label>
 
-          <input 
-            v-model="contentTemplate.title"
-            type="text"
-            class="form-control"
-            id="title" 
-            placeholder="Bijvoorbeeld: Mijn Leuke Titel" 
-          />
+          <input v-model="contentTemplate.title" type="text" class="form-control" id="title"
+            placeholder="Bijvoorbeeld: Mijn Leuke Titel" />
         </div>
 
         <div class="pb-3 col-lg-10">
           <label for="description" class="form-label">Beschrijving</label>
 
-          <textarea 
-            v-model="contentTemplate.description"
-            type="text" 
-            class="form-control" 
-            id="description"
-            placeholder="Bijvoorbeeld: Mijn Content is handig !"
-            rows="5" 
-            style="resize: none" 
-          />
+          <textarea v-model="contentTemplate.description" type="text" class="form-control" id="description"
+            placeholder="Bijvoorbeeld: Mijn Content is handig !" rows="5" style="resize: none" />
         </div>
 
         <div class="pb-3 col-lg-10">
@@ -112,17 +120,14 @@
         <div class="pb-3 col-lg-10">
           <label for="formFile" class="form-label">Bijlage</label>
 
-          <input 
-          class="form-control"
-          type="file"
-          id="formFile" />
+          <input class="form-control" type="file" id="formFile" />
         </div>
       </form>
     </div>
 
     <div class="col">
       <SecondaryTitle> Content labels </SecondaryTitle>
-      
+
       <label class="form-label">Content labels</label>
       <LabelSelect :model-value="contentLabels" @update:modelValue="addSelectedLabels" />
     </div>
@@ -131,8 +136,8 @@
       <SecondaryTitle> Toegangsniveau </SecondaryTitle>
     </div>
 
-    <div class="col"> 
-    <!-- Een lege col om de divs te alignen  -->
+    <div class="col">
+      <!-- Een lege col om de divs te alignen  -->
     </div>
     <div class="col">
       <div class="pb-3 col-lg-10">
@@ -148,29 +153,51 @@
 
     <div class="col">
       <div v-if="accessLevel === 'restricted'">
-          <label class="pb-2" for="company"> Welke bedrijven mogen uw content zien</label>
-            <CompanySelect />
+        <label class="pb-2" for="company"> Welke bedrijven mogen uw content zien</label>
+        <CompanySelect />
       </div>
     </div>
-      
+
     <div class="col">
       <div v-if="accessLevel === 'restricted'">
-          <label class="pb-2" for="user"> Welke gebruikers mogen uw content zien</label>
-            <UserSelect/>
+        <label class="pb-2" for="user"> Welke gebruikers mogen uw content zien</label>
+        <UserSelect />
       </div>
     </div>
-    
+
   </div>
   <div class="d-flex flex-md-row flex-column flex-wrap">
-        <TextButton 
-        
-        class="mb-3 mb-md-0 me-md-2" @click="addContent"> Toevoegen </TextButton>
+    <TextButton 
+    class="button mb-3 mb-md-0 me-md-2" 
+    data-bs-toggle="modal"
+    data-bs-target="#confirmationModal" 
+    @click="addContent"> Toevoegen </TextButton>
 
-        <TextButton :to="{ name: 'content.overview' }" display-style="tertiary">
-          Annuleren
-        </TextButton>
+    <TextButton :to="{ name: 'content.overview' }" display-style="tertiary">
+      Annuleren
+    </TextButton>
+  </div>
+
+  <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModal">Gelukt !</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body">
+        Uw content is succesvol toegevoegd !
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+        @click="resetContentTemplate"> Blijven </button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+        @click="navigateToContentOverview">Terug</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </template>
 
-<style scoped></style>
-@/typings/Label
+<style scoped></style>@/typings/Label@/typings/Label

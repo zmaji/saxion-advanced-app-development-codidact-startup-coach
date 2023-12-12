@@ -101,4 +101,4 @@
   .label-icon:hover {
     cursor: pointer;
   }
-</style>@/typings/Label
+</style>@/typings/Label@/typings/Label@/typings/Label
