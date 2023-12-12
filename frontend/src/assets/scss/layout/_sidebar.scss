@@ -2,6 +2,17 @@
   height: 100vh;
   background-color: $white;
   border-right: 1px solid $gray-300;
+  @media (min-width: 992px) {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 300px;
+    min-height: 100%;
+    max-height: 100vh;
+    //overflow: scroll;
+    z-index: 100;
+  }
 }
 
 .sidebar-nav-logo {
@@ -11,27 +22,35 @@
 }
 
 .sidebar-nav {
-  min-height: 100%;
-  max-height: 100vh;
+  height: 100%;
+  //max-height: 100vh;
   margin: 0;
   padding: 0;
   list-style: none;
   @media (min-width: 992px) {
-    width: 300px;
+    //width: 300px;
+    overflow: scroll;
   }
   li {
     background-color: $white;
   }
-  a {
+  .nav-link, a {
+    //min-width: 300px;
     transition: all 0.3s;
     display: block;
     text-decoration: none;
     color: $gray-800;
     padding: 15px;
     border-top: 1px solid $gray-300;
+    &:hover {
+      color: $primary;
+    }
+  }
+  .nav-link {
+    transition: all 0.3s;
     border-bottom: 4px solid $white;
     &:hover {
-      color: $primary ;
+      color: $primary;
       background: $blue-100;
       border-bottom-color: $primary;
       border-top-color: $blue-100;
