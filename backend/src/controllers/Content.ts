@@ -26,6 +26,8 @@ const getContent = async (contentID: string): Promise<Content | null> => {
 const createContent = async (contentData: Content): Promise<Content | null> => {
   try {
     contentData.contentID = uuidv4();
+    contentData.createdAt = new Date().toISOString();
+    console.log(contentData);
     const newContent = new ContentModel(contentData);
     await newContent.save();
 

@@ -47,11 +47,11 @@
 
   const addContent = async () => {
     try {
-      console.log(contentTemplate);
+      console.log(JSON.parse(JSON.stringify(contentTemplate)));
       
-      const response = await httpService.postRequest('/content', {
-        contentData: contentTemplate
-      })
+      const response = await httpService.postRequest('/content', 
+        JSON.parse(JSON.stringify(contentTemplate))
+      )
       
       console.log(response);
 
