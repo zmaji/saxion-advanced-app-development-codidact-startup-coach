@@ -1,4 +1,4 @@
-import type { ContentLabel } from './Label';
+import type { Label } from './Label';
 
 import { User } from './User';
 
@@ -8,7 +8,7 @@ export interface Content {
     title: string;
     description: string;
     category: string;
-    labels: ContentLabel[];
+    labels: Label[];
     accessLevel: string;
     attachment: string;
     createdAt: string;
