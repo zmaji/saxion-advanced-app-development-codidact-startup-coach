@@ -4,25 +4,29 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faArrowLeft,
+  faCalendarDays,
   faCheck,
   faCircleCheck,
   faXmark,
   faInfo,
-  faTriangleExclamation,
   faCircleInfo,
-  faCircleXmark
+  faFile,
+  faTriangleExclamation,
+  faThumbsUp
 } from '@fortawesome/free-solid-svg-icons';
 
 // Icons
 library.add(
   faArrowLeft,
+  faCalendarDays,
   faCheck,
   faCircleCheck,
   faXmark,
   faInfo,
-  faTriangleExclamation,
   faCircleInfo,
-  faCircleXmark
+  faFile,
+  faTriangleExclamation,
+  faThumbsUp
 );
 
 export default {
