@@ -1,9 +1,11 @@
 <script setup lang="ts">
+  import type { Ref } from 'vue';
   import type { Content } from '@/typings/Content';
   import type { Category } from '@/typings/Category';
-  import type { Ref } from 'vue';
+  import type { Label } from '@/typings/Label';
 
   import { onMounted, ref } from 'vue';
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
   import httpService from '@/plugins/http/httpService';
   import {
@@ -22,10 +24,11 @@
   });
 
   const searchQuery = ref('');
-  const labelFilter = ref('');
+  const labelFilter = ref([]);
   const categoryFilter = ref<Category>('');
   const searchResults = ref<Content[]>([]);
   const categories: Ref<Category[]> = ref<Category[]>([]);
+  const labels: Ref<Label[]> = ref<Label[]>([]);
   const emit = defineEmits<{(event: 'update:modelValue', value: Content[]): void}>();
 
   const search = async () => {
@@ -57,8 +60,29 @@
     }
   }
 
+  const fetchLabels = async () => {
+    try {
+      const response = await httpService.getRequest<Label[]>('/labels', false);
+
+      if (response && response.data) {
+        labels.value = response.data;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  const removeLabel = (selectedLabel: Label): void => {
+    const index = labelFilter.value.findIndex(label => label.labelID === selectedLabel.labelID);
+
+    if (index !== -1) {
+      labelFilter.value.splice(index, 1);
+    }
+  }
+
   onMounted(() => {
     fetchCategories();
+    fetchLabels();
   });
 </script>
 
@@ -84,6 +108,18 @@
             Zoeken
           </TextButton>
         </div>
+
+        <div v-if="labelFilter.length > 0" class="d-flex flex-direction-row flex-wrap pt-3">
+          <div
+            v-for="(label, key) in labelFilter"
+            :key="key"
+            class="bg-secondary text-white px-3 py-1 rounded-pill me-2 mb-2"
+          >
+            {{label}}
+
+            <FontAwesomeIcon icon="circle-xmark" class="ps-2 label-icon" @click="removeLabel(label)"/>
+          </div>
+        </div>
       </div>
 
       <div class="col col-lg-5 position-relative">
@@ -103,18 +139,22 @@
           <div class="bg-white p-4 border rounded">
             <div class="pb-3">
               <label for="labelFilter" class="form-label">Filter op Label:</label>
-              <input
-                v-model="labelFilter"
-                id="labelFilter"
-                type="text"
-                class="form-control"
-                placeholder="Filter op label"
-              />
+              <select id="labelFilter" class="form-select" aria-label="Label select" v-model="labelFilter" multiple>
+                <option selected disabled> een of meerdere labels</option>
+
+                <option
+                  v-for="(label, key) in labels"
+                  :key="key"
+                  :value="label.name"
+                >
+                  {{ label.name }}
+                </option>
+              </select>
             </div>
 
             <div class="pb-3">
               <label for="categoryFilter" class="form-label">Selecteer een categorie</label>
-              <select class="form-select" aria-label="Category select" v-model="categoryFilter">
+              <select id="categoryFilter" class="form-select" aria-label="Category select" v-model="categoryFilter">
                 <option selected value="">Selecteer een categorie</option>
 
                 <option
@@ -151,5 +191,9 @@
     z-index: 100;
     left: 0.25rem;
     right: 0;
+  }
+
+  .label-icon:hover {
+    cursor: pointer;
   }
 </style>

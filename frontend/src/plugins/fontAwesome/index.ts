@@ -13,7 +13,8 @@ import {
   faFile,
   faFilter,
   faTriangleExclamation,
-  faThumbsUp
+  faThumbsUp,
+  faXmarkCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 // Icons
@@ -28,7 +29,8 @@ library.add(
   faFile,
   faFilter,
   faTriangleExclamation,
-  faThumbsUp
+  faThumbsUp,
+  faXmarkCircle
 );
 
 export default {

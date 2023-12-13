@@ -63,6 +63,7 @@
     fetchCategories();
     fetchContent();
   });
+
 </script>
 
 <template>
@@ -74,7 +75,7 @@
 
   <SearchBar v-model="contents" @update:modelValue="updateContent()"/>
 
-  <div v-if="standardContents && standardContents.length > 0" class="row row-cols-2 g-4 pt-3 pb-4">
+  <div v-if="standardContents && standardContents.length > 0" class="row row-cols-2 g-4 pb-4">
     <ContentItem
       v-for="(content, key) in standardContents"
       :key="key"
@@ -84,7 +85,7 @@
 
   <SecondaryTitle v-if="contents && contents.length > 0">Overige posts</SecondaryTitle>
 
-  <div class="row row-cols-2 g-4 pt-3 pb-4">
+  <div class="row row-cols-2 g-4 pt-2 pb-4">
     <ContentItem
       v-for="(content, key) in contents"
       :key="key"
