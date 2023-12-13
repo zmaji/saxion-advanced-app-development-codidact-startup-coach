@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { ContentLabel } from '@/typings/Label';
+  import type { Label } from '@/typings/Label';
   import type { Ref } from 'vue';
 
   import { reactive, ref } from 'vue';
@@ -19,22 +19,22 @@
     contentID?: string | null;
     user: string | null;
     title: string | null;
-    description: string | null;
+    description: string | number | string[] | undefined;
     category: string | null;
-    labels: ContentLabel[] | null;
+    labels: Label[] | null;
     accessLevel: string | null;
     attachment: string | null;
     createdAt: string | null;
   }
 
   let accessLevel: Ref<string> = ref('');
-  let contentLabels: Ref<ContentLabel[]> = ref<ContentLabel[]>([])
+  let contentLabels: Ref<Label[]> = ref<Label[]>([])
 
   const contentTemplate: NewContent = reactive({
     contentID: null,
     user: null,
     title: null,
-    description: null,
+    description: '',
     category: null,
     labels: contentLabels,
     accessLevel: accessLevel,
@@ -42,7 +42,7 @@
     createdAt: null,
   })
 
-  const addSelectedLabels = (selectedLabels: ContentLabel[]) => {
+  const addSelectedLabels = (selectedLabels: Label[]) => {
     contentLabels.value = selectedLabels;
   }
 
