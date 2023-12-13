@@ -21,7 +21,7 @@
 
   let selectedLabels: Ref<Label[]> = ref<Label[]>([]);
   let labelOptions: Ref<Label[]> = ref<Label[]>([]);
-  let newLabelID = ref('');
+  let newLabelID : Ref<string> = ref('');
 
   const addLabel = (newLabelName: string) => {
     const newLabel = {
@@ -60,7 +60,16 @@
     }
   }
 
+  const fetchLabels = async () => {
+    labelOptions.value = []
+    const fetchedLabels = await httpService.getRequest<Label[]>(
+      '/labels'
+    )
+    labelOptions.value = fetchedLabels.data;
+  }
+
   const fetchAddedlabel = async () => {
+    labelOptions.value = []
     const result = await httpService.getRequest<Label>(
       `/labels/${newLabelID.value}`
     )
@@ -69,16 +78,6 @@
       const label = result.data;
       selectedLabels.value.push(label);
     }
-  }
-
-  const fetchLabels = async () => {
-    labelOptions.value = []
-    const fetchedLabels = await httpService.getRequest<Label[]>(
-      '/labels'
-    )
-    labelOptions.value = fetchedLabels.data;
-    console.log('fetched labels', fetchedLabels.data);
-    console.log('current labels', labelOptions.value);
   }
 
   onMounted(fetchLabels)
