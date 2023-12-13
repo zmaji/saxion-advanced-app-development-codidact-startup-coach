@@ -1,8 +1,16 @@
 <script setup lang="ts">
   import type { Label } from '@/typings/Label';
   import type { Ref } from 'vue';
+  import type { User } from '@/typings/User';
 
-  import { reactive, ref } from 'vue';
+  import {
+    onMounted,
+    reactive,
+    ref,
+    watch
+  } from 'vue';
+  import { useTokenStore } from '../../stores/token';
+  import { jwtDecode } from 'jwt-decode';
 
   import router from '@/router/index';
   import httpService from '@/plugins/http/httpService';
@@ -15,9 +23,23 @@
   import { LabelSelect } from '@/components'
   import { CompanySelect } from '@/components'
 
+  const tokenStore = useTokenStore()
+  let currentUser = ref<User | null>(null)
+  let currentUserID = ref<string | undefined>('');
+  const fetchUserData = async () => {
+    try {
+      const userToken = tokenStore.getToken;
+      currentUser.value = jwtDecode(userToken);
+      currentUserID.value = currentUser.value?.userID;
+      
+    } catch (error) {
+      console.error('Error fetching current userID:', error);
+    }
+  };
+  
   interface NewContent {
     contentID?: string | null;
-    user: string | null;
+    user: string | undefined;
     title: string | null;
     description: string | number | string[] | undefined;
     category: string | null;
@@ -32,7 +54,7 @@
 
   const contentTemplate: NewContent = reactive({
     contentID: null,
-    user: null,
+    user: currentUserID,
     title: null,
     description: '',
     category: null,
@@ -48,8 +70,6 @@
 
   const addContent = async () => {
     try {
-      console.log(JSON.parse(JSON.stringify(contentTemplate)));
-
       await httpService.postRequest(
         '/content',
         JSON.parse(JSON.stringify(contentTemplate))
@@ -65,6 +85,8 @@
   const navigateToContentOverview = () => {
     router.push({ name: 'content.overview' })
   }
+  
+  onMounted(fetchUserData);
 
 </script>
 
@@ -114,7 +136,7 @@
       <SecondaryTitle> Content labels </SecondaryTitle>
 
       <label class="form-label">Content labels</label>
-      <LabelSelect :model-value="contentLabels" @update:modelValue="addSelectedLabels" />
+      <LabelSelect :model-value="contentLabels" @update:updateLabels="addSelectedLabels" />
     </div>
 
     <div class="col">

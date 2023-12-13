@@ -95,11 +95,38 @@ const createContent = async (contentData: Content): Promise<Content | null> => {
   try {
     contentData.contentID = uuidv4();
     contentData.createdAt = new Date().toISOString();
-    // Labels toevoegen
+    const labels: Label[] = [];
+
+    for (const label of contentData.labels) {
+      const existingLabel = await labelModel.findOne({ labelID: label.labelID });
+      let contentLabel: ContentLabel;
+
+      if (existingLabel) {
+        contentLabel = {
+          contentID: contentData.contentID,
+          labelID: label.labelID,
+        };
+      } else {
+        label.labelID = uuidv4();
+        const newLabel = new labelModel(label);
+
+        await newLabel.save();
+        contentLabel = {
+          contentID: contentData.contentID,
+          labelID: newLabel.labelID,
+        };
+      }
+
+      const newContentLabel = new contentLabelModel(contentLabel);
+      await newContentLabel.save();
+      labels.push(label);
+    }
+
     const newContent = new contentModel(contentData);
     await newContent.save();
+    contentData.labels = labels;
 
-    return newContent;
+    return contentData;
   } catch (error) {
     console.error('Something went wrong creating new content:', error);
     throw error;
@@ -133,7 +160,7 @@ const deleteContent = async (contentID: string): Promise<Content | null> => {
   }
 };
 
-const companyAnalysisController = {
+const contentController = {
   getAllContent,
   getContent,
   createContent,
@@ -141,4 +168,4 @@ const companyAnalysisController = {
   deleteContent,
 };
 
-export default companyAnalysisController;
+export default contentController;
