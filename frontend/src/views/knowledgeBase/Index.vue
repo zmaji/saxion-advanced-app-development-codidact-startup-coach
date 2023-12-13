@@ -12,7 +12,7 @@
     ContentCategoryNavItem,
     PageTitle,
     SecondaryTitle,
-    SearchBar,
+    SearchBar
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
   import ContentItem from '@/components/content/ContentItem.vue';
@@ -50,6 +50,15 @@
     }
   }
 
+  const updateContent = async () => {
+    standardContents.value = contents.value.filter(
+      (content) => content.labels.find((label: Label) => label.name === 'Standaard sjabloon'));
+
+    contents.value = contents.value.filter(
+      (content) => !content.labels.find((label: Label) => label.name === 'Standaard sjabloon')
+    );
+  }
+
   onMounted(() => {
     fetchCategories();
     fetchContent();
@@ -63,9 +72,9 @@
 
   <SecondaryTitle>Zoeken en filteren</SecondaryTitle>
 
-  <SearchBar/>
+  <SearchBar v-model="contents" @update:modelValue="updateContent()"/>
 
-  <div class="row row-cols-2 g-4 pt-3 pb-4">
+  <div v-if="standardContents && standardContents.length > 0" class="row row-cols-2 g-4 pt-3 pb-4">
     <ContentItem
       v-for="(content, key) in standardContents"
       :key="key"
@@ -73,7 +82,7 @@
     />
   </div>
 
-  <SecondaryTitle>Overige posts</SecondaryTitle>
+  <SecondaryTitle v-if="contents && contents.length > 0">Overige posts</SecondaryTitle>
 
   <div class="row row-cols-2 g-4 pt-3 pb-4">
     <ContentItem
