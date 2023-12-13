@@ -1,7 +1,8 @@
 import type { companyAnalysis } from '../typings/CompanyAnalysis';
+import CompanyAnalysisModel from '../models/CompanyAnalysis';
 
 import { v4 as uuidv4 } from 'uuid';
-import CompanyAnalysisModel from '../models/CompanyAnalysis';
+import { removeIdField } from '../helpers/removeMongoID';
 
 const getCompanyAnalyses = async (): Promise<companyAnalysis[]> => {
   try {
@@ -31,7 +32,7 @@ const createCompanyAnalysis = async (companyAnalysisData: companyAnalysis): Prom
     const newCompanyAnalysis = new CompanyAnalysisModel(companyAnalysisData);
     const companyAnalysis = await newCompanyAnalysis.save();
 
-    return companyAnalysis || null;
+    return removeIdField(companyAnalysis);
   } catch (error) {
     console.error('Something went wrong creating a company analysis:', error);
     throw error;
