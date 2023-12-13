@@ -3,12 +3,7 @@
   import type { Ref } from 'vue';
   import type { User } from '@/typings/User';
 
-  import {
-    onMounted,
-    reactive,
-    ref,
-    watch
-  } from 'vue';
+  import { onMounted, reactive, ref } from 'vue';
   import { useTokenStore } from '../../stores/token';
   import { jwtDecode } from 'jwt-decode';
 
