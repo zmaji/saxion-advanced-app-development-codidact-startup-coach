@@ -44,4 +44,24 @@ router.get('/:labelID', async (req: Request, res: Response) => {
   }
 });
 
+router.post('/', async (req: Request, res: Response) => {
+  try {
+    const result = await labelController.createLabel(req.body);
+
+    if (result) {
+      res
+          .status(StatusCodes.OK)
+          .json(result);
+    } else {
+      res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ error: 'Unable to add new label' });
+    }
+  } catch {
+    res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: 'An error occurred adding new label' });
+  }
+});
+
 export default router;

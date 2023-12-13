@@ -19,40 +19,19 @@
 
   const emit = defineEmits<{(event: 'update:updateLabels', value: Label[]): void,}>();
 
-  let selectedLabels: Ref<Label[]> = ref([])
-  let labelOptions: Ref<Label[]> = ref<Label[]>([
-    {
-      labelID: '1',
-      name: 'Sjabloon',
-      isDefault: false
-    },
-    {
-      labelID: '2',
-      name: 'Document',
-      isDefault: false
-    },
-    {
-      labelID: '3',
-      name: 'Pitch',
-      isDefault: false
-    },
-    {
-      labelID: '4',
-      name: 'Presentatie',
-      isDefault: false
-    },
-  ]);
+  let selectedLabels: Ref<Label[]> = ref<Label[]>([]);
+  let labelOptions: Ref<Label[]> = ref<Label[]>([]);
+  let newLabelID = ref('');
 
-  const addLabel = (newLabel: string) => {
-    // axios with httpservice request to save new label, also check if it already exists
-    const result = {
+  const addLabel = (newLabelName: string) => {
+    const newLabel = {
       labelID: '',
-      name: newLabel,
+      name: newLabelName,
       isDefault: false
     };
-
-    labelOptions.value.push(result);
-    selectedLabels.value.push(result);
+    postLabel(newLabel);
+    fetchAddedlabel()
+    fetchLabels();
   }
 
   watch(selectedLabels, () => {
@@ -67,14 +46,39 @@
     }
   };
 
+  const postLabel = async (newLabel: Label) => {
+    try {
+      const response = await httpService.postRequest(
+        '/labels',
+        newLabel
+      );
+
+      let label: Label = response.data as Label;
+      console.log(label);
+      newLabelID.value = label.labelID;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const fetchLabels = async () => {
     labelOptions.value = []
     const fetchedLabels = await httpService.getRequest<Label[]>(
       '/labels'
     )
     labelOptions.value = fetchedLabels.data;
-    console.log('fetched labels', fetchedLabels.data);
-    console.log('current labels', labelOptions.value);
+  }
+
+  const fetchAddedlabel = async () => {
+    labelOptions.value = []
+    const result = await httpService.getRequest<Label>(
+      `/labels/${newLabelID.value}`
+    )
+
+    if (result) {
+      const label = result.data;
+      selectedLabels.value.push(label);
+    }
   }
 
   onMounted(fetchLabels)
