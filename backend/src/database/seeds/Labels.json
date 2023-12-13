@@ -2,27 +2,27 @@
     {
         "labelID": "729be325-fe26-47c1-b451-890d0d4a1205",
         "name": "Document",
-        "isDefault": "false"
+        "isDefault": false
     },
     {
         "labelID": "2650ab81-da68-4650-8330-207072926891",
         "name": "Pitch",
-        "isDefault": "false"
+        "isDefault": false
     },
     {
         "labelID": "58f63a61-83d7-4dd4-8ce0-0366c601bcda",
         "name": "Interview",
-        "isDefault": "false"
+        "isDefault": false
     },
     {
         "labelID": "36551ef7-baee-48c7-9107-1eb1c803d675",
         "name": "Presentatie",
-        "isDefault": "false"
+        "isDefault": false
     },
     {
         "labelID": "601baf0d-b1bb-4749-8095-8a3e33e55f85",
         "name": "Standaard sjabloon",
-        "isDefault": "true"
+        "isDefault": true
     },
     {
         "labelID": "e1a3f2c4-97cf-4d2a-8d12-61b66b174c93",
