@@ -1,310 +1,312 @@
 <script setup lang="ts">
-  import type { FormData, FormStep } from '@/typings/Form';
-  import type { User } from '@/typings/User';
-  import type { Company } from '@/typings/Company';
-  import type { companyAnalysis } from '@/typings/CompanyAnalysis';
+import type { FormData, FormStep } from '@/typings/Form';
+import type { User } from '@/typings/User';
+import type { Company } from '@/typings/Company';
+import type { companyAnalysis } from '@/typings/CompanyAnalysis';
 
-  import { onMounted, reactive, ref } from 'vue';
-  import httpService from '../../plugins/http/httpService';
-  import { useTokenStore } from '../../stores/token';
-  import { jwtDecode } from 'jwt-decode';
+import { onMounted, reactive, ref } from 'vue';
+import httpService from '../../plugins/http/httpService';
+import { useTokenStore } from '../../stores/token';
+import { jwtDecode } from 'jwt-decode';
 
-  import {
-    TextButton,
-    PageTitle,
-    SubTitle,
-    SecondaryTitle,
-    SubHeader
-  } from '@/components';
+import {
+  TextButton,
+  PageTitle,
+  SubTitle,
+  SecondaryTitle,
+  SubHeader
+} from '@/components';
 
-  let currentStep = ref<FormStep | null>(null);
-  let currentStepFields = ref<FormData[] | null>(null);
-  let showForm = ref(false);
-  let showInformation = ref(true);
-  let canValidate = ref(false);
-  let showOverview = ref(false);
+let currentStep = ref<FormStep | null>(null);
+let currentStepFields = ref<FormData[] | null>(null);
+let showForm = ref(false);
+let showInformation = ref(true);
+let canValidate = ref(false);
+let showOverview = ref(false);
 
-  const tokenStore = useTokenStore()
-  let currentUser = ref<User | null>(null)
-  let currentCompany = ref<Company | null>(null)
-  let currentAnalysis = ref<companyAnalysis | null>(null)
+const tokenStore = useTokenStore()
+let currentUser = ref<User | null>(null)
+let currentCompany = ref<Company | null>(null)
+let currentAnalysis = ref<companyAnalysis | null>(null)
 
-  const getUser = async () => {
-    try {
-      const userToken = tokenStore.getToken;
-      currentUser.value = jwtDecode(userToken);
-    } catch (error) {
-      console.error('Error fetching current user:', error);
-    }
-  };
-
-  const getAnalysis = async () => {
-    try {
-      const fetchedAnalysis = await httpService.getRequest<companyAnalysis>(
-        `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
-      );
-      currentAnalysis.value = fetchedAnalysis.data;
-    } catch (error) {
-      console.error('Error fetching current user:', error);
-    }
-  };
-
-  const fetchCurrentCompany = async () => {
-    try {
-      getUser();
-      const fetchedCompany = await httpService.getRequest<Company>(
-        `/companies/${currentUser.value?.company}`
-      );
-      currentCompany.value = fetchedCompany.data;
-      getAnalysis();
-    } catch (error) {
-      console.error('Error fetching current company:', error);
-    }
-  };
-
-  onMounted(fetchCurrentCompany);
-
-  let formSteps = reactive({
-    1: {
-      number: 1,
-      name: 'Bedrijfsgegevens',
-      description: 'Vul de benodigde informatie in met betrekking tot de bedrijfsgegevens.',
-      completed: false,
-    },
-    2: {
-      number: 2,
-      name: 'Doelen',
-      description: 'Definieer de doelen die het bedrijf in de toekomst wil bereiken.',
-      completed: false,
-    },
-    3: {
-      number: 3,
-      name: 'Doelgroep',
-      description: 'Identificeer en beschrijf de doelgroep van het bedrijf.',
-      completed: false,
-    },
-  } as Record<string, FormStep>);
-
-  let formData = reactive({
-    industry: {
-      label: 'Industrie',
-      step: formSteps[1],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul een geldige industrie in.',
-    },
-    nrOfEmployees: {
-      label: 'Aantal werknemers',
-      step: formSteps[1],
-      value: 0,
-      isValid: false,
-      errorMessage: 'Vul een geldig aantal werknemers in.',
-    },
-    stage: {
-      label: 'Fase',
-      step: formSteps[1],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul een geldige fase in.',
-    },
-    serviceInformation: {
-      label: 'Service informatie',
-      step: formSteps[2],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige service-informatie in.',
-    },
-    businessGoals: {
-      label: 'Doelen',
-      step: formSteps[2],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige zakelijke doelen in.',
-    },
-    painPoints: {
-      label: 'Pijnpunten',
-      step: formSteps[2],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige pijnpunten in.',
-    },
-    targetAudience: {
-      label: 'Doelgroep',
-      step: formSteps[3],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul een geldige doelgroep in.',
-    },
-    competitors: {
-      label: 'Competitie',
-      step: formSteps[3],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige informatie over concurrenten in.',
-    },
-    budget: {
-      label: 'Budget',
-      step: formSteps[3],
-      value: 0,
-      isValid: false,
-      errorMessage: 'Vul een geldig budget in.',
-    },
-  } as Record<string, FormData>);
-
-  const startAnalysis = () => {
-    showInformation.value = false;
-    showForm.value = true;
-    currentStep.value = formSteps[1];
-    currentStepFields.value = getCurrentStepFields();
+const getUser = async () => {
+  try {
+    const userToken = tokenStore.getToken;
+    currentUser.value = jwtDecode(userToken);
+  } catch (error) {
+    console.error('Error fetching current user:', error);
   }
+};
 
-  const nextStep = () => {
-    currentStepFields.value = getCurrentStepFields();
+const getAnalysis = async () => {
+  try {
+    const fetchedAnalysis = await httpService.getRequest<companyAnalysis>(
+      `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
+    );
+    currentAnalysis.value = fetchedAnalysis.data;
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+  }
+};
 
-    const isStepValid = currentStepFields.value.every((field) => {
-      canValidate.value = true;
-      field.isValid = field.value !== '';
+const fetchCurrentCompany = async () => {
+  try {
+    getUser();
+    const fetchedCompany = await httpService.getRequest<Company>(
+      `/companies/${currentUser.value?.company}`
+    );
+    currentCompany.value = fetchedCompany.data;
+    getAnalysis();
+  } catch (error) {
+    console.error('Error fetching current company:', error);
+  }
+};
 
-      return field.isValid;
-    });
+onMounted(fetchCurrentCompany);
 
-    if (isStepValid) {
-      currentStep.value!.completed = true;
-      currentStep.value = formSteps[currentStep.value!.number + 1]
-      currentStepFields.value = getCurrentStepFields();
-      showInformation.value = false;
-      showForm.value = true;
-      canValidate.value = false;
-    } else {
-      alert('Vul alle verplichte velden in.');
-      currentStep.value!.completed = false;
-    }
-  };
+let formSteps = reactive({
+  1: {
+    number: 1,
+    name: 'Bedrijfsgegevens',
+    description: 'Vul de benodigde informatie in met betrekking tot de bedrijfsgegevens.',
+    completed: false,
+  },
+  2: {
+    number: 2,
+    name: 'Doelen',
+    description: 'Definieer de doelen die het bedrijf in de toekomst wil bereiken.',
+    completed: false,
+  },
+  3: {
+    number: 3,
+    name: 'Doelgroep',
+    description: 'Identificeer en beschrijf de doelgroep van het bedrijf.',
+    completed: false,
+  },
+} as Record<string, FormStep>);
 
-  const previousStep = () => {
+let formData = reactive({
+  industry: {
+    label: 'Industrie',
+    step: formSteps[1],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul een geldige industrie in.',
+  },
+  nrOfEmployees: {
+    label: 'Aantal werknemers',
+    step: formSteps[1],
+    value: 0,
+    isValid: false,
+    errorMessage: 'Vul een geldig aantal werknemers in.',
+  },
+  stage: {
+    label: 'Fase',
+    step: formSteps[1],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul een geldige fase in.',
+  },
+  serviceInformation: {
+    label: 'Service informatie',
+    step: formSteps[2],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul geldige service-informatie in.',
+  },
+  businessGoals: {
+    label: 'Doelen',
+    step: formSteps[2],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul geldige zakelijke doelen in.',
+  },
+  painPoints: {
+    label: 'Pijnpunten',
+    step: formSteps[2],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul geldige pijnpunten in.',
+  },
+  targetAudience: {
+    label: 'Doelgroep',
+    step: formSteps[3],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul een geldige doelgroep in.',
+  },
+  competitors: {
+    label: 'Competitie',
+    step: formSteps[3],
+    value: '',
+    isValid: false,
+    errorMessage: 'Vul geldige informatie over concurrenten in.',
+  },
+  budget: {
+    label: 'Budget',
+    step: formSteps[3],
+    value: 0,
+    isValid: false,
+    errorMessage: 'Vul een geldig budget in.',
+  },
+} as Record<string, FormData>);
+
+const startAnalysis = () => {
+  showInformation.value = false;
+  showForm.value = true;
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+}
+
+const nextStep = () => {
+  currentStepFields.value = getCurrentStepFields();
+
+  const isStepValid = currentStepFields.value.every((field) => {
     canValidate.value = true;
+    field.isValid = field.value !== '';
 
-    if (currentStep.value === formSteps[1]) {
-      showInformation.value = true;
-      showForm.value = false;
-      alert('U gaat terug naar het overzicht.');
-    } else {
-      currentStep.value = formSteps[currentStep.value!.number - 1]
-      currentStepFields.value = getCurrentStepFields();
-    }
-  };
+    return field.isValid;
+  });
 
-  const continueAnalysis = () => {
-    showForm.value = true;
-    showInformation.value = false;
-
-    if (!currentStep.value) {
-      currentStep.value = formSteps[1];
-      currentStepFields.value = getCurrentStepFields();
-    }
-  };
-
-  const restartAnalysis = () => {
-    resetForm();
+  if (isStepValid) {
+    currentStep.value!.completed = true;
+    currentStep.value = formSteps[currentStep.value!.number + 1]
+    currentStepFields.value = getCurrentStepFields();
     showInformation.value = false;
     showForm.value = true;
-    currentStep.value = formSteps[1];
-    currentStep.value.completed = false;
-    alert('U herstart de analyse.');
-  };
+    canValidate.value = false;
+  } else {
+    alert('Vul alle verplichte velden in.');
+    currentStep.value!.completed = false;
+  }
+};
 
-  const goToOverview = () => {
+const previousStep = () => {
+  canValidate.value = true;
+
+  if (currentStep.value === formSteps[1]) {
     showInformation.value = true;
     showForm.value = false;
     alert('U gaat terug naar het overzicht.');
-  };
-
-  const reviewForm = () => {
+  } else {
+    currentStep.value = formSteps[currentStep.value!.number - 1]
     currentStepFields.value = getCurrentStepFields();
-
-    const isFormValid = currentStepFields.value.every((field) => {
-      canValidate.value = true;
-
-      field.isValid = typeof field.value === 'string' ? field.value.length > 0 : true;
-
-      return field.isValid;
-    });
-
-    if (isFormValid) {
-      showForm.value = false;
-      showOverview.value = true;
-      canValidate.value = false;
-    }
   }
+};
 
-  const closeOverview = () => {
-    showForm.value = true;
-    showOverview.value = false;
-  }
+const continueAnalysis = () => {
+  showForm.value = true;
+  showInformation.value = false;
 
-  const submitForm = async () => {
-    showOverview.value = false;
-    showInformation.value = true;
-    showForm.value = false;
-
-    try {
-      const formFields = new FormData();
-
-      // TODO: Change logic based on Juul's input, could then be made dynamically as well 
-      formFields.append('industry', String(formData.industry.value));
-      formFields.append('serviceInformation', String(formData.serviceInformation.value));
-      formFields.append('nrOfEmployees', String(formData.nrOfEmployees.value));
-      formFields.append('stage', String(formData.stage.value));
-      formFields.append('businessGoals', JSON.stringify([String(formData.businessGoals.value)]));
-      formFields.append('painPoints', JSON.stringify([String(formData.painPoints.value)]));
-      formFields.append('competitors', JSON.stringify([String(formData.competitors.value)]));
-      formFields.append('targetAudience', String(formData.targetAudience.value));
-      formFields.append('budget', String(formData.budget.value));
-
-      const newCompanyAnalysis = await httpService.postRequest<companyAnalysis>('/companyAnalyses', formFields);
-      const newCompanyAnalysisData = newCompanyAnalysis.data
-
-      if (newCompanyAnalysisData) {
-        const companyData = {
-          companyAnalysis: newCompanyAnalysisData.companyAnalysisID
-        }
-
-        if (currentCompany.value) {
-          await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
-        }
-      }
-    } catch (error) {
-      console.error('Error creating company analysis:', error);
-    }
-    alert('Analyse succesvol opgeslagen.');
-  };
-
-  const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
-    try {
-      await httpService.putRequest<Company>(`/companies/${companyID}`, companyData);
-      fetchCurrentCompany();
-    } catch (error) {
-      console.error('Error associating company analysis:', error);
-    }
-  };
-
-  const resetForm = () => {
-    for (const key in formData) {
-      formData[key].value = '';
-      formData[key].isValid = false;
-    }
+  if (!currentStep.value) {
     currentStep.value = formSteps[1];
     currentStepFields.value = getCurrentStepFields();
+  }
+};
+
+const restartAnalysis = () => {
+  resetForm();
+  currentAnalysis.value = null;
+  showInformation.value = false;
+  showForm.value = true;
+  currentStep.value = formSteps[1];
+  currentStep.value.completed = false;
+  alert('U herstart de analyse.');
+};
+
+const goToOverview = () => {
+  showInformation.value = true;
+  showForm.value = false;
+  alert('U gaat terug naar het overzicht.');
+};
+
+const reviewForm = () => {
+  currentStepFields.value = getCurrentStepFields();
+
+  const isFormValid = currentStepFields.value.every((field) => {
+    canValidate.value = true;
+
+    field.isValid = typeof field.value === 'string' ? field.value.length > 0 : true;
+
+    return field.isValid;
+  });
+
+  if (isFormValid) {
+    showForm.value = false;
+    showOverview.value = true;
     canValidate.value = false;
-  };
-
-  const getCurrentStepFields = () => {
-    return Object.values(formData).filter((field) => field.step === currentStep.value);
   }
+}
 
-  const toCapital = (String: string) => {
-    return String.charAt(0).toUpperCase() + String.slice(1);
+const closeOverview = () => {
+  showForm.value = true;
+  showOverview.value = false;
+}
+
+const submitForm = async () => {
+  currentStep.value = formSteps[currentStep.value!.number + 1]
+  showOverview.value = false;
+  showInformation.value = true;
+  showForm.value = false;
+
+  try {
+    const formFields = new FormData();
+
+    // TODO: Change logic based on Juul's input, could then be made dynamically as well 
+    formFields.append('industry', String(formData.industry.value));
+    formFields.append('serviceInformation', String(formData.serviceInformation.value));
+    formFields.append('nrOfEmployees', String(formData.nrOfEmployees.value));
+    formFields.append('stage', String(formData.stage.value));
+    formFields.append('businessGoals', JSON.stringify([String(formData.businessGoals.value)]));
+    formFields.append('painPoints', JSON.stringify([String(formData.painPoints.value)]));
+    formFields.append('competitors', JSON.stringify([String(formData.competitors.value)]));
+    formFields.append('targetAudience', String(formData.targetAudience.value));
+    formFields.append('budget', String(formData.budget.value));
+
+    const newCompanyAnalysis = await httpService.postRequest<companyAnalysis>('/companyAnalyses', formFields);
+    const newCompanyAnalysisData = newCompanyAnalysis.data
+
+    if (newCompanyAnalysisData) {
+      const companyData = {
+        companyAnalysis: newCompanyAnalysisData.companyAnalysisID
+      }
+
+      if (currentCompany.value) {
+        await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
+      }
+    }
+  } catch (error) {
+    console.error('Error creating company analysis:', error);
   }
+  alert('Analyse succesvol opgeslagen.');
+};
+
+const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
+  try {
+    await httpService.putRequest<Company>(`/companies/${companyID}`, companyData);
+    fetchCurrentCompany();
+  } catch (error) {
+    console.error('Error associating company analysis:', error);
+  }
+};
+
+const resetForm = () => {
+  for (const key in formData) {
+    formData[key].value = '';
+    formData[key].isValid = false;
+  }
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+  canValidate.value = false;
+};
+
+const getCurrentStepFields = () => {
+  return Object.values(formData).filter((field) => field.step === currentStep.value);
+}
+
+const toCapital = (String: string) => {
+  return String.charAt(0).toUpperCase() + String.slice(1);
+}
 </script>
 
 <template>
@@ -357,30 +359,34 @@
     </p>
 
     <div class="row">
-      <div v-if="!currentAnalysis" class="col">
+      <div v-if="!currentAnalysis || currentAnalysis === null" class="col">
         <SubTitle type="secondary" v-if="!currentStep">Analyse nog niet begonnen</SubTitle>
 
-        <SubTitle type="warning" v-if="currentStep">
+        <SubTitle type="warning" v-if="currentStep" testID="currentStepButton">
           {{ currentStep.completed === true ? currentStep.number : currentStep.number - 1 }}
           /
           {{ Object.keys(formSteps).length }} stappen voltooid</SubTitle>
       </div>
 
       <div v-else class="col">
-        <SubTitle type="success" v-if="currentAnalysis !== null">Analyse voltooid</SubTitle>
+        <SubTitle type="success" v-if="currentAnalysis !== null" testID="finishedAnalysisButton">Analyse voltooid
+        </SubTitle>
       </div>
     </div>
 
     <div>
-      <TextButton v-if="!currentStep && !currentAnalysis" class="me-2" @click="startAnalysis">Start de analyse
+      <TextButton v-if="!currentStep && !currentAnalysis" class="me-2" @click="startAnalysis"
+        testID="startAnalysisButton">
+        Start de analyse
       </TextButton>
 
-      <TextButton v-if="currentStep && !currentAnalysis" class="me-2" @click="continueAnalysis">
+      <TextButton v-if="currentStep && !currentAnalysis" class="me-2" @click="continueAnalysis"
+        testID="continueAnalysisButton">
         Ga verder
       </TextButton>
 
       <TextButton v-if="currentStep || currentAnalysis" class="me-2" type="danger" display-style="secondary"
-        @click="restartAnalysis">
+        @click="restartAnalysis" testID="restartAnalysisButton">
         Herstart de analyse
       </TextButton>
     </div>
@@ -390,7 +396,7 @@
     <div class="d-flex justify-content-between align-items-center mb-2">
       <PageTitle>Behoefteanalyse</PageTitle>
 
-      <TextButton type="primary" display-style="secondary" @click="goToOverview">
+      <TextButton type="primary" display-style="secondary" @click="goToOverview" testID="backToOverviewButton">
         Terug naar overzicht
       </TextButton>
     </div>
@@ -441,15 +447,15 @@
           Vorige
         </TextButton>
 
-        <TextButton v-else display-style="secondary" class="me-4" @click="previousStep">
+        <TextButton v-else display-style="secondary" class="me-4" @click="previousStep" testID="previousStepButton">
           Vorige
         </TextButton>
 
-        <TextButton v-if="currentStep.number !== Object.keys(formSteps).length" @click="nextStep">
+        <TextButton v-if="currentStep.number !== Object.keys(formSteps).length" @click="nextStep" testID="nextStepButton">
           Volgende
         </TextButton>
 
-        <TextButton v-else type="primary" @click="reviewForm">
+        <TextButton v-else type="primary" @click="reviewForm" testID="reviewAnalysisButton">
           Controleer analyse
         </TextButton>
       </div>
@@ -472,14 +478,14 @@
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget imperdiet neque, ac ultrices nunc. Praesent
           non turpis elementum, vestibulum augue sit amet, interdum justo.</p>
 
-        <div v-for="( formStep, key ) in  formSteps " :key="key">
+        <div v-for="(  formStep, key  ) in   formSteps  " :key="key">
           <div class="pb-3">
-            <SubHeader class="pb-1">{{ formStep.name }}</SubHeader>
+            <SubHeader class="pb-1" testID="reviewFormStepName">{{ formStep.name }}</SubHeader>
 
-            <div v-for="( formField, fieldKey ) in  formData " :key="fieldKey">
+            <div v-for="(  formField, fieldKey  ) in   formData  " :key="fieldKey">
               <div v-if="formField.step === formStep" class="d-flex">
-                <div class="fw-bold me-2">{{ formField.label }}:</div>
-                <p class="mb-0 pb-2">{{ formField.value }}</p>
+                <div class="fw-bold me-2" testID="reviewFormFieldLabel">{{ formField.label }}:</div>
+                <p class="mb-0 pb-2" testID="reviewFormFieldValue">{{ formField.value }}</p>
               </div>
             </div>
           </div>
@@ -491,7 +497,7 @@
           Wijzig analyse
         </TextButton>
 
-        <TextButton type="success" @click="submitForm">
+        <TextButton type="success" @click="submitForm" testID="finishAnalysisButton">
           Voltooi Analyse
         </TextButton>
       </div>

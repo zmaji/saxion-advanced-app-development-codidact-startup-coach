@@ -1,70 +1,70 @@
 <script setup lang="ts">
-  import type { ContentLabel } from '@/typings/Label';
-  import type { Ref } from 'vue';
+import type { Label } from '@/typings/Label';
+import type { Ref } from 'vue';
 
-  import { reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 
-  import router from '@/router/index';
-  import httpService from '@/plugins/http/httpService';
-  import {
-    PageTitle,
-    SecondaryTitle,
-    TextButton,
-    UserSelect
-  } from '@/components';
-  import { LabelSelect } from '@/components'
-  import { CompanySelect } from '@/components'
+import router from '@/router/index';
+import httpService from '@/plugins/http/httpService';
+import {
+  PageTitle,
+  SecondaryTitle,
+  TextButton,
+  UserSelect
+} from '@/components';
+import { LabelSelect } from '@/components'
+import { CompanySelect } from '@/components'
 
-  interface NewContent {
-    contentID?: string | null;
-    user: string | null;
-    title: string | null;
-    description: string | null;
-    category: string | null;
-    labels: ContentLabel[] | null;
-    accessLevel: string | null;
-    attachment: string | null;
-    createdAt: string | null;
+interface NewContent {
+  contentID?: string | null;
+  user: string | null;
+  title: string | null;
+  description: string | null;
+  category: string | null;
+  labels: Label[] | null;
+  accessLevel: string | null;
+  attachment: string | null;
+  createdAt: string | null;
+}
+
+let accessLevel: Ref<string> = ref('');
+let contentLabels: Ref<Label[]> = ref<Label[]>([])
+
+const contentTemplate: NewContent = reactive({
+  contentID: null,
+  user: null,
+  title: null,
+  description: null,
+  category: null,
+  labels: contentLabels,
+  accessLevel: accessLevel,
+  attachment: null,
+  createdAt: null,
+})
+
+const addSelectedLabels = (selectedLabels: Label[]) => {
+  contentLabels.value = selectedLabels;
+}
+
+const addContent = async () => {
+  try {
+    console.log(JSON.parse(JSON.stringify(contentTemplate)));
+
+    await httpService.postRequest(
+      '/content',
+      JSON.parse(JSON.stringify(contentTemplate))
+    );
+
+    navigateToContentOverview();
+
+  } catch (error) {
+    console.error(error);
   }
+}
 
-  let accessLevel: Ref<string> = ref('');
-  let contentLabels: Ref<ContentLabel[]> = ref<ContentLabel[]>([])
-
-  const contentTemplate: NewContent = reactive({
-    contentID: null,
-    user: null,
-    title: null,
-    description: null,
-    category: null,
-    labels: contentLabels,
-    accessLevel: accessLevel,
-    attachment: null,
-    createdAt: null,
-  })
-
-  const addSelectedLabels = (selectedLabels: ContentLabel[]) => {
-    contentLabels.value = selectedLabels;
-  }
-
-  const addContent = async () => {
-    try {
-      console.log(JSON.parse(JSON.stringify(contentTemplate)));
-
-      await httpService.postRequest(
-        '/content',
-        JSON.parse(JSON.stringify(contentTemplate))
-      );
-
-      navigateToContentOverview();
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  const navigateToContentOverview = () => {
-    router.push({ name: 'content.overview' })
-  }
+const navigateToContentOverview = () => {
+  router.push({ name: 'content.overview' })
+}
 
 </script>
 
@@ -88,8 +88,8 @@
         <div class="pb-3 col-lg-10">
           <label for="description" class="form-label">Beschrijving</label>
 
-          <textarea v-model="contentTemplate.description" type="text" class="form-control" id="description"
-            placeholder="Bijvoorbeeld: Mijn Content is handig !" rows="5" style="resize: none" />
+          <!-- <textarea v-model="contentTemplate.description" type="text" class="form-control" id="description"
+            placeholder="Bijvoorbeeld: Mijn Content is handig !" rows="5" style="resize: none" /> -->
         </div>
 
         <div class="pb-3 col-lg-10">
@@ -152,11 +152,8 @@
 
   </div>
   <div class="d-flex flex-md-row flex-column flex-wrap">
-    <TextButton 
-    class="button mb-3 mb-md-0 me-md-2" 
-    data-bs-toggle="modal"
-    data-bs-target="#confirmationModal" 
-    @click="addContent"> Toevoegen </TextButton>
+    <TextButton class="button mb-3 mb-md-0 me-md-2" data-bs-toggle="modal" data-bs-target="#confirmationModal"
+      @click="addContent"> Toevoegen </TextButton>
 
     <TextButton :to="{ name: 'content.overview' }" display-style="tertiary">
       Annuleren
@@ -164,23 +161,22 @@
   </div>
 
   <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmationModal">Gelukt !</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Uw content is succesvol toegevoegd !
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-        @click="navigateToContentOverview">Prima</button>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationModal">Gelukt !</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Uw content is succesvol toegevoegd !
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+            @click="navigateToContentOverview">Prima</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
 </template>
 
 <style scoped></style>
