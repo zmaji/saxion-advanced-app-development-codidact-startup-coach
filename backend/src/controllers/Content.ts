@@ -7,27 +7,30 @@ import contentLabelModel from '../models/ContentLabel';
 import labelModel from '../models/Label';
 
 const getAllContent = async (
-  title: string,
-  labels: string[],
-  category: string
+    title: string,
+    labels: string[],
+    category: string,
 ): Promise<Content[]> => {
   try {
     let labelIDs: string[] = [];
 
     if (labels && labels.length > 0) {
       const labelResults: Label[] = await labelModel.find({ name: { $in: labels } }, { labelID: 1 });
-      labelIDs = labelResults.map(label => label.labelID);
+      labelIDs = labelResults.map((label) => label.labelID);
     }
 
-    let filter: any = {};
+    const filter: any = {};
 
     if (title) {
       filter.title = { $regex: title, $options: 'i' };
     }
 
     if (labelIDs.length > 0) {
-      const contentLabelResults: ContentLabel[] = await contentLabelModel.find({ labelID: { $in: labelIDs } }, { contentID: 1 });
-      const contentIDs = contentLabelResults.map(contentLabel => contentLabel.contentID);
+      const contentLabelResults: ContentLabel[] = await contentLabelModel.find(
+          { labelID: { $in: labelIDs } },
+          { contentID: 1 },
+      );
+      const contentIDs = contentLabelResults.map((contentLabel) => contentLabel.contentID);
 
       filter.contentID = { $in: contentIDs };
     }
@@ -45,7 +48,7 @@ const getAllContent = async (
 
       for (const content of result) {
         const labelsOfContent = contentLabels.filter(
-          (contentLabel: ContentLabel) => contentLabel.contentID === content.contentID
+            (contentLabel: ContentLabel) => contentLabel.contentID === content.contentID,
         );
         const relatedLabels: Label[] = [];
 
