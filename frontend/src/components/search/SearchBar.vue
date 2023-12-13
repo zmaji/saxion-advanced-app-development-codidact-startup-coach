@@ -24,7 +24,7 @@
   });
 
   const searchQuery = ref('');
-  const labelFilter = ref([]);
+  const labelFilter = ref<string[]>([]);
   const categoryFilter = ref<Category>('');
   const searchResults = ref<Content[]>([]);
   const categories: Ref<Category[]> = ref<Category[]>([]);
@@ -34,8 +34,9 @@
   const search = async () => {
     try {
       const response = await httpService.getRequest<Content[]>(
-        `/content?title=${searchQuery.value}&labels=${labelFilter.value}
-        &category=${categoryFilter.value ? categoryFilter.value.categoryID : ''}`,
+        `/content?title=${searchQuery.value}` +
+          `&labels=${labelFilter.value}` +
+          `&category=${categoryFilter.value ? categoryFilter.value.categoryID : ''}`,
         false
       );
 
@@ -73,11 +74,13 @@
   }
 
   const removeLabel = (selectedLabel: Label): void => {
-    const index = labelFilter.value.findIndex(label => label.labelID === selectedLabel.labelID);
+    const index = labelFilter.value.findIndex(label => label === selectedLabel);
 
     if (index !== -1) {
       labelFilter.value.splice(index, 1);
     }
+
+    search();
   }
 
   onMounted(() => {
