@@ -6,7 +6,13 @@ const router = Router();
 
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const result = await contentController.getAllContent();
+    const { title, labels, category } = req.query;
+
+    const result = await contentController.getAllContent(
+      title as string,
+      labels as string[],
+      category as string,
+    );
 
     if (result) {
       res
