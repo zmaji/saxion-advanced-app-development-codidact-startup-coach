@@ -19,14 +19,14 @@
 
   const emit = defineEmits<{(event: 'update:updateLabels', value: Label[]): void,}>();
 
-  let selectedLabels: Ref<Label[]> = ref<Label[]>([]);
+  let selectedLabels: Ref<Label[]> = ref([])
   let labelOptions: Ref<Label[]> = ref<Label[]>([]);
-  let newLabelID : Ref<string> = ref('');
 
-  const addLabel = (newLabelName: string) => {
-    const newLabel = {
+  const addLabel = (newLabel: string) => {
+    // axios with httpservice request to save new label, also check if it already exists
+    const result = {
       labelID: '',
-      name: newLabelName,
+      name: newLabel,
       isDefault: false
     };
     postLabel(newLabel);
@@ -77,6 +77,18 @@
       '/labels'
     )
     labelOptions.value = fetchedLabels.data;
+  }
+
+  onMounted(fetchLabels)
+
+  const fetchLabels = async () => {
+    labelOptions.value = []
+    const fetchedLabels = await httpService.getRequest<Label[]>(
+      '/labels'
+    )
+    labelOptions.value = fetchedLabels.data;
+    console.log('fetched labels', fetchedLabels.data);
+    console.log('current labels', labelOptions.value);
   }
 
   onMounted(fetchLabels)

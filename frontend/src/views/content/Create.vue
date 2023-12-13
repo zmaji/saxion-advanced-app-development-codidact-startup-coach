@@ -3,7 +3,12 @@
   import type { Ref } from 'vue';
   import type { User } from '@/typings/User';
 
-  import { onMounted, reactive, ref } from 'vue';
+  import {
+    onMounted,
+    reactive,
+    ref,
+    watch
+  } from 'vue';
   import { useTokenStore } from '../../stores/token';
   import { jwtDecode } from 'jwt-decode';
 
@@ -26,17 +31,17 @@
       const userToken = tokenStore.getToken;
       currentUser.value = jwtDecode(userToken);
       currentUserID.value = currentUser.value?.userID;
-      
+
     } catch (error) {
       console.error('Error fetching current userID:', error);
     }
   };
-  
+
   interface NewContent {
     contentID?: string | null;
     user: string | undefined;
     title: string | null;
-    description: string | number | string[] | undefined;
+    description: string | null;
     category: string | null;
     labels: Label[] | null;
     accessLevel: string | null;
@@ -51,7 +56,7 @@
     contentID: null,
     user: currentUserID,
     title: null,
-    description: '',
+    description: null,
     category: null,
     labels: contentLabels,
     accessLevel: accessLevel,
@@ -80,7 +85,7 @@
   const navigateToContentOverview = () => {
     router.push({ name: 'content.overview' })
   }
-  
+
   onMounted(fetchUserData);
 
 </script>
@@ -105,8 +110,8 @@
         <div class="pb-3 col-lg-10">
           <label for="description" class="form-label">Beschrijving</label>
 
-          <!-- <textarea v-model="contentTemplate.description" type="text" class="form-control" id="description"
-            placeholder="Bijvoorbeeld: Mijn Content is handig !" rows="5" style="resize: none" /> -->
+          <textarea v-model="contentTemplate.description" type="text" class="form-control" id="description"
+            placeholder="Bijvoorbeeld: Mijn Content is handig !" rows="5" style="resize: none" />
         </div>
 
         <div class="pb-3 col-lg-10">
@@ -169,8 +174,11 @@
 
   </div>
   <div class="d-flex flex-md-row flex-column flex-wrap">
-    <TextButton class="button mb-3 mb-md-0 me-md-2" data-bs-toggle="modal" data-bs-target="#confirmationModal"
-      @click="addContent"> Toevoegen </TextButton>
+    <TextButton 
+    class="button mb-3 mb-md-0 me-md-2" 
+    data-bs-toggle="modal"
+    data-bs-target="#confirmationModal" 
+    @click="addContent"> Toevoegen </TextButton>
 
     <TextButton :to="{ name: 'content.overview' }" display-style="tertiary">
       Annuleren
@@ -178,22 +186,23 @@
   </div>
 
   <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="confirmationModal">Gelukt !</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Uw content is succesvol toegevoegd !
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-            @click="navigateToContentOverview">Prima</button>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModal">Gelukt !</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Uw content is succesvol toegevoegd !
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+        @click="navigateToContentOverview">Prima</button>
       </div>
     </div>
   </div>
+</div>
+
 </template>
 
 <style scoped></style>
