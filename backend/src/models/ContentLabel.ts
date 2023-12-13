@@ -5,7 +5,6 @@ import mongoose, { Schema } from 'mongoose';
 const contentLabelSchema: Schema<ContentLabel> = new Schema({
   labelID: {
     type: String,
-    immutable: true,
   },
   contentID: {
     type: String,
