@@ -25,3 +25,4 @@ export { default as CategoryBreadCrumb } from './contentCategories/CategoryBread
 export { default as CategoryCrumb } from './contentCategories/CategoryCrumb.vue';
 export { default as TextLabel } from './labels/TextLabel.vue';
 export { default as IconLabel } from './labels/IconLabel.vue';
+export { default as SearchBar } from './search/SearchBar.vue';

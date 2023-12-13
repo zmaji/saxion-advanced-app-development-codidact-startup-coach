@@ -11,7 +11,8 @@
     CategoryBreadCrumb,
     ContentCategoryNavItem,
     PageTitle,
-    SecondaryTitle
+    SecondaryTitle,
+    SearchBar,
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
   import ContentItem from '@/components/content/ContentItem.vue';
@@ -61,6 +62,8 @@
   <CategoryBreadCrumb/>
 
   <SecondaryTitle>Zoeken en filteren</SecondaryTitle>
+
+  <SearchBar/>
 
   <div class="row row-cols-2 g-4 pt-3 pb-4">
     <ContentItem
