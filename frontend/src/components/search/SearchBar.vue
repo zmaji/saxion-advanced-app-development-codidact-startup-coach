@@ -54,7 +54,7 @@
 
   const fetchCategories = async () => {
     try {
-      const response = await httpService.getRequest<Category[]>('/categories', false);
+      const response = await httpService.getRequest<Category[]>('/categories/flattened', false);
 
       if (response && response.data) {
         categories.value = response.data;
