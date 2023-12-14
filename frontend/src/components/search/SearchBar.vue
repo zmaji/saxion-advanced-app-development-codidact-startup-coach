@@ -5,7 +5,6 @@
   import type { Label } from '@/typings/Label';
 
   import { onMounted, ref } from 'vue';
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
   import VueMultiselect from 'vue-multiselect';
 
   import httpService from '@/plugins/http/httpService';
@@ -172,17 +171,7 @@
                 :options="labels"
                 :multiple="true"
                 :close-on-select="false"
-              >
-                <template #item-name="{ label }">
-                  <div
-                    class="bg-primary text-white px-3 py-1 rounded-pill me-2 mb-2"
-                    >
-                    {{label}}
-
-                    <FontAwesomeIcon icon="circle-xmark" class="ps-2 label-icon" @click="removeLabel(label)"/>
-                  </div>
-                </template>
-              </VueMultiselect>
+              />
             </div>
 
             <div class="pb-3">
@@ -224,9 +213,5 @@
     z-index: 100;
     left: 0.25rem;
     right: 0;
-  }
-
-  .label-icon:hover {
-    cursor: pointer;
   }
 </style>
