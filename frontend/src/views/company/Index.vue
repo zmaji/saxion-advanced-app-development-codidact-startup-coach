@@ -2,7 +2,7 @@
   import type { FormData, FormStep } from '@/typings/Form';
   import type { User } from '@/typings/User';
   import type { Company } from '@/typings/Company';
-  import type { companyAnalysis } from '@/typings/CompanyAnalysis';
+  import type { CompanyAnalysis } from '@/typings/CompanyAnalysis';
 
   import { onMounted, reactive, ref } from 'vue';
   import httpService from '../../plugins/http/httpService';
@@ -27,7 +27,7 @@
   const tokenStore = useTokenStore()
   let currentUser = ref<User | null>(null)
   let currentCompany = ref<Company | null>(null)
-  let currentAnalysis = ref<companyAnalysis | null>(null)
+  let currentAnalysis = ref<CompanyAnalysis | null>(null)
 
   const getUser = async () => {
     try {
@@ -40,7 +40,7 @@
 
   const getAnalysis = async () => {
     try {
-      const fetchedAnalysis = await httpService.getRequest<companyAnalysis>(
+      const fetchedAnalysis = await httpService.getRequest<CompanyAnalysis>(
         `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
       );
       currentAnalysis.value = fetchedAnalysis.data;
@@ -263,7 +263,7 @@
       formFields.append('targetAudience', String(formData.targetAudience.value));
       formFields.append('budget', String(formData.budget.value));
 
-      const newCompanyAnalysis = await httpService.postRequest<companyAnalysis>('/companyAnalyses', formFields);
+      const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields);
       const newCompanyAnalysisData = newCompanyAnalysis.data
 
       if (newCompanyAnalysisData) {
@@ -362,31 +362,31 @@
       <div v-if="!currentAnalysis || currentAnalysis === null" class="col">
         <SubTitle type="secondary" v-if="!currentStep">Analyse nog niet begonnen</SubTitle>
 
-        <SubTitle type="warning" v-if="currentStep" testID="currentStepButton">
+        <SubTitle type="warning" v-if="currentStep" data-test="currentStepButton">
           {{ currentStep.completed === true ? currentStep.number : currentStep.number - 1 }}
           /
           {{ Object.keys(formSteps).length }} stappen voltooid</SubTitle>
       </div>
 
       <div v-else class="col">
-        <SubTitle type="success" v-if="currentAnalysis !== null" testID="finishedAnalysisButton">Analyse voltooid
+        <SubTitle type="success" v-if="currentAnalysis !== null" data-test="finishedAnalysisButton">Analyse voltooid
         </SubTitle>
       </div>
     </div>
 
     <div>
       <TextButton v-if="!currentStep && !currentAnalysis" class="me-2" @click="startAnalysis"
-        testID="startAnalysisButton">
+        data-test="startAnalysisButton">
         Start de analyse
       </TextButton>
 
       <TextButton v-if="currentStep && !currentAnalysis" class="me-2" @click="continueAnalysis"
-        testID="continueAnalysisButton">
+        data-test="continueAnalysisButton">
         Ga verder
       </TextButton>
 
       <TextButton v-if="currentStep || currentAnalysis" class="me-2" type="danger" display-style="secondary"
-        @click="restartAnalysis" testID="restartAnalysisButton">
+        @click="restartAnalysis" data-test="restartAnalysisButton">
         Herstart de analyse
       </TextButton>
     </div>
@@ -396,7 +396,7 @@
     <div class="d-flex justify-content-between align-items-center mb-2">
       <PageTitle>Behoefteanalyse</PageTitle>
 
-      <TextButton type="primary" display-style="secondary" @click="goToOverview" testID="backToOverviewButton">
+      <TextButton type="primary" display-style="secondary" @click="goToOverview" data-test="backToOverviewButton">
         Terug naar overzicht
       </TextButton>
     </div>
@@ -447,15 +447,15 @@
           Vorige
         </TextButton>
 
-        <TextButton v-else display-style="secondary" class="me-4" @click="previousStep" testID="previousStepButton">
+        <TextButton v-else display-style="secondary" class="me-4" @click="previousStep" data-test="previousStepButton">
           Vorige
         </TextButton>
 
-        <TextButton v-if="currentStep.number !== Object.keys(formSteps).length" @click="nextStep" testID="nextStep">
+        <TextButton v-if="currentStep.number !== Object.keys(formSteps).length" @click="nextStep" data-test="nextStep">
           Volgende
         </TextButton>
 
-        <TextButton v-else type="primary" @click="reviewForm" testID="reviewAnalysisButton">
+        <TextButton v-else type="primary" @click="reviewForm" data-test="reviewAnalysisButton">
           Controleer analyse
         </TextButton>
       </div>
@@ -480,12 +480,12 @@
 
         <div v-for="(  formStep, key  ) in   formSteps  " :key="key">
           <div class="pb-3">
-            <SubHeader class="pb-1" testID="reviewFormStepName">{{ formStep.name }}</SubHeader>
+            <SubHeader class="pb-1" data-test="reviewFormStepName">{{ formStep.name }}</SubHeader>
 
             <div v-for="(  formField, fieldKey  ) in   formData  " :key="fieldKey">
               <div v-if="formField.step === formStep" class="d-flex">
-                <div class="fw-bold me-2" testID="reviewFormFieldLabel">{{ formField.label }}:</div>
-                <p class="mb-0 pb-2" testID="reviewFormFieldValue">{{ formField.value }}</p>
+                <div class="fw-bold me-2" data-test="reviewFormFieldLabel">{{ formField.label }}:</div>
+                <p class="mb-0 pb-2" data-test="reviewFormFieldValue">{{ formField.value }}</p>
               </div>
             </div>
           </div>
@@ -497,7 +497,7 @@
           Wijzig analyse
         </TextButton>
 
-        <TextButton type="success" @click="submitForm" testID="finishAnalysisButton">
+        <TextButton type="success" @click="submitForm" data-test="finishAnalysisButton">
           Voltooi Analyse
         </TextButton>
       </div>

@@ -1,8 +1,8 @@
-import type { companyAnalysis } from '../typings/CompanyAnalysis';
+import type { CompanyAnalysis } from '../typings/CompanyAnalysis';
 
 import mongoose, { Schema } from 'mongoose';
 
-const companyAnalysisScheme: Schema<companyAnalysis> = new Schema({
+const companyAnalysisScheme: Schema<CompanyAnalysis> = new Schema({
   companyAnalysisID: {
     type: String,
     unique: true,
@@ -43,6 +43,6 @@ const companyAnalysisScheme: Schema<companyAnalysis> = new Schema({
   versionKey: false,
 });
 
-const CompanyAnalysisModel = mongoose.model<companyAnalysis>('CompanyAnalysis', companyAnalysisScheme);
+const CompanyAnalysisModel = mongoose.model<CompanyAnalysis>('CompanyAnalysis', companyAnalysisScheme);
 
 export default CompanyAnalysisModel;

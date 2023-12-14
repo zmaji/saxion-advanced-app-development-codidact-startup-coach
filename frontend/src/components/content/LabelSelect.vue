@@ -6,12 +6,15 @@
   import VueMultiselect from 'vue-multiselect'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
+  import { SmallHeader } from '@/components';
+
   interface Props {
     modelValue?: Label[]
   }
+
   withDefaults(defineProps<Props>(), {
     modelValue: undefined
-  })
+  });
 
   const emit = defineEmits<{ (event: 'update:modelValue', value: Label[]): void, }>();
 

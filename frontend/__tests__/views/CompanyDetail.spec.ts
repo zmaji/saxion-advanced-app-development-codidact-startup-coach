@@ -31,7 +31,7 @@ describe('CompanyIndex', () => {
   it('starts the analysis when the "Start de analyse" button is clicked', async () => {
     const wrapper = mount(CompanyIndex);
 
-    await wrapper.find('[testID="startAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="startAnalysisButton"]').trigger('click');
 
     const subHeaderComponent = wrapper.findComponent(SubHeader);
     expect(subHeaderComponent.exists()).toBe(true);
@@ -45,9 +45,9 @@ describe('CompanyIndex', () => {
   it('validates form fields and shows error messages', async () => {
     const wrapper = mount(CompanyIndex);
 
-    await wrapper.find('[testID="startAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="startAnalysisButton"]').trigger('click');
 
-    await wrapper.find('[testID="nextStep"]').trigger('click');
+    await wrapper.find('[data-test="nextStep"]').trigger('click');
     expect(wrapper.find('.is-invalid').exists()).toBe(true);
     expect(wrapper.find('.invalid-feedback').exists()).toBe(true);
   });
@@ -55,13 +55,13 @@ describe('CompanyIndex', () => {
   it('fills in first step form and proceeds to the next step', async () => {
     const wrapper = mount(CompanyIndex);
 
-    await wrapper.find('[testID="startAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="startAnalysisButton"]').trigger('click');
 
     wrapper.vm.formData.industry.value = 'Sample industry';
     wrapper.vm.formData.nrOfEmployees.value = 10;
     wrapper.vm.formData.stage.value = 'Sample phase';
 
-    await wrapper.find('[testID="nextStep"]').trigger('click');
+    await wrapper.find('[data-test="nextStep"]').trigger('click');
 
     expect(wrapper.vm.currentStep).toEqual(wrapper.vm.formSteps[2]);
 
@@ -70,19 +70,19 @@ describe('CompanyIndex', () => {
     expect(subHeaderComponent.text()).toEqual('Stap 2: Doelen');
   });
 
-  it('goes back to the previous step', async () => {
+  it('goes back to the previous step in the multi-step form', async () => {
     const wrapper = mount(CompanyIndex);
 
-    await wrapper.find('[testID="startAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="startAnalysisButton"]').trigger('click');
 
     wrapper.vm.formData.industry.value = 'Sample industry';
     wrapper.vm.formData.nrOfEmployees.value = 10;
     wrapper.vm.formData.stage.value = 'Sample phase';
 
-    await wrapper.find('[testID="nextStep"]').trigger('click');
+    await wrapper.find('[data-test="nextStep"]').trigger('click');
     expect(wrapper.vm.currentStep).toEqual(wrapper.vm.formSteps[2]);
 
-    await wrapper.find('[testID="previousStepButton"]').trigger('click');
+    await wrapper.find('[data-test="previousStepButton"]').trigger('click');
     expect(wrapper.vm.currentStep).toEqual(wrapper.vm.formSteps[1]);
 
     const subHeaderComponent = wrapper.findComponent(SubHeader);
@@ -90,39 +90,39 @@ describe('CompanyIndex', () => {
     expect(subHeaderComponent.text()).toEqual('Stap 1: Bedrijfsgegevens');
   });
 
-  it('goes back to overiew and shows steps', async () => {
+  it('goes back to overiew and shows current analysis status with options to continue or restart', async () => {
     const wrapper = mount(CompanyIndex);
 
-    await wrapper.find('[testID="startAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="startAnalysisButton"]').trigger('click');
 
     wrapper.vm.formData.industry.value = 'Sample industry';
     wrapper.vm.formData.nrOfEmployees.value = 10;
     wrapper.vm.formData.stage.value = 'Sample phase';
 
-    await wrapper.find('[testID="nextStep"]').trigger('click');
+    await wrapper.find('[data-test="nextStep"]').trigger('click');
 
-    await wrapper.find('[testID="backToOverviewButton"]').trigger('click');
+    await wrapper.find('[data-test="backToOverviewButton"]').trigger('click');
     expect(wrapper.vm.showInformation).toBe(true);
     expect(wrapper.vm.showForm).toBe(false);
-    const currentStepButton = wrapper.find('[testID="currentStepButton"]');
+    const currentStepButton = wrapper.find('[data-test="currentStepButton"]');
     expect(currentStepButton.text()).toEqual('1 / 3 stappen voltooid');
-    wrapper.find('[testID="continueAnalysisButton"]').exists();
-    wrapper.find('[testID="restartAnalysisButton"]').exists();
+    wrapper.find('[data-test="continueAnalysisButton"]').exists();
+    wrapper.find('[data-test="restartAnalysisButton"]').exists();
   });
 
-  it('goes back to overiew and shows steps', async () => {
+  it('goes back to overiew and continues current analysis with the right step', async () => {
     const wrapper = mount(CompanyIndex);
 
-    await wrapper.find('[testID="startAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="startAnalysisButton"]').trigger('click');
 
     wrapper.vm.formData.industry.value = 'Sample industry';
     wrapper.vm.formData.nrOfEmployees.value = 10;
     wrapper.vm.formData.stage.value = 'Sample phase';
 
-    await wrapper.find('[testID="nextStep"]').trigger('click');
-    await wrapper.find('[testID="backToOverviewButton"]').trigger('click');
+    await wrapper.find('[data-test="nextStep"]').trigger('click');
+    await wrapper.find('[data-test="backToOverviewButton"]').trigger('click');
 
-    await wrapper.find('[testID="continueAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="continueAnalysisButton"]').trigger('click');
     expect(wrapper.vm.showInformation).toBe(false);
     expect(wrapper.vm.showForm).toBe(true);
 
@@ -134,17 +134,17 @@ describe('CompanyIndex', () => {
   it('restarts the analysis', async () => {
     const wrapper = mount(CompanyIndex);
 
-    await wrapper.find('[testID="startAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="startAnalysisButton"]').trigger('click');
 
     wrapper.vm.formData.industry.value = 'Sample industry';
     wrapper.vm.formData.nrOfEmployees.value = 10;
     wrapper.vm.formData.stage.value = 'Sample stage';
 
-    await wrapper.find('[testID="backToOverviewButton"]').trigger('click');
-    const currentStepButton = wrapper.find('[testID="currentStepButton"]');
+    await wrapper.find('[data-test="backToOverviewButton"]').trigger('click');
+    const currentStepButton = wrapper.find('[data-test="currentStepButton"]');
     expect(currentStepButton.text()).toEqual('0 / 3 stappen voltooid');
 
-    await wrapper.find('[testID="restartAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="restartAnalysisButton"]').trigger('click');
     expect(wrapper.vm.showInformation).toBe(false);
     expect(wrapper.vm.showForm).toBe(true);
 
@@ -156,7 +156,7 @@ describe('CompanyIndex', () => {
   it('finish form, review and submit', async () => {
     const wrapper = mount(CompanyIndex);
 
-    await wrapper.find('[testID="startAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="startAnalysisButton"]').trigger('click');
 
     const submitFormMock = vi.fn();
     wrapper.vm.submitForm = submitFormMock;
@@ -164,7 +164,7 @@ describe('CompanyIndex', () => {
     wrapper.vm.formData.industry.value = 'Sample industry';
     wrapper.vm.formData.nrOfEmployees.value = 10;
     wrapper.vm.formData.stage.value = 'Sample stage';
-    await wrapper.find('[testID="nextStep"]').trigger('click');
+    await wrapper.find('[data-test="nextStep"]').trigger('click');
 
     wrapper.vm.formData.serviceInformation.value = 'Sample service information';
     wrapper.vm.formData.businessGoals.value = [
@@ -173,7 +173,7 @@ describe('CompanyIndex', () => {
     wrapper.vm.formData.painPoints.value = [
       'Sample pain point 1', 'Sample pain point 2'
     ];
-    await wrapper.find('[testID="nextStep"]').trigger('click');
+    await wrapper.find('[data-test="nextStep"]').trigger('click');
 
     wrapper.vm.formData.targetAudience.value = 'Sample target audience';
     wrapper.vm.formData.competitors.value = [
@@ -181,19 +181,19 @@ describe('CompanyIndex', () => {
     ];
     wrapper.vm.formData.budget.value = 10000;
 
-    await wrapper.find('[testID="reviewAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="reviewAnalysisButton"]').trigger('click');
     expect(wrapper.vm.currentStep).toEqual(wrapper.vm.formSteps[3]);
 
     const subHeaderComponent = wrapper.findComponent(SubHeader);
     expect(subHeaderComponent.exists()).toBe(true);
     expect(subHeaderComponent.text()).toEqual('Controleer uw gegevens');
 
-    const reviewFormStepName = wrapper.find('[testID="reviewFormStepName"]');
+    const reviewFormStepName = wrapper.find('[data-test="reviewFormStepName"]');
     expect(reviewFormStepName.exists()).toBe(true);
     const expectedStepNames = ['Bedrijfsgegevens', 'Doelen', 'Doelgroep'];
     expect(expectedStepNames.some(stepName => reviewFormStepName.text().includes(stepName))).toBe(true);
 
-    await wrapper.find('[testID="finishAnalysisButton"]').trigger('click');
+    await wrapper.find('[data-test="finishAnalysisButton"]').trigger('click');
 
     expect(submitFormMock).toHaveBeenCalledTimes(1);
 

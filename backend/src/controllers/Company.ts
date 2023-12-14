@@ -1,10 +1,10 @@
 import type { Company } from '../typings/Company';
 
-import companyModel from '../models/Company';
+import CompanyModel from '../models/Company';
 
 const getCompanies = async (): Promise<Company[]> => {
   try {
-    return await companyModel.find({}, { _id: 0 });
+    return await CompanyModel.find({}, { _id: 0 });
   } catch (error) {
     console.error('Something went wrong getting companies:', error);
     throw error;
@@ -13,7 +13,7 @@ const getCompanies = async (): Promise<Company[]> => {
 
 const getCompany = async (companyID: string): Promise<Company | null> => {
   try {
-    const result = await companyModel.findOne({ companyID }, { _id: 0 });
+    const result = await CompanyModel.findOne({ companyID }, { _id: 0 });
 
     return result || null;
   } catch (error) {
@@ -24,7 +24,7 @@ const getCompany = async (companyID: string): Promise<Company | null> => {
 
 const updateCompany = async (companyID: string, companyData: Company): Promise<Company | null> => {
   try {
-    const updatedCompany = await companyModel.findOneAndUpdate(
+    const updatedCompany = await CompanyModel.findOneAndUpdate(
         { companyID },
         companyData,
         { new: true },
@@ -37,10 +37,10 @@ const updateCompany = async (companyID: string, companyData: Company): Promise<C
   }
 };
 
-const companyController = {
+const CompanyController = {
   getCompanies,
   getCompany,
   updateCompany,
 };
 
-export default companyController;
+export default CompanyController;
