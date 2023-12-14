@@ -1,4 +1,9 @@
-import { describe, it, vi, expect } from 'vitest'
+import {
+  describe,
+  it,
+  vi,
+  expect
+} from 'vitest';
 import { mount } from '@vue/test-utils'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
@@ -42,7 +47,7 @@ describe('CompanyIndex', () => {
 
     await wrapper.find('[testID="startAnalysisButton"]').trigger('click');
 
-    await wrapper.find('[testID="nextStepButton"]').trigger('click');
+    await wrapper.find('[testID="nextStep"]').trigger('click');
     expect(wrapper.find('.is-invalid').exists()).toBe(true);
     expect(wrapper.find('.invalid-feedback').exists()).toBe(true);
   });
@@ -56,7 +61,7 @@ describe('CompanyIndex', () => {
     wrapper.vm.formData.nrOfEmployees.value = 10;
     wrapper.vm.formData.stage.value = 'Sample phase';
 
-    await wrapper.find('[testID="nextStepButton"]').trigger('click');
+    await wrapper.find('[testID="nextStep"]').trigger('click');
 
     expect(wrapper.vm.currentStep).toEqual(wrapper.vm.formSteps[2]);
 
@@ -74,7 +79,7 @@ describe('CompanyIndex', () => {
     wrapper.vm.formData.nrOfEmployees.value = 10;
     wrapper.vm.formData.stage.value = 'Sample phase';
 
-    await wrapper.find('[testID="nextStepButton"]').trigger('click');
+    await wrapper.find('[testID="nextStep"]').trigger('click');
     expect(wrapper.vm.currentStep).toEqual(wrapper.vm.formSteps[2]);
 
     await wrapper.find('[testID="previousStepButton"]').trigger('click');
@@ -94,7 +99,7 @@ describe('CompanyIndex', () => {
     wrapper.vm.formData.nrOfEmployees.value = 10;
     wrapper.vm.formData.stage.value = 'Sample phase';
 
-    await wrapper.find('[testID="nextStepButton"]').trigger('click');
+    await wrapper.find('[testID="nextStep"]').trigger('click');
 
     await wrapper.find('[testID="backToOverviewButton"]').trigger('click');
     expect(wrapper.vm.showInformation).toBe(true);
@@ -114,7 +119,7 @@ describe('CompanyIndex', () => {
     wrapper.vm.formData.nrOfEmployees.value = 10;
     wrapper.vm.formData.stage.value = 'Sample phase';
 
-    await wrapper.find('[testID="nextStepButton"]').trigger('click');
+    await wrapper.find('[testID="nextStep"]').trigger('click');
     await wrapper.find('[testID="backToOverviewButton"]').trigger('click');
 
     await wrapper.find('[testID="continueAnalysisButton"]').trigger('click');
@@ -159,7 +164,7 @@ describe('CompanyIndex', () => {
     wrapper.vm.formData.industry.value = 'Sample industry';
     wrapper.vm.formData.nrOfEmployees.value = 10;
     wrapper.vm.formData.stage.value = 'Sample stage';
-    await wrapper.find('[testID="nextStepButton"]').trigger('click');
+    await wrapper.find('[testID="nextStep"]').trigger('click');
 
     wrapper.vm.formData.serviceInformation.value = 'Sample service information';
     wrapper.vm.formData.businessGoals.value = [
@@ -168,7 +173,7 @@ describe('CompanyIndex', () => {
     wrapper.vm.formData.painPoints.value = [
       'Sample pain point 1', 'Sample pain point 2'
     ];
-    await wrapper.find('[testID="nextStepButton"]').trigger('click');
+    await wrapper.find('[testID="nextStep"]').trigger('click');
 
     wrapper.vm.formData.targetAudience.value = 'Sample target audience';
     wrapper.vm.formData.competitors.value = [

@@ -1,70 +1,70 @@
 <script setup lang="ts">
-import type { Label } from '@/typings/Label';
-import type { Ref } from 'vue';
+  import type { Label } from '@/typings/Label';
+  import type { Ref } from 'vue';
 
-import { reactive, ref } from 'vue';
+  import { reactive, ref } from 'vue';
 
-import router from '@/router/index';
-import httpService from '@/plugins/http/httpService';
-import {
-  PageTitle,
-  SecondaryTitle,
-  TextButton,
-  UserSelect
-} from '@/components';
-import { LabelSelect } from '@/components'
-import { CompanySelect } from '@/components'
+  import router from '@/router/index';
+  import httpService from '@/plugins/http/httpService';
+  import {
+    PageTitle,
+    SecondaryTitle,
+    TextButton,
+    UserSelect
+  } from '@/components';
+  import { LabelSelect } from '@/components'
+  import { CompanySelect } from '@/components'
 
-interface NewContent {
-  contentID?: string | null;
-  user: string | null;
-  title: string | null;
-  description: string | number | string[] | undefined;
-  category: string | null;
-  labels: Label[] | null;
-  accessLevel: string | null;
-  attachment: string | null;
-  createdAt: string | null;
-}
-
-let accessLevel: Ref<string> = ref('');
-let contentLabels: Ref<Label[]> = ref<Label[]>([])
-
-const contentTemplate: NewContent = reactive({
-  contentID: null,
-  user: null,
-  title: null,
-  description: '',
-  category: null,
-  labels: contentLabels,
-  accessLevel: accessLevel,
-  attachment: null,
-  createdAt: null,
-})
-
-const addSelectedLabels = (selectedLabels: Label[]) => {
-  contentLabels.value = selectedLabels;
-}
-
-const addContent = async () => {
-  try {
-    console.log(JSON.parse(JSON.stringify(contentTemplate)));
-
-    await httpService.postRequest(
-      '/content',
-      JSON.parse(JSON.stringify(contentTemplate))
-    );
-
-    navigateToContentOverview();
-
-  } catch (error) {
-    console.error(error);
+  interface NewContent {
+    contentID?: string | null;
+    user: string | null;
+    title: string | null;
+    description: string | number | string[] | undefined;
+    category: string | null;
+    labels: Label[] | null;
+    accessLevel: string | null;
+    attachment: string | null;
+    createdAt: string | null;
   }
-}
 
-const navigateToContentOverview = () => {
-  router.push({ name: 'content.overview' })
-}
+  let accessLevel: Ref<string> = ref('');
+  let contentLabels: Ref<Label[]> = ref<Label[]>([])
+
+  const contentTemplate: NewContent = reactive({
+    contentID: null,
+    user: null,
+    title: null,
+    description: '',
+    category: null,
+    labels: contentLabels,
+    accessLevel: accessLevel,
+    attachment: null,
+    createdAt: null,
+  })
+
+  const addSelectedLabels = (selectedLabels: Label[]) => {
+    contentLabels.value = selectedLabels;
+  }
+
+  const addContent = async () => {
+    try {
+      console.log(JSON.parse(JSON.stringify(contentTemplate)));
+
+      await httpService.postRequest(
+        '/content',
+        JSON.parse(JSON.stringify(contentTemplate))
+      );
+
+      navigateToContentOverview();
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const navigateToContentOverview = () => {
+    router.push({ name: 'content.overview' })
+  }
 
 </script>
 

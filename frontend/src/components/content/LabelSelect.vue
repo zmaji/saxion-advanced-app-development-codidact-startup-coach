@@ -1,67 +1,67 @@
 <script setup lang="ts">
-import type { Label } from '@/typings/Label';
-import type { Ref } from 'vue';
+  import type { Label } from '@/typings/Label';
+  import type { Ref } from 'vue';
 
-import { ref, watch } from 'vue'
-import VueMultiselect from 'vue-multiselect'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import { ref, watch } from 'vue'
+  import VueMultiselect from 'vue-multiselect'
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-interface Props {
-  modelValue?: Label[]
-}
-withDefaults(defineProps<Props>(), {
-  modelValue: undefined
-})
-
-const emit = defineEmits<{ (event: 'update:modelValue', value: Label[]): void, }>();
-
-let selectedLabels: Ref<Label[]> = ref([])
-let labelOptions: Ref<Label[]> = ref<Label[]>([
-  {
-    labelID: '1',
-    name: 'Sjabloon',
-    isDefault: false
-  },
-  {
-    labelID: '2',
-    name: 'Document',
-    isDefault: false
-  },
-  {
-    labelID: '3',
-    name: 'Pitch',
-    isDefault: false
-  },
-  {
-    labelID: '4',
-    name: 'Presentatie',
-    isDefault: false
-  },
-]);
-
-const addLabel = (newLabel: string) => {
-  // axios with httpservice request to save new label, also check if it already exists
-  const result = {
-    labelID: '' + labelOptions.value.length + 1,
-    name: newLabel,
-    isDefault: false
-  };
-
-  labelOptions.value.push(result);
-  selectedLabels.value.push(result);
-}
-
-watch(selectedLabels, () => {
-  emit('update:modelValue', selectedLabels.value);
-}, { deep: true });
-
-const removeLabel = (selectedLabel: Label): void => {
-  const index = selectedLabels.value.findIndex(label => label.labelID === selectedLabel.labelID);
-
-  if (index !== -1) {
-    selectedLabels.value.splice(index, 1);
+  interface Props {
+    modelValue?: Label[]
   }
-};
+  withDefaults(defineProps<Props>(), {
+    modelValue: undefined
+  })
+
+  const emit = defineEmits<{ (event: 'update:modelValue', value: Label[]): void, }>();
+
+  let selectedLabels: Ref<Label[]> = ref([])
+  let labelOptions: Ref<Label[]> = ref<Label[]>([
+    {
+      labelID: '1',
+      name: 'Sjabloon',
+      isDefault: false
+    },
+    {
+      labelID: '2',
+      name: 'Document',
+      isDefault: false
+    },
+    {
+      labelID: '3',
+      name: 'Pitch',
+      isDefault: false
+    },
+    {
+      labelID: '4',
+      name: 'Presentatie',
+      isDefault: false
+    },
+  ]);
+
+  const addLabel = (newLabel: string) => {
+    // axios with httpservice request to save new label, also check if it already exists
+    const result = {
+      labelID: '' + labelOptions.value.length + 1,
+      name: newLabel,
+      isDefault: false
+    };
+
+    labelOptions.value.push(result);
+    selectedLabels.value.push(result);
+  }
+
+  watch(selectedLabels, () => {
+    emit('update:modelValue', selectedLabels.value);
+  }, { deep: true });
+
+  const removeLabel = (selectedLabel: Label): void => {
+    const index = selectedLabels.value.findIndex(label => label.labelID === selectedLabel.labelID);
+
+    if (index !== -1) {
+      selectedLabels.value.splice(index, 1);
+    }
+  };
 
 </script>
 
