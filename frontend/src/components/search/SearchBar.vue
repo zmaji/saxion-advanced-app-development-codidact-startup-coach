@@ -25,7 +25,7 @@
 
   const searchQuery = ref('');
   const labelFilter = ref<string[]>([]);
-  const categoryFilter = ref<Category>('');
+  const categoryFilter = ref<Category>();
   const searchResults = ref<Content[]>([]);
   const categories: Ref<Category[]> = ref<Category[]>([]);
   const labels: Ref<Label[]> = ref<Label[]>([]);
@@ -73,12 +73,20 @@
     }
   }
 
-  const removeLabel = (selectedLabel: Label): void => {
+  const removeLabel = (selectedLabel: string): void => {
     const index = labelFilter.value.findIndex(label => label === selectedLabel);
 
     if (index !== -1) {
       labelFilter.value.splice(index, 1);
     }
+
+    search();
+  }
+
+  const resetFilters = ():void => {
+    searchQuery.value = '';
+    labelFilter.value = [];
+    categoryFilter.value = undefined;
 
     search();
   }
@@ -111,24 +119,13 @@
             Zoeken
           </TextButton>
         </div>
-
-        <div v-if="labelFilter.length > 0" class="d-flex flex-direction-row flex-wrap pt-3">
-          <div
-            v-for="(label, key) in labelFilter"
-            :key="key"
-            class="bg-secondary text-white px-3 py-1 rounded-pill me-2 mb-2"
-          >
-            {{label}}
-
-            <FontAwesomeIcon icon="circle-xmark" class="ps-2 label-icon" @click="removeLabel(label)"/>
-          </div>
-        </div>
       </div>
 
       <div class="col col-lg-5 position-relative">
         <IconButton
           icon="filter"
           type="primary"
+          class="me-2"
           display-style="secondary"
           data-bs-toggle="collapse"
           data-bs-target="#collapse-filters"
@@ -136,15 +133,27 @@
           aria-controls="collapse-filters"
         >
           Filters
+
+          <span v-if="(labelFilter && labelFilter.length > 0) || categoryFilter">
+            {{ `(${labelFilter.length + (categoryFilter ? 1 : 0)})` }}
+          </span>
+        </IconButton>
+
+        <IconButton
+          v-if="(searchQuery && searchQuery.length > 0) || (labelFilter && labelFilter.length > 0) || categoryFilter"
+          icon="arrows-rotate"
+          type="primary"
+          display-style="tertiary"
+          @click="resetFilters()"
+        >
+          Reset filters
         </IconButton>
 
         <div class="collapse pt-2 filter-menu" id="collapse-filters">
           <div class="bg-white p-4 border rounded">
             <div class="pb-3">
-              <label for="labelFilter" class="form-label">Filter op Label:</label>
+              <label for="labelFilter" class="form-label">Selecteer Label(s):</label>
               <select id="labelFilter" class="form-select" aria-label="Label select" v-model="labelFilter" multiple>
-                <option selected disabled> een of meerdere labels</option>
-
                 <option
                   v-for="(label, key) in labels"
                   :key="key"
@@ -153,6 +162,18 @@
                   {{ label.name }}
                 </option>
               </select>
+
+              <div v-if="labelFilter.length > 0" class="d-flex flex-direction-row flex-wrap pt-3">
+                <div
+                  v-for="(label, key) in labelFilter"
+                  :key="key"
+                  class="bg-primary text-white px-3 py-1 rounded-pill me-2 mb-2"
+                >
+                  {{label}}
+
+                  <FontAwesomeIcon icon="circle-xmark" class="ps-2 label-icon" @click="removeLabel(label)"/>
+                </div>
+              </div>
             </div>
 
             <div class="pb-3">
