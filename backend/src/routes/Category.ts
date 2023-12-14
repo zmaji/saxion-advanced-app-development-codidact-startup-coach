@@ -24,6 +24,20 @@ router.get('', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/flattened', async (req: Request, res: Response) => {
+  try {
+    const result = await categoryController.getAllFlattenedCategories();
+
+    if (result) {
+      res.status(StatusCodes.OK).json(result);
+    } else {
+      res.status(StatusCodes.NOT_FOUND).json({ error: 'Unable to find all flattened categories' });
+    }
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred getting all flattened categories' });
+  }
+});
+
 router.get('/:categoryID/parents', async (req: Request, res: Response) => {
   try {
     const { categoryID } = req.params;
