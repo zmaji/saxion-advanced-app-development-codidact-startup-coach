@@ -12,29 +12,28 @@
       </h1>
     </div>
 
-    <ul class="sidebar-nav" v-if="route.name !== 'knowledgeBase.overview'">
-      <li class="sidebar-nav-item">
-        <RouterLink :to="{ name: 'company.overview' }" class="nav-link">Mijn bedrijf</RouterLink>
-      </li>
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <slot v-if="route.name !== 'knowledgeBase.overview'">
+        <li class="sidebar-nav-item">
+          <RouterLink :to="{ name: 'company.overview' }" class="nav-link">Mijn bedrijf</RouterLink>
+        </li>
 
-      <li class="sidebar-nav-item">
-        <RouterLink :to="{ name: 'company.roadmap' }" class="nav-link">Roadmap</RouterLink>
-      </li>
+        <li class="sidebar-nav-item">
+          <RouterLink :to="{ name: 'company.roadmap' }" class="nav-link">Roadmap</RouterLink>
+        </li>
 
-      <li class="sidebar-nav-item">
-        <RouterLink :to="{ name: 'company.overview' }" class="nav-link">Interne kennisbank</RouterLink>
-      </li>
+        <li class="sidebar-nav-item">
+          <RouterLink :to="{ name: 'company.overview' }" class="nav-link">Interne kennisbank</RouterLink>
+        </li>
 
-      <li class="sidebar-nav-item">
-        <RouterLink :to="{ name: 'company.overview' }" class="nav-link">Modules</RouterLink>
-      </li>
+        <li class="sidebar-nav-item">
+          <RouterLink :to="{ name: 'company.overview' }" class="nav-link">Modules</RouterLink>
+        </li>
 
-      <li class="sidebar-nav-item">
-        <RouterLink :to="{ name: 'components' }" class="nav-link">Componenten</RouterLink>
-      </li>
-    </ul>
-
-    <ul v-else class="sidebar-nav" id="knowledge-base-nav">
+        <li class="sidebar-nav-item">
+          <RouterLink :to="{ name: 'components' }" class="nav-link">Componenten</RouterLink>
+        </li>
+      </slot>
     </ul>
   </nav>
 </template>
