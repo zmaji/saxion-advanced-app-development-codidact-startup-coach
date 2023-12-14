@@ -1,6 +1,6 @@
 import type { companyAnalysis } from '../typings/CompanyAnalysis';
-import CompanyAnalysisModel from '../models/CompanyAnalysis';
 
+import CompanyAnalysisModel from '../models/CompanyAnalysis';
 import { v4 as uuidv4 } from 'uuid';
 import { removeIdField } from '../helpers/removeMongoID';
 

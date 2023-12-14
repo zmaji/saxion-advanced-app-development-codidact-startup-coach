@@ -39,21 +39,21 @@ describe('POST /companyAnalyses', () => {
       nrOfEmployees: 1,
       stage: 'Start-up',
       businessGoals: [
-        'Sample business goal 1', 'Sample business Goal 2'
+        'Sample business goal 1', 'Sample business Goal 2',
       ],
       painPoints: [
-        'Sample pain point 1', 'Sample pain point 2'
+        'Sample pain point 1', 'Sample pain point 2',
       ],
       competitors: [
-        'Sample competitor 1', 'Sample competitor 2'
+        'Sample competitor 1', 'Sample competitor 2',
       ],
       targetAudience: 'Sample target audience',
-      budget: 100000
+      budget: 100000,
     };
 
     const response = await request(app)
-      .post('/companyAnalyses')
-      .send(newCompanyAnalysisData);
+        .post('/companyAnalyses')
+        .send(newCompanyAnalysisData);
     const { companyAnalysisID } = response.body;
 
     expect(response.status).toBe(StatusCodes.CREATED);
@@ -70,8 +70,8 @@ describe('POST /companyAnalyses', () => {
     };
 
     const response = await request(app)
-      .post('/companyAnalyses')
-      .send(newCompanyAnalysisData);
+        .post('/companyAnalyses')
+        .send(newCompanyAnalysisData);
 
     expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     expect(response.body).toEqual({ error: 'Fields were not filled in properly' });

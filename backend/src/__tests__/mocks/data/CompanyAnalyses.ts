@@ -9,18 +9,18 @@ export const companyAnalysesIndexData: companyAnalysis[] = [
     stage: 'Start-up',
     businessGoals: [
       'Expand market share and increase revenue',
-      'Make the world better'
+      'Make the world better',
     ],
     painPoints: [
       'Customer support efficiency',
-      'Product scalability'
+      'Product scalability',
     ],
     competitors: [
       'Competitor A',
-      'Competitor B'
+      'Competitor B',
     ],
     targetAudience: 'Tech-savvy professionals',
-    budget: 3000
-  }
+    budget: 3000,
+  },
 ];
 

@@ -2,10 +2,8 @@ import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import createServer from '../../utils/createServer';
 import { Express } from 'express';
-
 import CompanyModel from '../../models/Company';
 import CompanyAnalysisModel from '../../models/CompanyAnalysis';
-
 import { companiesIndexData } from '../mocks/data/Companies';
 import { companyAnalysesIndexData } from '../mocks/data/CompanyAnalyses';
 
@@ -30,7 +28,6 @@ beforeAll(async () => {
     const newMockCompanyAnalysis = new CompanyAnalysisModel(companyAnalysis);
     await newMockCompanyAnalysis.save();
   }
-
 }, 60000);
 
 afterAll(async () => {
