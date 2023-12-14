@@ -75,16 +75,6 @@
     }
   }
 
-  const removeLabel = (selectedLabel: Label): void => {
-    const index = labelFilter.value.findIndex(label => label === selectedLabel);
-
-    if (index !== -1) {
-      labelFilter.value.splice(index, 1);
-    }
-
-    search();
-  }
-
   const resetFilters = ():void => {
     searchQuery.value = '';
     labelFilter.value = [];
