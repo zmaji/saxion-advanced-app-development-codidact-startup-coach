@@ -13,10 +13,7 @@
 <template>
   <div class="accordion accordion-flush" id="categories-accordion">
     <div class="accordion-item" v-for="(category, key) in categories" :key="key">
-      <ContentCategory
-        :category="category"
-        :categoryKey="key"
-      />
+      <ContentCategory :category="category" :categoryKey="key" />
     </div>
   </div>
 </template>

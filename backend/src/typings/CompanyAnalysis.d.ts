@@ -1,4 +1,4 @@
-export interface companyAnalysis {
+export interface CompanyAnalysis {
   companyAnalysisID: string,
   industry: string,
   serviceInformation?: string,

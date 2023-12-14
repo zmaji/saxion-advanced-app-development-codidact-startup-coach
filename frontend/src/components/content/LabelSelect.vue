@@ -5,17 +5,18 @@
   import { ref, watch } from 'vue'
   import VueMultiselect from 'vue-multiselect'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-  
+
   import { SmallHeader } from '@/components';
 
   interface Props {
     modelValue?: Label[]
   }
+
   withDefaults(defineProps<Props>(), {
     modelValue: undefined
-  }) 
+  });
 
-  const emit = defineEmits<{(event: 'update:modelValue', value: Label[]): void,}>();
+  const emit = defineEmits<{ (event: 'update:modelValue', value: Label[]): void, }>();
 
   let selectedLabels: Ref<Label[]> = ref([])
   let labelOptions: Ref<Label[]> = ref<Label[]>([
@@ -63,42 +64,29 @@
     if (index !== -1) {
       selectedLabels.value.splice(index, 1);
     }
-  }
+  };
 
 </script>
 
 <template>
-  <VueMultiselect
-    v-model="selectedLabels"
-    tag-placeholder="Voeg deze label nieuw toe"
-    placeholder="Selecteer de gewenste content labels"
-    label="name"
-    track-by="labelID"
-    class="pb-2"
-    :options="labelOptions"
-    :multiple="true"
-    :taggable="true"
-    :close-on-select="false"
-    @tag="addLabel"
-  />
+  <VueMultiselect v-model="selectedLabels" tag-placeholder="Voeg deze label nieuw toe"
+    placeholder="Selecteer de gewenste content labels" label="name" track-by="labelID" class="pb-2"
+    :options="labelOptions" :multiple="true" :taggable="true" :close-on-select="false" @tag="addLabel" />
 
   <SmallHeader>Geselecteerde labels</SmallHeader>
 
   <div class="d-flex flex-direction-row flex-wrap">
-    <div
-      v-for="(label,key) in selectedLabels"
-      :key="key"
-      class="bg-secondary text-white px-3 py-1 rounded-pill me-2 mb-2"
-    >
-      {{label.name}}
+    <div v-for="(label, key) in selectedLabels" :key="key"
+      class="bg-secondary text-white px-3 py-1 rounded-pill me-2 mb-2">
+      {{ label.name }}
 
-      <FontAwesomeIcon icon="circle-xmark" class="ps-2 label-icon" @click="removeLabel(label)"/>
+      <FontAwesomeIcon icon="circle-xmark" class="ps-2 label-icon" @click="removeLabel(label)" />
     </div>
   </div>
 </template>
 
 <style scoped>
-  .label-icon:hover {
-    cursor: pointer;
-  }
+.label-icon:hover {
+  cursor: pointer;
+}
 </style>

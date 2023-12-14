@@ -88,8 +88,8 @@
         <div class="pb-3 col-lg-10">
           <label for="description" class="form-label">Beschrijving</label>
 
-          <textarea v-model="contentTemplate.description" type="text" class="form-control" id="description"
-            placeholder="Bijvoorbeeld: Mijn Content is handig !" rows="5" style="resize: none" />
+          <!-- <textarea v-model="contentTemplate.description" type="text" class="form-control" id="description"
+            placeholder="Bijvoorbeeld: Mijn Content is handig !" rows="5" style="resize: none" /> -->
         </div>
 
         <div class="pb-3 col-lg-10">
@@ -152,11 +152,8 @@
 
   </div>
   <div class="d-flex flex-md-row flex-column flex-wrap">
-    <TextButton 
-    class="button mb-3 mb-md-0 me-md-2" 
-    data-bs-toggle="modal"
-    data-bs-target="#confirmationModal" 
-    @click="addContent"> Toevoegen </TextButton>
+    <TextButton class="button mb-3 mb-md-0 me-md-2" data-bs-toggle="modal" data-bs-target="#confirmationModal"
+      @click="addContent"> Toevoegen </TextButton>
 
     <TextButton :to="{ name: 'content.overview' }" display-style="tertiary">
       Annuleren
@@ -164,23 +161,22 @@
   </div>
 
   <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmationModal">Gelukt !</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Uw content is succesvol toegevoegd !
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-        @click="navigateToContentOverview">Prima</button>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationModal">Gelukt !</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Uw content is succesvol toegevoegd !
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+            @click="navigateToContentOverview">Prima</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
 </template>
 
 <style scoped></style>
