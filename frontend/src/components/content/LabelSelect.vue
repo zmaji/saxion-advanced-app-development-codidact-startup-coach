@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { ContentLabel } from '@/typings/Label';
+  import type { Label } from '@/typings/Label';
   import type { Ref } from 'vue';
 
   import { ref, watch } from 'vue'
@@ -9,16 +9,16 @@
   import { SmallHeader } from '@/components';
 
   interface Props {
-    modelValue?: ContentLabel[]
+    modelValue?: Label[]
   }
   withDefaults(defineProps<Props>(), {
     modelValue: undefined
   }) 
 
-  const emit = defineEmits<{(event: 'update:modelValue', value: ContentLabel[]): void,}>();
+  const emit = defineEmits<{(event: 'update:modelValue', value: Label[]): void,}>();
 
-  let selectedLabels: Ref<ContentLabel[]> = ref([])
-  let labelOptions: Ref<ContentLabel[]> = ref<ContentLabel[]>([
+  let selectedLabels: Ref<Label[]> = ref([])
+  let labelOptions: Ref<Label[]> = ref<Label[]>([
     {
       labelID: '1',
       name: 'Sjabloon',
@@ -57,7 +57,7 @@
     emit('update:modelValue', selectedLabels.value);
   }, { deep: true });
 
-  const removeLabel = (selectedLabel: ContentLabel): void => {
+  const removeLabel = (selectedLabel: Label): void => {
     const index = selectedLabels.value.findIndex(label => label.labelID === selectedLabel.labelID);
 
     if (index !== -1) {
