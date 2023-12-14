@@ -6,6 +6,12 @@ import contentModel from '../models/Content';
 import contentLabelModel from '../models/ContentLabel';
 import labelModel from '../models/Label';
 
+interface Filter {
+  title?: { $regex: string; $options: string } | string;
+  contentID?: { $in: string[] };
+  category?: string;
+}
+
 const getAllContent = async (
     title: string,
     labels: string[],
@@ -19,7 +25,7 @@ const getAllContent = async (
       labelIDs = labelResults.map((label) => label.labelID);
     }
 
-    const filter: any = {};
+    const filter: Filter = {};
 
     if (title) {
       filter.title = { $regex: title, $options: 'i' };
