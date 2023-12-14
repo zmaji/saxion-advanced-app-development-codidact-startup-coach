@@ -6,8 +6,6 @@ import { ref, watch } from 'vue'
 import VueMultiselect from 'vue-multiselect'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import { SmallHeader } from '@/components';
-
 interface Props {
   modelValue?: Label[]
 }
@@ -63,7 +61,7 @@ const removeLabel = (selectedLabel: Label): void => {
   if (index !== -1) {
     selectedLabels.value.splice(index, 1);
   }
-}
+};
 
 </script>
 

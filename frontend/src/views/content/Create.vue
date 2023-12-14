@@ -19,7 +19,7 @@ interface NewContent {
   contentID?: string | null;
   user: string | null;
   title: string | null;
-  description: string | null;
+  description: string | number | string[] | undefined;
   category: string | null;
   labels: Label[] | null;
   accessLevel: string | null;
@@ -34,7 +34,7 @@ const contentTemplate: NewContent = reactive({
   contentID: null,
   user: null,
   title: null,
-  description: null,
+  description: '',
   category: null,
   labels: contentLabels,
   accessLevel: accessLevel,
