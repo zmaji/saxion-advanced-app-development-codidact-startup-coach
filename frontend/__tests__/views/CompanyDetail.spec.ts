@@ -1,11 +1,10 @@
 import { describe, it, vi, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
 // @ts-ignore
 import CompanyIndex from '../../src/views/company/Index.vue'
 import { PageTitle, SecondaryTitle, SubHeader } from '../../src/components'
-
-import { createPinia } from 'pinia'
-import { createApp } from 'vue'
 
 const pinia = createPinia();
 const app = createApp({});
