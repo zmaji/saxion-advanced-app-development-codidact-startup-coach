@@ -56,7 +56,7 @@
               <div class="pb-4 col-lg-10 col-xl-8">
                 <label for="username" class="form-label">Gebruikersnaam</label>
                 <input type="text" class="form-control" :class="error && !userName ? 'border border-danger' : null"
-                  id="username" placeholder="Uw gebruikersnaam" v-model="userName">
+                  id="username" placeholder="Uw gebruikersnaam" v-model="userName" @keyup.enter="login">
 
                 <small v-show="(error && !userName)" class="text-danger">U moet uw gebruikersnaam invullen</small>
               </div>
@@ -64,7 +64,7 @@
               <div class="pb-4 col-lg-10 col-xl-8">
                 <label for="password" class="form-label">Wachtwoord</label>
                 <input type="password" class="form-control" :class="error && !password ? 'border border-danger' : null"
-                  id="password" placeholder="Uw wachtwoord" v-model="password">
+                  id="password" placeholder="Uw wachtwoord" v-model="password" @keyup.enter="login">
 
                 <small v-if="error && !password" class="text-danger">Het wachtwoord moet ingevuld worden</small>
               </div>

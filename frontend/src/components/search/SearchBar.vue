@@ -111,13 +111,13 @@
             type="text"
             class="form-control me-2 py-2 px-4"
             placeholder="Typ hier uw zoekopdracht"
-            @keyup.enter="search()"
+            @keyup.enter="search"
           />
 
           <TextButton
             type="primary"
             render-as="button"
-            @click="search()"
+            @click="search"
             class="d-inline-block"
           >
             Zoeken
@@ -148,7 +148,7 @@
           icon="arrows-rotate"
           type="primary"
           display-style="tertiary"
-          @click="resetFilters()"
+          @click="resetFilters"
         >
           Reset filters
         </IconButton>
