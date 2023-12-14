@@ -6,6 +6,7 @@
 
   import { onMounted, ref } from 'vue';
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import VueMultiselect from 'vue-multiselect';
 
   import httpService from '@/plugins/http/httpService';
   import {
@@ -24,7 +25,7 @@
   });
 
   const searchQuery = ref('');
-  const labelFilter = ref<string[]>([]);
+  const labelFilter = ref<Label[]>([]);
   const categoryFilter = ref<Category>();
   const searchResults = ref<Content[]>([]);
   const categories: Ref<Category[]> = ref<Category[]>([]);
@@ -33,9 +34,11 @@
 
   const search = async () => {
     try {
+      const filteredLabelNames = labelFilter.value.map(({ name }) => name);
+
       const response = await httpService.getRequest<Content[]>(
         `/content?title=${searchQuery.value}` +
-          `&labels=${labelFilter.value}` +
+          `&labels=${filteredLabelNames}` +
           `&category=${categoryFilter.value ? categoryFilter.value.categoryID : ''}`,
         false
       );
@@ -73,7 +76,7 @@
     }
   }
 
-  const removeLabel = (selectedLabel: string): void => {
+  const removeLabel = (selectedLabel: Label): void => {
     const index = labelFilter.value.findIndex(label => label === selectedLabel);
 
     if (index !== -1) {
@@ -152,28 +155,30 @@
         <div class="collapse pt-2 filter-menu" id="collapse-filters">
           <div class="bg-white p-4 border rounded">
             <div class="pb-3">
+
               <label for="labelFilter" class="form-label">Selecteer Label(s):</label>
-              <select id="labelFilter" class="form-select" aria-label="Label select" v-model="labelFilter" multiple>
-                <option
-                  v-for="(label, key) in labels"
-                  :key="key"
-                  :value="label.name"
-                >
-                  {{ label.name }}
-                </option>
-              </select>
 
-              <div v-if="labelFilter.length > 0" class="d-flex flex-direction-row flex-wrap pt-3">
-                <div
-                  v-for="(label, key) in labelFilter"
-                  :key="key"
-                  class="bg-primary text-white px-3 py-1 rounded-pill me-2 mb-2"
-                >
-                  {{label}}
+              <VueMultiselect
+                v-model="labelFilter"
+                placeholder="Selecteer de gewenste label(s)"
+                label="name"
+                track-by="labelID"
+                class="pb-2"
+                id="labelFilter"
+                :options="labels"
+                :multiple="true"
+                :close-on-select="false"
+              >
+                <template #item-name="{ label }">
+                  <div
+                    class="bg-primary text-white px-3 py-1 rounded-pill me-2 mb-2"
+                    >
+                    {{label}}
 
-                  <FontAwesomeIcon icon="circle-xmark" class="ps-2 label-icon" @click="removeLabel(label)"/>
-                </div>
-              </div>
+                    <FontAwesomeIcon icon="circle-xmark" class="ps-2 label-icon" @click="removeLabel(label)"/>
+                  </div>
+                </template>
+              </VueMultiselect>
             </div>
 
             <div class="pb-3">
