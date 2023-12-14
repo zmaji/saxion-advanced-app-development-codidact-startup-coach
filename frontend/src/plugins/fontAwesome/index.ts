@@ -13,6 +13,8 @@ import {
   faCircleInfo,
   faFile,
   faFilter,
+  faUser,
+  faRightFromBracket,
   faTriangleExclamation,
   faThumbsUp,
   faXmarkCircle
@@ -30,6 +32,8 @@ library.add(
   faCircleInfo,
   faFile,
   faFilter,
+  faUser,
+  faRightFromBracket,
   faTriangleExclamation,
   faThumbsUp,
   faXmarkCircle
