@@ -77,7 +77,7 @@
       type="primary"
       display-style="secondary"
       :render-as-circle="true"
-      :to="{ name: 'content.create' }"
+      :to="{ name: 'knowledgeBase.create' }"
       class="ms-3"
     />
   </div>
