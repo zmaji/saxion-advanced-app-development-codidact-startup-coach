@@ -23,16 +23,16 @@
   const categories: Ref<Category[]> = ref<Category[]>([]);
   const currentUser = ref<User | null>(null)
   const currentUserID = ref<string | undefined>('');
-  let accessLevel: Ref<string> = ref('');
+  let accessLevel: Ref<string> = ref('public');
   let contentLabels: Ref<Label[]> = ref<Label[]>([]);
 
   interface NewContent {
     contentID?: string | null;
     user: string | undefined;
     title: string | null;
-    description: string | null;
+    description: string;
     category: string | null;
-    labels: Label[] | null;
+    labels: Label[];
     accessLevel: string | null;
     attachment: string | null;
     createdAt: string | null;
@@ -42,17 +42,13 @@
     contentID: null,
     user: currentUserID,
     title: null,
-    description: null,
+    description: '',
     category: null,
     labels: contentLabels,
     accessLevel: accessLevel,
     attachment: null,
     createdAt: null,
-  })
-
-  const addSelectedLabels = (selectedLabels: Label[]) => {
-    contentLabels.value = selectedLabels;
-  }
+  });
 
   const addContent = async () => {
     try {
@@ -107,92 +103,111 @@
 <template>
   <PageTitle>Content Toevoegen</PageTitle>
 
-  <p>Pad naar categorie !</p>
+  <form class="row g-2 g-lg-3">
+    <div class="col col-lg-6">
+      <SecondaryTitle>Algemene gegevens</SecondaryTitle>
 
-  <div class="row row-cols-2 g-2 g-lg-3">
-    <div class="col">
-      <SecondaryTitle> Algemene gegevens </SecondaryTitle>
+      <div class="pb-3 col-lg-10">
+        <label for="content-title" class="form-label">Titel</label>
 
-      <form>
-        <div class="pb-3 col-lg-10">
-          <label for="title" class="form-label">Titel</label>
+        <input
+          v-model="contentTemplate.title"
+          type="text"
+          class="form-control"
+          id="content-title"
+          placeholder="Vul een titel in"
+        />
+      </div>
 
-          <input v-model="contentTemplate.title" type="text" class="form-control" id="title"
-            placeholder="Bijvoorbeeld: Mijn Leuke Titel" />
-        </div>
+      <div class="pb-3 col-lg-10">
+        <label for="content-description" class="form-label">Beschrijving</label>
 
-        <div class="pb-3 col-lg-10">
-          <label for="description" class="form-label">Beschrijving</label>
+        <textarea
+          v-model="contentTemplate.description"
+          type="text"
+          class="form-control"
+          id="content-description"
+          placeholder="Vul een beschrijving in"
+          rows="5"
+          style="resize: none"
+        />
+      </div>
 
-          <textarea v-model="contentTemplate.description" type="text" class="form-control" id="description"
-            placeholder="Bijvoorbeeld: Mijn Content is handig !" rows="5" style="resize: none" />
-        </div>
+      <div class="pb-3 col-lg-10">
+        <label class="pb-2" for="category-select">Categorie</label>
 
-        <div class="pb-3 col-lg-10">
-          <label class="pb-2" for="category">Categorie</label>
-          <select class="form-select" id="category" v-model="contentTemplate.category">
-            <option selected>Selecteer een categorie</option>
-            <option v-for="(category, key) in categories" :key="key" :value="category">{{ category.name }}</option>
-          </select>
-        </div>
+        <select class="form-select" id="category-select" v-model="contentTemplate.category">
+          <option selected :value="null" disabled>Selecteer een categorie</option>
 
-        <div class="pb-3 col-lg-10">
-          <label for="formFile" class="form-label">Bijlage</label>
+          <option
+            v-for="(category, key) in categories"
+            :key="key"
+            :value="category.categoryID"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
 
-          <input class="form-control" type="file" id="formFile" />
-        </div>
-      </form>
+      <div class="pb-3 col-lg-10">
+        <label class="form-label" for="content-file">Bijlage</label>
+
+        <input class="form-control" type="file" id="content-file" />
+      </div>
     </div>
 
-    <div class="col">
+    <div class="col col-lg-6">
       <SecondaryTitle> Content labels </SecondaryTitle>
 
-      <label class="form-label">Content labels</label>
-      <LabelSelect :model-value="contentLabels" @update:updateLabels="addSelectedLabels" />
+      <div class="pb-3 col-lg-10">
+        <label class="form-label">Content labels</label>
+
+        <LabelSelect v-model="contentTemplate.labels"/>
+      </div>
     </div>
 
     <div class="col">
       <SecondaryTitle> Toegangsniveau </SecondaryTitle>
-    </div>
 
-    <div class="col">
-      <!-- Een lege col om de divs te alignen  -->
-    </div>
-    <div class="col">
-      <div class="pb-3 col-lg-10">
-        <label class="pb-2" for="accessLevel">Zichtbaarheid</label>
-        <select class="form-select" id="accessLevel" v-model="accessLevel">
-          <option selected value="">Selecteer toegangsniveau (Standaard Openbaar)</option>
-          <option value="private">Privé</option>
-          <option value="restricted">Beperkt</option>
-          <option value="public">Openbaar</option>
-        </select>
+      <div class="row g-2 g-lg-3">
+        <div class="col-lg-6">
+          <div class="pb-3 col-lg-10">
+            <label class="pb-2" for="content-access-level">Zichtbaarheid (Standaard Openbaar)</label>
+
+            <select class="form-select" id="content-access-level" v-model="accessLevel">
+              <option selected value="public">Openbaar</option>
+              <option value="private">Privé</option>
+              <option value="restricted">Beperkt</option>
+            </select>
+          </div>
+
+          <div v-if="accessLevel === 'restricted'" class="pb-3 col-lg-10">
+            <label class="pb-2" for="user"> Welke gebruikers mogen uw content zien</label>
+            <UserSelect/>
+          </div>
+        </div>
+
+        <div v-if="accessLevel === 'restricted'" class="col-lg-6">
+          <div class="pb-3 col-lg-10">
+            <label class="pb-2" for="company"> Welke bedrijven mogen uw content zien</label>
+            <CompanySelect/>
+          </div>
+        </div>
       </div>
     </div>
+  </form>
 
-    <div class="col">
-      <div v-if="accessLevel === 'restricted'">
-        <label class="pb-2" for="company"> Welke bedrijven mogen uw content zien</label>
-        <CompanySelect />
-      </div>
-    </div>
-
-    <div class="col">
-      <div v-if="accessLevel === 'restricted'">
-        <label class="pb-2" for="user"> Welke gebruikers mogen uw content zien</label>
-        <UserSelect />
-      </div>
-    </div>
-
-  </div>
   <div class="d-flex flex-md-row flex-column flex-wrap">
     <TextButton 
-    class="button mb-3 mb-md-0 me-md-2" 
-    data-bs-toggle="modal"
-    data-bs-target="#confirmationModal" 
-    @click="addContent"> Toevoegen </TextButton>
+      class="button mb-3 mb-md-0 me-md-2"
+      data-bs-toggle="modal"
+      data-bs-target="#confirmationModal"
+      @click="addContent"
+    >
+      Content toevoegen
+    </TextButton>
 
-    <TextButton :to="{ name: 'content.overview' }" display-style="tertiary">
+    <TextButton :to="{ name: 'knowledgeBase.overview' }" display-style="secondary">
       Annuleren
     </TextButton>
   </div>
