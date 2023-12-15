@@ -9,3 +9,8 @@ export interface User {
   emailAddress: string,
   fullName: string
 }
+
+export interface SimpleUSer {
+  userID: string,
+  fullName: string,
+}
