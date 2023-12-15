@@ -195,6 +195,7 @@
 
           <div v-if="accessLevel === 'restricted'" class="pb-3 col-lg-10">
             <label class="pb-2" for="user"> Welke gebruikers mogen uw content zien</label>
+
             <UserSelect/>
           </div>
         </div>
@@ -202,6 +203,7 @@
         <div v-if="accessLevel === 'restricted'" class="col-lg-6">
           <div class="pb-3 col-lg-10">
             <label class="pb-2" for="company"> Welke bedrijven mogen uw content zien</label>
+
             <CompanySelect/>
           </div>
         </div>
