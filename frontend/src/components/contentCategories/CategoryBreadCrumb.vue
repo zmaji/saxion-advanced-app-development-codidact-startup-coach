@@ -41,7 +41,7 @@
 
 <template>
   <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
+    <ol class="breadcrumb mb-0">
       <li class="breadcrumb-item">
         <RouterLink :to="{ name: 'knowledgeBase.overview' }">
           Kennisbank

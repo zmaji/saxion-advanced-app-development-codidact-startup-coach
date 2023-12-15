@@ -10,12 +10,13 @@
   import {
     CategoryBreadCrumb,
     ContentCategoryNavItem,
+    ContentItem,
     PageTitle,
     SecondaryTitle,
-    SearchBar
+    SearchBar,
+    IconButton
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
-  import ContentItem from '@/components/content/ContentItem.vue';
 
   const categories: Ref<Category[]> = ref<Category[]>([]);
   const contents: Ref<Content[]> = ref<Content[]>([]);
@@ -68,7 +69,18 @@
 <template>
   <PageTitle>De kennisbank</PageTitle>
 
-  <CategoryBreadCrumb/>
+  <div class="d-flex flex-row flex-wrap align-items-center">
+    <CategoryBreadCrumb/>
+
+    <IconButton
+      icon="plus"
+      type="primary"
+      display-style="secondary"
+      :render-as-circle="true"
+      :to="{ name: 'content.create' }"
+      class="ms-3"
+    />
+  </div>
 
   <SecondaryTitle>Zoeken en filteren</SecondaryTitle>
 
