@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { User } from '@/typings/user';
+  import type { User } from '@/typings/User';
 
   import { RouterLink, useRoute } from 'vue-router'
   import { computed, ref } from 'vue';

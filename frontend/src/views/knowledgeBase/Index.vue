@@ -63,7 +63,6 @@
     fetchCategories();
     fetchContent();
   });
-
 </script>
 
 <template>

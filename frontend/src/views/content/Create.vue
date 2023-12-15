@@ -2,11 +2,12 @@
   import type { Label } from '@/typings/Label';
   import type { Ref } from 'vue';
   import type { User } from '@/typings/User';
+  import type { Category } from '@/typings/Category';
 
   import { onMounted, reactive, ref } from 'vue';
-  import { useTokenStore } from '../../stores/token';
   import { jwtDecode } from 'jwt-decode';
 
+  import { useTokenStore } from '@/stores/token';
   import router from '@/router/index';
   import httpService from '@/plugins/http/httpService';
   import {
@@ -19,18 +20,11 @@
   import { CompanySelect } from '@/components'
 
   const tokenStore = useTokenStore()
-  let currentUser = ref<User | null>(null)
-  let currentUserID = ref<string | undefined>('');
-  const fetchUserData = async () => {
-    try {
-      const userToken = tokenStore.getToken;
-      currentUser.value = jwtDecode(userToken);
-      currentUserID.value = currentUser.value?.userID;
-
-    } catch (error) {
-      console.error('Error fetching current userID:', error);
-    }
-  };
+  const categories: Ref<Category[]> = ref<Category[]>([]);
+  const currentUser = ref<User | null>(null)
+  const currentUserID = ref<string | undefined>('');
+  let accessLevel: Ref<string> = ref('');
+  let contentLabels: Ref<Label[]> = ref<Label[]>([]);
 
   interface NewContent {
     contentID?: string | null;
@@ -43,9 +37,6 @@
     attachment: string | null;
     createdAt: string | null;
   }
-
-  let accessLevel: Ref<string> = ref('');
-  let contentLabels: Ref<Label[]> = ref<Label[]>([])
 
   const contentTemplate: NewContent = reactive({
     contentID: null,
@@ -65,12 +56,15 @@
 
   const addContent = async () => {
     try {
-      await httpService.postRequest(
+      console.log(contentTemplate.labels)
+      const result = await httpService.postRequest(
         '/content',
         JSON.parse(JSON.stringify(contentTemplate))
       );
 
-      navigateToContentOverview();
+      if (result) {
+        // navigateToContentOverview();
+      }
 
     } catch (error) {
       console.error(error);
@@ -78,11 +72,36 @@
   }
 
   const navigateToContentOverview = () => {
-    router.push({ name: 'content.overview' })
+    router.push({ name: 'knowledgeBase.overview' })
   }
 
-  onMounted(fetchUserData);
+  const fetchUserData = async () => {
+    try {
+      const userToken = tokenStore.getToken;
+      currentUser.value = jwtDecode(userToken);
+      currentUserID.value = currentUser.value?.userID;
 
+    } catch (error) {
+      console.error('Error fetching current userID:', error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await httpService.getRequest<Category[]>('/categories/flattened', false);
+
+      if (response && response.data) {
+        categories.value = response.data;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  onMounted(() => {
+    fetchCategories();
+    fetchUserData();
+  });
 </script>
 
 <template>
@@ -113,9 +132,7 @@
           <label class="pb-2" for="category">Categorie</label>
           <select class="form-select" id="category" v-model="contentTemplate.category">
             <option selected>Selecteer een categorie</option>
-            <option value="Software">Software</option>
-            <option value="Zorg">Zorg</option>
-            <option value="Business">Business</option>
+            <option v-for="(category, key) in categories" :key="key" :value="category">{{ category.name }}</option>
           </select>
         </div>
 
