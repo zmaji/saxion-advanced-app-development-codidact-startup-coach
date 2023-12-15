@@ -32,8 +32,8 @@
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  watch(() => route.params.categoryID, async (newVal, oldVal) => {
-    if (newVal) {
+  watch(() => route.params.categoryID, async (currentCategory) => {
+    if (currentCategory) {
       await fetchCategories();
     }
   });
