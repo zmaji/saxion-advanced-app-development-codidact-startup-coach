@@ -6,6 +6,7 @@
 
   import { onMounted, reactive, ref } from 'vue';
   import { jwtDecode } from 'jwt-decode';
+  import { toast } from 'vue3-toastify';
 
   import { useTokenStore } from '@/stores/token';
   import router from '@/router/index';
@@ -52,23 +53,34 @@
 
   const addContent = async () => {
     try {
-      console.log(contentTemplate.labels)
       const result = await httpService.postRequest(
         '/content',
         JSON.parse(JSON.stringify(contentTemplate))
       );
 
-      if (result) {
-        // navigateToContentOverview();
-      }
+      if (result.status === 200) {
+        toast.success('Content succesvol toegevoegd!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
 
+        setTimeout(() => {
+          navigateToContentOverview();
+        }, 2000);
+      } else {
+        toast.warning('Er ging iets fout', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
     } catch (error) {
+      toast.error('Er ging iets fout', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
       console.error(error);
     }
   }
 
   const navigateToContentOverview = () => {
-    router.push({ name: 'knowledgeBase.overview' })
+    router.push({ name: 'knowledgeBase.overview' });
   }
 
   const fetchUserData = async () => {
@@ -200,8 +212,6 @@
   <div class="d-flex flex-md-row flex-column flex-wrap">
     <TextButton 
       class="button mb-3 mb-md-0 me-md-2"
-      data-bs-toggle="modal"
-      data-bs-target="#confirmationModal"
       @click="addContent"
     >
       Content toevoegen
@@ -211,24 +221,6 @@
       Annuleren
     </TextButton>
   </div>
-
-  <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmationModal">Gelukt !</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Uw content is succesvol toegevoegd !
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-        @click="navigateToContentOverview">Prima</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 </template>
 
