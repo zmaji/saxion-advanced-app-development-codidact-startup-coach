@@ -32,8 +32,8 @@
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  watch(() => route.params.categoryID, async (newVal, oldVal) => {
-    if (newVal) {
+  watch(() => route.params.categoryID, async (currentCategory) => {
+    if (currentCategory) {
       await fetchCategories();
     }
   });
@@ -41,7 +41,7 @@
 
 <template>
   <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
+    <ol class="breadcrumb mb-0">
       <li class="breadcrumb-item">
         <RouterLink :to="{ name: 'knowledgeBase.overview' }">
           Kennisbank

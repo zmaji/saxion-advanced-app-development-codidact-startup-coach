@@ -1,9 +1,14 @@
 <script setup lang="ts">
   import type { Label } from '@/typings/Label';
   import type { Ref } from 'vue';
+  import type { User } from '@/typings/User';
+  import type { Category } from '@/typings/Category';
 
-  import { reactive, ref } from 'vue';
+  import { onMounted, reactive, ref } from 'vue';
+  import { jwtDecode } from 'jwt-decode';
+  import { toast } from 'vue3-toastify';
 
+  import { useTokenStore } from '@/stores/token';
   import router from '@/router/index';
   import httpService from '@/plugins/http/httpService';
   import {
@@ -15,24 +20,28 @@
   import { LabelSelect } from '@/components'
   import { CompanySelect } from '@/components'
 
+  const tokenStore = useTokenStore()
+  const categories: Ref<Category[]> = ref<Category[]>([]);
+  const currentUser = ref<User | null>(null)
+  const currentUserID = ref<string | undefined>('');
+  let accessLevel: Ref<string> = ref('public');
+  let contentLabels: Ref<Label[]> = ref<Label[]>([]);
+
   interface NewContent {
     contentID?: string | null;
-    user: string | null;
+    user: string | undefined;
     title: string | null;
-    description: string | number | string[] | undefined;
+    description: string;
     category: string | null;
-    labels: Label[] | null;
+    labels: Label[];
     accessLevel: string | null;
     attachment: string | null;
     createdAt: string | null;
   }
 
-  let accessLevel: Ref<string> = ref('');
-  let contentLabels: Ref<Label[]> = ref<Label[]>([])
-
   const contentTemplate: NewContent = reactive({
     contentID: null,
-    user: null,
+    user: currentUserID,
     title: null,
     description: '',
     category: null,
@@ -40,143 +49,181 @@
     accessLevel: accessLevel,
     attachment: null,
     createdAt: null,
-  })
-
-  const addSelectedLabels = (selectedLabels: Label[]) => {
-    contentLabels.value = selectedLabels;
-  }
+  });
 
   const addContent = async () => {
     try {
-      console.log(JSON.parse(JSON.stringify(contentTemplate)));
-
-      await httpService.postRequest(
+      const result = await httpService.postRequest(
         '/content',
         JSON.parse(JSON.stringify(contentTemplate))
       );
 
-      navigateToContentOverview();
+      if (result.status === 200) {
+        toast.success('Content succesvol toegevoegd!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
 
+        setTimeout(() => {
+          navigateToContentOverview();
+        }, 2000);
+      } else {
+        toast.warning('Er ging iets fout', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
     } catch (error) {
+      toast.error('Er ging iets fout', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
       console.error(error);
     }
   }
 
   const navigateToContentOverview = () => {
-    router.push({ name: 'content.overview' })
+    router.push({ name: 'knowledgeBase.overview' });
   }
 
+  const fetchUserData = async () => {
+    try {
+      const userToken = tokenStore.getToken;
+      currentUser.value = jwtDecode(userToken);
+      currentUserID.value = currentUser.value?.userID;
+
+    } catch (error) {
+      console.error('Error fetching current userID:', error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await httpService.getRequest<Category[]>('/categories/flattened', false);
+
+      if (response && response.data) {
+        categories.value = response.data;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  onMounted(() => {
+    fetchCategories();
+    fetchUserData();
+  });
 </script>
 
 <template>
   <PageTitle>Content Toevoegen</PageTitle>
 
-  <p>Pad naar categorie !</p>
+  <form class="row g-2 g-lg-3">
+    <div class="col col-lg-6">
+      <SecondaryTitle>Algemene gegevens</SecondaryTitle>
 
-  <div class="row row-cols-2 g-2 g-lg-3">
-    <div class="col">
-      <SecondaryTitle> Algemene gegevens </SecondaryTitle>
+      <div class="pb-3 col-lg-10">
+        <label for="content-title" class="form-label">Titel</label>
 
-      <form>
-        <div class="pb-3 col-lg-10">
-          <label for="title" class="form-label">Titel</label>
+        <input
+          v-model="contentTemplate.title"
+          type="text"
+          class="form-control"
+          id="content-title"
+          placeholder="Vul een titel in"
+        />
+      </div>
 
-          <input v-model="contentTemplate.title" type="text" class="form-control" id="title"
-            placeholder="Bijvoorbeeld: Mijn Leuke Titel" />
-        </div>
+      <div class="pb-3 col-lg-10">
+        <label for="content-description" class="form-label">Beschrijving</label>
 
-        <div class="pb-3 col-lg-10">
-          <label for="description" class="form-label">Beschrijving</label>
+        <textarea
+          v-model="contentTemplate.description"
+          type="text"
+          class="form-control"
+          id="content-description"
+          placeholder="Vul een beschrijving in"
+          rows="5"
+          style="resize: none"
+        />
+      </div>
 
-          <!-- <textarea v-model="contentTemplate.description" type="text" class="form-control" id="description"
-            placeholder="Bijvoorbeeld: Mijn Content is handig !" rows="5" style="resize: none" /> -->
-        </div>
+      <div class="pb-3 col-lg-10">
+        <label class="pb-2" for="category-select">Categorie</label>
 
-        <div class="pb-3 col-lg-10">
-          <label class="pb-2" for="category">Categorie</label>
-          <select class="form-select" id="category" v-model="contentTemplate.category">
-            <option selected>Selecteer een categorie</option>
-            <option value="Software">Software</option>
-            <option value="Zorg">Zorg</option>
-            <option value="Business">Business</option>
-          </select>
-        </div>
+        <select class="form-select" id="category-select" v-model="contentTemplate.category">
+          <option selected :value="null" disabled>Selecteer een categorie</option>
 
-        <div class="pb-3 col-lg-10">
-          <label for="formFile" class="form-label">Bijlage</label>
+          <option
+            v-for="(category, key) in categories"
+            :key="key"
+            :value="category.categoryID"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
 
-          <input class="form-control" type="file" id="formFile" />
-        </div>
-      </form>
+      <div class="pb-3 col-lg-10">
+        <label class="form-label" for="content-file">Bijlage</label>
+
+        <input class="form-control" type="file" id="content-file" />
+      </div>
     </div>
 
-    <div class="col">
+    <div class="col col-lg-6">
       <SecondaryTitle> Content labels </SecondaryTitle>
 
-      <label class="form-label">Content labels</label>
-      <LabelSelect :model-value="contentLabels" @update:modelValue="addSelectedLabels" />
+      <div class="pb-3 col-lg-10">
+        <label class="form-label">Content labels</label>
+
+        <LabelSelect v-model="contentTemplate.labels"/>
+      </div>
     </div>
 
     <div class="col">
       <SecondaryTitle> Toegangsniveau </SecondaryTitle>
-    </div>
 
-    <div class="col">
-      <!-- Een lege col om de divs te alignen  -->
-    </div>
-    <div class="col">
-      <div class="pb-3 col-lg-10">
-        <label class="pb-2" for="accessLevel">Zichtbaarheid</label>
-        <select class="form-select" id="accessLevel" v-model="accessLevel">
-          <option selected value="">Selecteer toegangsniveau (Standaard Openbaar)</option>
-          <option value="private">Privé</option>
-          <option value="restricted">Beperkt</option>
-          <option value="public">Openbaar</option>
-        </select>
+      <div class="row g-2 g-lg-3">
+        <div class="col-lg-6">
+          <div class="pb-3 col-lg-10">
+            <label class="pb-2" for="content-access-level">Zichtbaarheid (Standaard Openbaar)</label>
+
+            <select class="form-select" id="content-access-level" v-model="accessLevel">
+              <option selected value="public">Openbaar</option>
+              <option value="private">Privé</option>
+              <option value="restricted">Beperkt</option>
+            </select>
+          </div>
+
+          <div v-if="accessLevel === 'restricted'" class="pb-3 col-lg-10">
+            <label class="pb-2" for="user"> Welke gebruikers mogen uw content zien</label>
+
+            <UserSelect/>
+          </div>
+        </div>
+
+        <div v-if="accessLevel === 'restricted'" class="col-lg-6">
+          <div class="pb-3 col-lg-10">
+            <label class="pb-2" for="company"> Welke bedrijven mogen uw content zien</label>
+
+            <CompanySelect/>
+          </div>
+        </div>
       </div>
     </div>
+  </form>
 
-    <div class="col">
-      <div v-if="accessLevel === 'restricted'">
-        <label class="pb-2" for="company"> Welke bedrijven mogen uw content zien</label>
-        <CompanySelect />
-      </div>
-    </div>
-
-    <div class="col">
-      <div v-if="accessLevel === 'restricted'">
-        <label class="pb-2" for="user"> Welke gebruikers mogen uw content zien</label>
-        <UserSelect />
-      </div>
-    </div>
-
-  </div>
   <div class="d-flex flex-md-row flex-column flex-wrap">
-    <TextButton class="button mb-3 mb-md-0 me-md-2" data-bs-toggle="modal" data-bs-target="#confirmationModal"
-      @click="addContent"> Toevoegen </TextButton>
+    <TextButton 
+      class="button mb-3 mb-md-0 me-md-2"
+      @click="addContent"
+    >
+      Content toevoegen
+    </TextButton>
 
-    <TextButton :to="{ name: 'content.overview' }" display-style="tertiary">
+    <TextButton :to="{ name: 'knowledgeBase.overview' }" display-style="secondary">
       Annuleren
     </TextButton>
   </div>
 
-  <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="confirmationModal">Gelukt !</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Uw content is succesvol toegevoegd !
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
-            @click="navigateToContentOverview">Prima</button>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <style scoped></style>

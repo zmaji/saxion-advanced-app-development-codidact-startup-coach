@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { User } from '@/typings/user';
+  import type { User } from '@/typings/User';
 
   import { RouterLink, useRoute } from 'vue-router'
   import { computed, ref } from 'vue';
@@ -51,11 +51,7 @@
       <div class="collapse navbar-collapse justify-content-end pe-5" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <RouterLink :to="{ name: 'content.overview' }" class="nav-link">Kennisbank</RouterLink>
-          </li>
-
-          <li class="nav-item">
-            <RouterLink :to="{ name: 'knowledgeBase.overview' }" class="nav-link">categorieën</RouterLink>
+            <RouterLink :to="{ name: 'knowledgeBase.overview' }" class="nav-link">Kennisbank</RouterLink>
           </li>
         </ul>
       </div>

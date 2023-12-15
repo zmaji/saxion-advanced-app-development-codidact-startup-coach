@@ -3,43 +3,36 @@
   import type { Ref } from 'vue';
   
   import VueMultiselect from 'vue-multiselect'
-  import { ref } from 'vue';
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import { ref, onMounted } from 'vue';
 
-  import { SmallHeader } from '@/components';
+  import httpService from '@/plugins/http/httpService';
 
   let selectedCompanies: Ref<Company[]> = ref([])
-  let companyOptions: Ref<Company[]> = ref<Company[]>([
-    {
-      companyID: '1',
-      name: 'Saxion',
-      location: ''
-    },
-    {
-      companyID: '2',
-      name: 'Inversable',
-      location: ''
-    },
-    {
-      companyID: '3',
-      name: 'Topicus',
-      location: ''
-    },
-    {
-      companyID: '4',
-      name: 'Google',
-      location: ''
-    },
-  ]);
+  let companies: Ref<Company[]> = ref<Company[]>([]);
 
-  const removeCompany = (selectedCompany: Company): void => {
-    const index = selectedCompanies.value.findIndex(company => company.companyID === selectedCompany.companyID);
+  interface Props {
+    modelValue?: Company[]
+  }
 
-    if (index !== -1) {
-      selectedCompanies.value.splice(index, 1);
+  withDefaults(defineProps<Props>(), {
+    modelValue: undefined
+  });
+
+  const fetchCompanies = async () => {
+    try {
+      const response = await httpService.getRequest<Company[]>('/companies', false);
+
+      if (response && response.data) {
+        companies.value = response.data;
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
 
+  onMounted(() => {
+    fetchCompanies();
+  });
 </script>
 
 <template>
@@ -49,30 +42,9 @@
     placeholder="Selecteer bedrijven om uit te nodigen"
     label="name"
     track-by="companyID"
-    class="pb-2"
-    :options="companyOptions"
+    :options="companies"
     :multiple="true"
     :taggable="true"
     :close-on-select="false"
   />
-
-  <SmallHeader>Geselecteerde bedrijven</SmallHeader>
-
-  <div class="d-flex flex-direction-row flex-wrap">
-    <div
-      v-for="(company,key) in selectedCompanies"
-      :key="key"
-      class="bg-secondary text-white px-3 py-1 rounded-pill me-2 mb-2"
-    >
-      {{company.name}}
-
-      <FontAwesomeIcon icon="circle-xmark" class="ps-2 label-icon" @click="removeCompany(company)"/>
-    </div>
-  </div>
 </template>
-
-<style scoped>
-  .label-icon:hover {
-    cursor: pointer;
-  }
-</style>

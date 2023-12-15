@@ -10,6 +10,7 @@ import companyAnalysesRoutes from '../routes/CompanyAnalysis';
 import contentRoutes from '../routes/Content';
 import categoryRoutes from '../routes/Category';
 import labelRoutes from '../routes/Label';
+import userRoutes from '../routes/User';
 
 const createServer = () => {
   const app: Express = express();
@@ -39,6 +40,7 @@ const createServer = () => {
   app.use('/content', contentRoutes);
   app.use('/categories', categoryRoutes);
   app.use('/labels', labelRoutes);
+  app.use('/users', userRoutes);
 
   return app;
 };

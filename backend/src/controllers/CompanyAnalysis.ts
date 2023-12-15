@@ -1,12 +1,12 @@
 import type { CompanyAnalysis } from '../typings/CompanyAnalysis';
 
-import CompanyAnalysisModel from '../models/CompanyAnalysis';
+import companyAnalysisModel from '../models/CompanyAnalysis';
 import { v4 as uuidv4 } from 'uuid';
 import { removeIdField } from '../helpers/removeMongoID';
 
 const getCompanyAnalyses = async (): Promise<CompanyAnalysis[]> => {
   try {
-    return await CompanyAnalysisModel.find({}, { _id: 0 });
+    return await companyAnalysisModel.find({}, { _id: 0 });
   } catch (error) {
     console.error('Something went wrong getting company analyses:', error);
     throw error;
@@ -15,7 +15,7 @@ const getCompanyAnalyses = async (): Promise<CompanyAnalysis[]> => {
 
 const getCompanyAnalysis = async (companyAnalysisID: string): Promise<CompanyAnalysis | null> => {
   try {
-    const result = await CompanyAnalysisModel.findOne({ companyAnalysisID }, { _id: 0 });
+    const result = await companyAnalysisModel.findOne({ companyAnalysisID }, { _id: 0 });
 
     return result || null;
   } catch (error) {
@@ -24,12 +24,11 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<CompanyAna
   }
 };
 
-// eslint-disable-next-line max-len
 const createCompanyAnalysis = async (companyAnalysisData: CompanyAnalysis): Promise<CompanyAnalysis | null> => {
   try {
     companyAnalysisData.companyAnalysisID = uuidv4();
 
-    const newCompanyAnalysis = new CompanyAnalysisModel(companyAnalysisData);
+    const newCompanyAnalysis = new companyAnalysisModel(companyAnalysisData);
     const companyAnalysis = await newCompanyAnalysis.save();
 
     return removeIdField(companyAnalysis);
@@ -39,10 +38,10 @@ const createCompanyAnalysis = async (companyAnalysisData: CompanyAnalysis): Prom
   }
 };
 
-const CompanyAnalysisController = {
+const companyAnalysisController = {
   getCompanyAnalyses,
   getCompanyAnalysis,
   createCompanyAnalysis,
 };
 
-export default CompanyAnalysisController;
+export default companyAnalysisController;

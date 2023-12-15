@@ -1,10 +1,8 @@
 import type { Label } from './Label';
 
-import { User } from './User';
-
 export interface Content {
     contentID: string;
-    user: User;
+    user: string;
     title: string;
     description: string;
     category: string;

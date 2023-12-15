@@ -10,3 +10,8 @@ export interface User {
   fullName: string,
   roles: string[]
 }
+
+export interface SimpleUser {
+  userID: string,
+  fullName: string,
+}

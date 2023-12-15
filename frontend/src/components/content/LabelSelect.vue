@@ -2,11 +2,10 @@
   import type { Label } from '@/typings/Label';
   import type { Ref } from 'vue';
 
-  import { ref, watch } from 'vue'
+  import { onMounted, ref, watch } from 'vue'
   import VueMultiselect from 'vue-multiselect'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-  import { SmallHeader } from '@/components';
+  import httpService from '@/plugins/http/httpService';
 
   interface Props {
     modelValue?: Label[]
@@ -16,77 +15,75 @@
     modelValue: undefined
   });
 
-  const emit = defineEmits<{ (event: 'update:modelValue', value: Label[]): void, }>();
+  const emit = defineEmits<{(event: 'update:modelValue', value: Label[]): void,}>();
 
-  let selectedLabels: Ref<Label[]> = ref([])
-  let labelOptions: Ref<Label[]> = ref<Label[]>([
-    {
-      labelID: '1',
-      name: 'Sjabloon',
-      isDefault: false
-    },
-    {
-      labelID: '2',
-      name: 'Document',
-      isDefault: false
-    },
-    {
-      labelID: '3',
-      name: 'Pitch',
-      isDefault: false
-    },
-    {
-      labelID: '4',
-      name: 'Presentatie',
-      isDefault: false
-    },
-  ]);
+  let selectedLabels: Ref<Label[]> = ref<Label[]>([]);
+  let labels: Ref<Label[]> = ref<Label[]>([]);
 
-  const addLabel = (newLabel: string) => {
-    // axios with httpservice request to save new label, also check if it already exists
-    const result = {
-      labelID: '' + labelOptions.value.length + 1,
-      name: newLabel,
+  const addLabel = (newLabelName: string) => {
+    const newLabel = {
+      labelID: '',
+      name: newLabelName,
       isDefault: false
     };
-
-    labelOptions.value.push(result);
-    selectedLabels.value.push(result);
+    postLabel(newLabel);
+    fetchLabels();
   }
 
   watch(selectedLabels, () => {
     emit('update:modelValue', selectedLabels.value);
   }, { deep: true });
 
-  const removeLabel = (selectedLabel: Label): void => {
-    const index = selectedLabels.value.findIndex(label => label.labelID === selectedLabel.labelID);
+  const postLabel = async (newLabel: Label) => {
+    try {
+      const response = await httpService.postRequest(
+        '/labels',
+        newLabel
+      );
 
-    if (index !== -1) {
-      selectedLabels.value.splice(index, 1);
+      let label: Label = response.data as Label;
+      await fetchAddedLabel(label.labelID);
+    } catch (error) {
+      console.log(error);
     }
-  };
+  }
 
+  const fetchLabels = async () => {
+    labels.value = []
+    const fetchedLabels = await httpService.getRequest<Label[]>(
+      '/labels'
+    )
+    labels.value = fetchedLabels.data;
+  }
+
+  const fetchAddedLabel = async (labelID: string) => {
+    const result = await httpService.getRequest<Label>(
+      `/labels/${labelID}`
+    )
+
+    if (result) {
+      const label = result.data;
+      selectedLabels.value.push(label);
+    }
+  }
+
+  onMounted(() => {
+    fetchLabels();
+  });
 </script>
 
 <template>
-  <VueMultiselect v-model="selectedLabels" tag-placeholder="Voeg deze label nieuw toe"
-    placeholder="Selecteer de gewenste content labels" label="name" track-by="labelID" class="pb-2"
-    :options="labelOptions" :multiple="true" :taggable="true" :close-on-select="false" @tag="addLabel" />
-
-  <SmallHeader>Geselecteerde labels</SmallHeader>
-
-  <div class="d-flex flex-direction-row flex-wrap">
-    <div v-for="(label, key) in selectedLabels" :key="key"
-      class="bg-secondary text-white px-3 py-1 rounded-pill me-2 mb-2">
-      {{ label.name }}
-
-      <FontAwesomeIcon icon="circle-xmark" class="ps-2 label-icon" @click="removeLabel(label)" />
-    </div>
-  </div>
+  <VueMultiselect
+    v-model="selectedLabels"
+    tag-placeholder="Voeg deze label nieuw toe"
+    placeholder="Selecteer de gewenste content labels"
+    label="name"
+    track-by="labelID"
+    class="pb-2"
+    :options="labels"
+    :multiple="true"
+    :taggable="true"
+    :close-on-select="false"
+    @tag="addLabel"
+  />
 </template>
-
-<style scoped>
-.label-icon:hover {
-  cursor: pointer;
-}
-</style>
