@@ -2,9 +2,9 @@
     {
         "contentID":"ea0abe91-b28d-47d0-a6ac-e9e4e3e8a8ae",
         "user": "289f486d-38a2-43c4-b475-af7394890a8c",
-        "title": "Lorem Ipsum",
+        "title": "Bericht na diepte-interviews in de planning voor volgende week!",
         "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        "category": "Sample Category",
+        "category": "6af3e807-a225-4490-83aa-3fbca8050ea8",
         "accessLevel": "private",
         "attachment": "example.pdf",
         "createdAt": "2023-12-12T08:00:00Z"
@@ -12,9 +12,9 @@
     {
         "contentID":"31bb0c9b-39ff-44e3-8e20-09b2e3c99b9a",
         "user": "289f486d-38a2-43c4-b475-af7394890a8c",
-        "title": "Sample Title",
+        "title": "Terugblik en Toekomst: Bericht over Boeiend Interview en Nieuwe Gesprekken!",
         "description": "This is a test description.",
-        "category": "Testing",
+        "category": "75364dfa-376a-4173-8b1d-816575077461",
         "accessLevel": "public",
         "attachment": "sample_image.jpg",
         "createdAt": "2023-12-12T09:15:00Z"
@@ -22,9 +22,9 @@
     {
         "contentID":"bd4d00da-c6c5-4a8f-a811-acc89f91a4ab",
         "user": "289f486d-38a2-43c4-b475-af7394890a8c",
-        "title": "Test Data",
+        "title": "Save the Date: Bericht over Panelgesprek en Communicatiestrategieën!",
         "description": "Just some placeholder text for testing purposes.",
-        "category": "Dummy",
+        "category": "75364dfa-376a-4173-8b1d-816575077461",
         "accessLevel": "private",
         "attachment": "example.docx",
         "createdAt": "2023-12-12T10:30:00Z"
@@ -32,9 +32,9 @@
     {
         "contentID":"e97403bf-2789-43da-afda-866522c819da",
         "user": "12c20d6e-1bc6-4d7a-acaf-2021afc7a242",
-        "title": "Random Title",
+        "title": "Bericht van de Expert: Afspraken voor Kennisuitwisseling in de planning!",
         "description": "Random description for testing.",
-        "category": "Random",
+        "category": "b8b7187e-7335-477e-b087-219d0d95910a",
         "accessLevel": "private",
         "attachment": "random_file.txt",
         "createdAt": "2023-12-12T11:45:00Z"

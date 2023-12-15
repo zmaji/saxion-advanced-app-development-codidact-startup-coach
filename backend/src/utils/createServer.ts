@@ -9,6 +9,7 @@ import companyRoutes from '../routes/Company';
 import companyAnalysesRoutes from '../routes/CompanyAnalysis';
 import contentRoutes from '../routes/Content';
 import categoryRoutes from '../routes/Category';
+import labelRoutes from '../routes/Label';
 
 const createServer = () => {
   const app: Express = express();
@@ -37,6 +38,7 @@ const createServer = () => {
   app.use('/companyAnalyses', companyAnalysesRoutes);
   app.use('/content', contentRoutes);
   app.use('/categories', categoryRoutes);
+  app.use('/labels', labelRoutes);
 
   return app;
 };

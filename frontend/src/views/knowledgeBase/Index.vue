@@ -11,7 +11,8 @@
     CategoryBreadCrumb,
     ContentCategoryNavItem,
     PageTitle,
-    SecondaryTitle
+    SecondaryTitle,
+    SearchBar
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
   import ContentItem from '@/components/content/ContentItem.vue';
@@ -49,10 +50,20 @@
     }
   }
 
+  const updateContent = async () => {
+    standardContents.value = contents.value.filter(
+      (content) => content.labels.find((label: Label) => label.name === 'Standaard sjabloon'));
+
+    contents.value = contents.value.filter(
+      (content) => !content.labels.find((label: Label) => label.name === 'Standaard sjabloon')
+    );
+  }
+
   onMounted(() => {
     fetchCategories();
     fetchContent();
   });
+
 </script>
 
 <template>
@@ -62,7 +73,9 @@
 
   <SecondaryTitle>Zoeken en filteren</SecondaryTitle>
 
-  <div class="row row-cols-2 g-4 pt-3 pb-4">
+  <SearchBar v-model="contents" @update:modelValue="updateContent()"/>
+
+  <div v-if="standardContents && standardContents.length > 0" class="row row-cols-2 g-4 pb-4">
     <ContentItem
       v-for="(content, key) in standardContents"
       :key="key"
@@ -70,9 +83,13 @@
     />
   </div>
 
-  <SecondaryTitle>Overige posts</SecondaryTitle>
+  <SecondaryTitle
+    v-if="(contents && contents.length > 0) && (standardContents && standardContents.length > 0)"
+  >
+    Overige posts
+  </SecondaryTitle>
 
-  <div class="row row-cols-2 g-4 pt-3 pb-4">
+  <div class="row row-cols-2 g-4 pt-2 pb-4">
     <ContentItem
       v-for="(content, key) in contents"
       :key="key"
@@ -80,8 +97,8 @@
     />
   </div>
 
-  <Teleport to="#knowledge-base-nav">
-    <div class="accordion accordion-flush m-0 p-0" id="categories-accordion">
+  <Teleport to="#sidebar-nav">
+    <div v-if="categories && categories.length > 0" class="accordion accordion-flush m-0 p-0" id="categories-accordion">
       <div class="accordion-item m-0 p-0" v-for="(category, key) in categories" :key="key">
         <ContentCategoryNavItem
           :category="category"

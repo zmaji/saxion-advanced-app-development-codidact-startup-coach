@@ -6,22 +6,60 @@ import contentModel from '../models/Content';
 import contentLabelModel from '../models/ContentLabel';
 import labelModel from '../models/Label';
 
-const getAllContent = async (): Promise<Content[]> => {
+interface Filter {
+  title?: { $regex: string; $options: string } | string;
+  contentID?: { $in: string[] };
+  category?: string;
+}
+
+const getAllContent = async (
+    title: string,
+    labels: string[],
+    category: string,
+): Promise<Content[]> => {
   try {
-    const result: Content[] = await contentModel.find({}, { _id: 0 }).lean();
+    let labelIDs: string[] = [];
+
+    if (labels && labels.length > 0) {
+      const labelResults: Label[] = await labelModel.find({ name: { $in: labels } }, { labelID: 1 });
+      labelIDs = labelResults.map((label) => label.labelID);
+    }
+
+    const filter: Filter = {};
+
+    if (title) {
+      filter.title = { $regex: title, $options: 'i' };
+    }
+
+    if (labelIDs.length > 0) {
+      const contentLabelResults: ContentLabel[] = await contentLabelModel.find(
+          { labelID: { $in: labelIDs } },
+          { contentID: 1 },
+      );
+      const contentIDs = contentLabelResults.map((contentLabel) => contentLabel.contentID);
+
+      filter.contentID = { $in: contentIDs };
+    }
+
+    if (category) {
+      filter.category = category;
+    }
+
+    const result: Content[] = await contentModel.find(filter, { _id: 0 }).lean();
     const contentLabels: ContentLabel[] = await contentLabelModel.find({}, { _id: 0 });
-    const labels: Label[] = await labelModel.find({}, { _id: 0 });
+    const labelsData: Label[] = await labelModel.find({}, { _id: 0 });
 
     if (result) {
       const contents: Content[] = [];
 
       for (const content of result) {
         const labelsOfContent = contentLabels.filter(
-            (contentLabel: ContentLabel) => contentLabel.contentID === content.contentID);
+            (contentLabel: ContentLabel) => contentLabel.contentID === content.contentID,
+        );
         const relatedLabels: Label[] = [];
 
         for (const contentLabel of labelsOfContent) {
-          const label = labels.find((label: Label) => label.labelID === contentLabel.labelID);
+          const label = labelsData.find((label: Label) => label.labelID === contentLabel.labelID);
 
           if (label) {
             relatedLabels.push(label);

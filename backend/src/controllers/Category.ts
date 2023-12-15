@@ -23,6 +23,15 @@ const getAllCategories = async (): Promise<Category[]> => {
   }
 };
 
+const getAllFlattenedCategories = async (): Promise<Category[]> => {
+  try {
+    return await categoryModel.find({}, { _id: 0 }).lean();
+  } catch (error) {
+    console.error('Something went wrong getting all flattened categories:', error);
+    throw error;
+  }
+};
+
 const getAllParentCategories = async (categoryID: string): Promise<Category | null> => {
   try {
     const category = await categoryModel.findOne({ categoryID }, { _id: 0 });
@@ -108,6 +117,7 @@ const categoryController = {
   getAllParentCategories,
   getCategoryById,
   getSubcategoriesByParentId,
+  getAllFlattenedCategories,
 };
 
 export default categoryController;
