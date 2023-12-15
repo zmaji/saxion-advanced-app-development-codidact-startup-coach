@@ -1,8 +1,8 @@
-import type { SimpleUSer } from '../typings/User';
+import type { SimpleUser } from '../typings/User';
 
 import userModel from '../models/User';
 
-const getAllUsers = async (): Promise<SimpleUSer[]> => {
+const getAllUsers = async (): Promise<SimpleUser[]> => {
   try {
     return await userModel.find({}, { userID: 1, fullName: 1, _id: 0 });
   } catch (error) {

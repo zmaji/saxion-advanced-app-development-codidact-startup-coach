@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { SimpleUSer } from '@/typings/User';
+  import type { SimpleUser } from '@/typings/User';
   import type { Ref } from 'vue';
   
   import VueMultiselect from 'vue-multiselect'
@@ -7,12 +7,12 @@
 
   import httpService from '@/plugins/http/httpService';
 
-  let selectedUsers: Ref<SimpleUSer[]> = ref([])
-  let users: Ref<SimpleUSer[]> = ref<SimpleUSer[]>([]);
+  let selectedUsers: Ref<SimpleUser[]> = ref([])
+  let users: Ref<SimpleUser[]> = ref<SimpleUser[]>([]);
 
   const fetchUsers = async () => {
     try {
-      const response = await httpService.getRequest<SimpleUSer[]>('/users', true);
+      const response = await httpService.getRequest<SimpleUser[]>('/users', true);
 
       if (response && response.data) {
         users.value = response.data;

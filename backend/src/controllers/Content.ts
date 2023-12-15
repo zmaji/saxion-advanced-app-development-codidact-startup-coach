@@ -111,6 +111,7 @@ const createContent = async (contentData: Content): Promise<Content | null> => {
         const newLabel = new labelModel(label);
 
         await newLabel.save();
+
         contentLabel = {
           contentID: contentData.contentID,
           labelID: newLabel.labelID,
