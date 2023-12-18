@@ -1,23 +1,11 @@
 [
   {
     "companyAnalysisID": "2165e04d-e505-4a43-8551-579aa182f9bc",
-    "industry": "Technology",
-    "serviceInformation": "Software development and consulting",
-    "nrOfEmployees": 2,
-    "stage": "Start-up",
-    "businessGoals": [
-      "Expand market share and increase revenue",
-      "Make the world better"
-    ],
-    "painPoints": [
-      "Customer support efficiency",
-      "Product scalability"
-    ],
-    "competitors": [
-      "Competitor A",
-      "Competitor B"
-    ],
-    "targetAudience": "Tech-savvy professionals",
-    "budget": 3000
+    "answers": [
+      "887f8dfe-caa3-4448-99e5-040dae8250e9",
+      "814987d7-637e-40e9-a5e0-e26c0d3274a6",
+      "c5a11466-b369-4a45-b6bb-59765ca470bf",
+      "a65e4fa7-e0e3-4eba-849d-e10ee519eb5c"
+    ]
   }
 ]

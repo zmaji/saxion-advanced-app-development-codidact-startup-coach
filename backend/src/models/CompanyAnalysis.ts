@@ -2,47 +2,21 @@ import type { CompanyAnalysis } from '../typings/CompanyAnalysis';
 
 import mongoose, { Schema } from 'mongoose';
 
-const companyAnalysisScheme: Schema<CompanyAnalysis> = new Schema({
+const companyAnalysisSchema: Schema<CompanyAnalysis> = new Schema({
   companyAnalysisID: {
     type: String,
     unique: true,
     immutable: true,
   },
-  industry: {
-    type: String,
-    required: true,
-  },
-  serviceInformation: {
-    type: String,
-  },
-  nrOfEmployees: {
-    type: Number,
-    required: true,
-  },
-  stage: {
-    type: String,
-    required: true,
-  },
-  businessGoals: {
+  answers: {
     type: [String],
-  },
-  painPoints: {
-    type: [String],
-  },
-  competitors: {
-    type: [String],
-  },
-  targetAudience: {
-    type: String,
-  },
-  budget: {
-    type: Number,
+    required: true,
   },
 }, {
   collection: 'companyAnalyses',
   versionKey: false,
 });
 
-const CompanyAnalysisModel = mongoose.model<CompanyAnalysis>('CompanyAnalysis', companyAnalysisScheme);
+const CompanyAnalysisModel = mongoose.model<CompanyAnalysis>('CompanyAnalysis', companyAnalysisSchema);
 
 export default CompanyAnalysisModel;

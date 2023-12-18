@@ -1,0 +1,26 @@
+[
+  {
+    "answerID": "887f8dfe-caa3-4448-99e5-040dae8250e9",
+    "questionID": "6033aa9b-7896-44e4-9bea-872af8ba7647",
+    "answer": "Ja",
+    "followUpQuestion": "6190968b-b142-43ea-a3c0-effebea9594e"
+  },
+  {
+    "answerID": "814987d7-637e-40e9-a5e0-e26c0d3274a6",
+    "questionID": "6190968b-b142-43ea-a3c0-effebea9594e",
+    "answer": "Textveld antwoord",
+    "followUpQuestion": "700dcdd4-854c-464d-a7cb-87754a6273b4"
+  },
+  {
+    "answerID": "c5a11466-b369-4a45-b6bb-59765ca470bf",
+    "questionID": "700dcdd4-854c-464d-a7cb-87754a6273b4",
+    "answer": "Nee",
+    "followUpQuestion": "c6ad0a80-c0ae-4c89-98d2-c16b21f72660"
+  },
+  {
+    "answerID": "a65e4fa7-e0e3-4eba-849d-e10ee519eb5c",
+    "questionID": "3d86ebe6-bc02-44bf-84d8-2e7c777a6d5e",
+    "answer": "Internettechnologie",
+    "followUpQuestion": "3d86ebe6-bc02-44bf-84d8-2e7c777a6d5e"
+  }
+]

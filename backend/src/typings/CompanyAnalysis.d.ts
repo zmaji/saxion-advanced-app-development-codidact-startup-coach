@@ -1,12 +1,6 @@
+import type { Answer } from './Answer';
+
 export interface CompanyAnalysis {
-  companyAnalysisID: string,
-  industry: string,
-  serviceInformation?: string,
-  nrOfEmployees: number,
-  stage: string,
-  businessGoals?: string[],
-  painPoints?: string[],
-  competitors?: string[],
-  targetAudience?: string,
-  budget?: number
+  companyAnalysisID: string
+  answers: Answer[]
 }
