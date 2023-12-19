@@ -97,7 +97,6 @@
     }
 
     if (contentTemplate.description!.length < 10) {
-      console.error('Entered description error!');
       errorMessages.value['description'] = 'De beschrijving moet minstens 10 letters lang zijn.';
 
     } else {
