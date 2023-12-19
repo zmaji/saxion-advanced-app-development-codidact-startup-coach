@@ -15,12 +15,12 @@ const questionSetSchema: Schema<QuestionSet> = new Schema({
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 }, {
   collection: 'questionSets',
   versionKey: false,

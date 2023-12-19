@@ -6,28 +6,28 @@ const questionSchema: Schema<Question> = new Schema({
   questionID: {
     type: String,
     unique: true,
-    immutable: true
+    immutable: true,
   },
   questionSetID: {
     type: String,
-    immutable: true
+    immutable: true,
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   inputType: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   requiredPhase: {
     type: [String],
-    required: true
-  }
+    required: true,
+  },
 }, {
   collection: 'questions',
   versionKey: false,

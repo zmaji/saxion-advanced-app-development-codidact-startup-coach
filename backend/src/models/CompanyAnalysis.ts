@@ -9,8 +9,8 @@ const companyAnalysisSchema: Schema<CompanyAnalysis> = new Schema({
     immutable: true,
   },
   phase: {
-    type: String
-  }
+    type: String,
+  },
 }, {
   collection: 'companyAnalyses',
   versionKey: false,

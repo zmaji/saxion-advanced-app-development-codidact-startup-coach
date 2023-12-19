@@ -6,16 +6,16 @@ const analysisSectionSchema: Schema<AnalysisSection> = new Schema({
   analysisSectionID: {
     type: String,
     unique: true,
-    immutable: true
+    immutable: true,
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 }, {
   collection: 'analysisSections',
   versionKey: false,

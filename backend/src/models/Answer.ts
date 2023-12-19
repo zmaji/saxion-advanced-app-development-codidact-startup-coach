@@ -17,7 +17,7 @@ const answerSchema: Schema<Answer> = new Schema({
     type: String,
     required: true,
     immutable: true,
-  }
+  },
 }, {
   collection: 'answers',
   versionKey: false,

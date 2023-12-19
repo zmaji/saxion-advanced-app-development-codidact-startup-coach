@@ -15,8 +15,8 @@ const questionOptionSchema: Schema<QuestionOption> = new Schema({
   },
   value: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 }, {
   collection: 'questionOptions',
   versionKey: false,
