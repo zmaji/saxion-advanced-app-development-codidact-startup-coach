@@ -19,6 +19,10 @@ CMD mongoimport --host=mongo --db=codidact-startup-coach-db --collection=compani
   echo "Categories seeded successfully" && \
   mongoimport --host=mongo --db=codidact-startup-coach-db --collection=contents --type=json --file=Contents.json --jsonArray --mode upsert --upsertFields contentID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
   echo "Content seeded successfully" && \
+  mongoimport --host=mongo --db=codidact-startup-coach-db --collection=contentUsers --type=json --file=ContentUsers.json --jsonArray --mode upsert --upsertFields userID,contentID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
+  echo "ContentUsers seeded successfully" && \
+  mongoimport --host=mongo --db=codidact-startup-coach-db --collection=contentFeedback --type=json --file=ContentFeedback.json --jsonArray --mode upsert --upsertFields feedbackID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
+  echo "ContentFeedback seeded successfully" && \
   mongoimport --host=mongo --db=codidact-startup-coach-db --collection=labels --type=json --file=Labels.json --jsonArray --mode upsert --upsertFields labelID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
   echo "Labels seeded successfully" && \
   mongoimport --host=mongo --db=codidact-startup-coach-db --collection=analysisSections --type=json --file=AnalysisSections.json --jsonArray --mode upsert --upsertFields analysisSectionID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \

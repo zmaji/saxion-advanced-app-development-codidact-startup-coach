@@ -1,10 +1,12 @@
-<!--suppress TypeScriptUnresolvedReference -->
 <script setup lang="ts">
   import type { Content } from '@/typings/Content';
   import type { Label } from '@/typings/Label';
+  import type { ContentUser, User } from '@/typings/User';
 
   import { onMounted, ref } from 'vue';
   import { useRoute } from 'vue-router';
+  import { jwtDecode } from 'jwt-decode';
+  import { toast } from 'vue3-toastify';
 
   import {
     CategoryBreadCrumb,
@@ -13,13 +15,51 @@
     PageTitle,
     SecondaryTitle,
     TextLabel,
-    IconLabel
+    TextButton,
+    IconLabel,
+    UserSelect
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
+  import { useTokenStore } from '@/stores/token';
 
   const route = useRoute();
   const loaded = ref(false);
   const content = ref<Content>();
+  const tokenStore = useTokenStore()
+  const currentUser = ref<User | null>(null)
+  const currentUserID = ref<string | undefined>('');
+  const addingMoreReviewers = ref(false);
+  const newReviewers = ref<ContentUser[]>([]);
+
+  const canReview = (): boolean => {
+    return content.value?.contentUsers?.find((user) => user.userID === currentUser.value?.userID) !== null;
+  };
+
+  const isOwner = (): boolean => {
+    return content.value?.user?.userID === currentUser.value?.userID;
+  };
+
+  const addReviewers = async () => {
+    try {
+      const response = await httpService.postRequest<ContentUser[]>(
+        `/contentUsers/${route.params.contentID}`,
+        newReviewers.value,
+        true
+      );
+
+      if (response && response.data) {
+        for (let user of response.data) {
+          content.value?.contentUsers?.push(user);
+        }
+        toast.success('Content reviewers succesvol toegevoegd!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        addingMoreReviewers.value = false;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   const fetchContent = async () => {
     try {
@@ -35,8 +75,20 @@
     }
   }
 
+  const fetchUserData = async () => {
+    try {
+      const userToken = tokenStore.getToken;
+      currentUser.value = jwtDecode(userToken);
+      currentUserID.value = currentUser.value?.userID;
+
+    } catch (error) {
+      console.error('Error fetching current userID:', error);
+    }
+  };
+
   onMounted(() => {
     fetchContent();
+    fetchUserData();
   });
 </script>
 
@@ -102,7 +154,7 @@
       </template>
     </div>
 
-    <p class="mb-0 pb-3">{{ content.description }}</p>
+    <p class="mb-0 pb-4">{{ content.description }}</p>
 
     <SecondaryTitle>Bijlage</SecondaryTitle>
 
@@ -117,8 +169,85 @@
       {{ content?.attachment }}
     </div>
 
-    <CategorySidebar/>
+    <div v-if="canReview() || isOwner()" class="row g-5 pt-4">
+      <div class="col col-lg-7">
+        <SecondaryTitle>Feedback</SecondaryTitle>
+        
+        <div
+          v-for="(feedback, key) in content.feedback"
+          :key="key"
+          class="bg-white px-4 py-3 border rounded mb-3"
+        >
+          <div class="d-flex flex-row flex-wrap justify-content-start pb-2">
+            <div class="d-flex align-items-center pe-4">
+              <IconLabel
+                icon="user"
+                type="primary"
+                display-style="secondary"
+              />
+
+              <span class="text-secondary">{{ feedback.user.fullName }}</span>
+            </div>
+
+            <DateLabel :date="feedback.createdAt" class="pe-4"/>
+          </div>
+
+          <p>{{ feedback.feedback }}</p>
+        </div>
+
+        <SecondaryTitle class="pt-3">Feedback plaatsen</SecondaryTitle>
+
+        <textarea
+          class="form-control mb-2"
+          id="contentFeedback"
+          placeholder="Vul hier uw feedback in"
+          rows="4"
+        />
+
+        <TextButton display-style="primary">Feedback plaatsen</TextButton>
+      </div>
+
+      <div v-if="isOwner()" class="col">
+        <SecondaryTitle>Reviewers</SecondaryTitle>
+
+        <div class="bg-white px-4 py-3 border rounded w-fit">
+          <div
+            v-for="(contentUser, key) in content.contentUsers"
+            :key="key"
+            class="d-flex align-items-center pb-3"
+          >
+            <IconLabel
+              icon="user"
+              type="primary"
+              display-style="secondary"
+            />
+
+            <span class="text-secondary">{{ contentUser.fullName }}</span>
+          </div>
+
+          <TextButton
+            v-show="!addingMoreReviewers"
+            @click="(addingMoreReviewers = true)"
+            display-style="secondary"
+          >
+            Toevoegen
+          </TextButton>
+
+          <UserSelect v-show="addingMoreReviewers" v-model="newReviewers"/>
+
+          <TextButton
+            v-show="addingMoreReviewers"
+            @click="addReviewers()"
+            display-style="secondary"
+          >
+            Opslaan
+          </TextButton>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <CategorySidebar/>
 </template>
 
 <style scoped>

@@ -1,5 +1,5 @@
 import type { Label } from './Label';
-import type { SimpleUser } from './User';
+import type { ContentUser, SimpleUser } from './User';
 
 export interface Content {
     contentID: string;
@@ -8,8 +8,18 @@ export interface Content {
     description: string;
     category: string;
     labels?: Label[];
+    contentUsers?: ContentUser[] | null;
+    feedback?: ContentFeedback[] | null;
     accessLevel: string;
     attachment: string;
     createdAt: string;
     editedAt?: string | null;
+}
+
+export interface ContentFeedback {
+    feedbackID: string,
+    contentID: string,
+    user: string | SimpleUser;
+    feedback: string;
+    createdAt: string;
 }

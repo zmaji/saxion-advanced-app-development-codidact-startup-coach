@@ -11,6 +11,7 @@ import contentRoutes from '../routes/Content';
 import categoryRoutes from '../routes/Category';
 import labelRoutes from '../routes/Label';
 import userRoutes from '../routes/User';
+import contentUserRoutes from '../routes/ContentUser';
 
 const createServer = () => {
   const app: Express = express();
@@ -41,9 +42,9 @@ const createServer = () => {
   app.use('/categories', categoryRoutes);
   app.use('/labels', labelRoutes);
   app.use('/users', userRoutes);
+  app.use('/contentUsers', contentUserRoutes);
 
   return app;
 };
 
 export default createServer;
-

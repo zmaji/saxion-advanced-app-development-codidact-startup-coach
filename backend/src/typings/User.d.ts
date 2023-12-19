@@ -15,3 +15,12 @@ export interface SimpleUser {
   userID: string,
   fullName: string,
 }
+
+type AccessLevel = 'view' | 'review' | 'edit';
+
+export interface ContentUser {
+  userID: string,
+  contentID: string,
+  fullName?: string
+  accessLevel: AccessLevel,
+}

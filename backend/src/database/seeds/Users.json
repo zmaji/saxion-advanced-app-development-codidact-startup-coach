@@ -23,5 +23,29 @@
     "roles": [
       "user"
     ]
+  },
+  {
+    "userID": "56823d1b-c117-408b-a52b-af03de9dcc07",
+    "company": "cb092a25-422a-468d-a959-83bcf3f2203b",
+    "userName": "Alex",
+    "emailAddress": "alexsios@paardenstaart.nl",
+    "fullName": "Alex M",
+    "password": "$2a$12$q0CXLVgH/WHjG92XoOD1feHGN0LDrgD53HFQ0/yFVpi/pD3JBM42u",
+    "secret": "zLZviOqVhZ",
+    "roles": [
+      "user"
+    ]
+  },
+  {
+    "userID": "4c78ba21-00ee-49e9-9a23-b37f5d13a5c1",
+    "company": "cb092a25-422a-468d-a959-83bcf3f2203b",
+    "userName": "Lisa",
+    "emailAddress": "lisa@w.nl",
+    "fullName": "Lisa W",
+    "password": "$2a$12$q0CXLVgH/WHjG92XoOD1feHGN0LDrgD53HFQ0/yFVpi/pD3JBM42u",
+    "secret": "zLZviOqVhZ",
+    "roles": [
+      "user"
+    ]
   }
 ]
