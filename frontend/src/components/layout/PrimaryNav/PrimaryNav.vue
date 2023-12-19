@@ -8,6 +8,7 @@
   import { TextButton } from '@/components';
   import { useTokenStore } from '@/stores/token';
   import IconLabel from '@/components/labels/IconLabel.vue';
+  import router from '@/router';
   
   const route = useRoute();
   const tokenStore = useTokenStore()
@@ -28,6 +29,11 @@
       'd-none': !showPrimaryNavMeta.value,
     };
   });
+
+  const logUserOut = ():void => {
+    tokenStore.clearToken();
+    router.push({ name: 'home' });
+  }
 
   const changeIcon = (icon: string):void => {
     userIcon.value = icon;
@@ -63,8 +69,10 @@
             :icon="userIcon"
             type="primary"
             display-style="secondary"
+            class="logout-btn"
             @mouseover="changeIcon('right-from-bracket')"
             @mouseout="changeIcon('user')"
+            @click="logUserOut()"
           />
 
           {{ currentUser.fullName }}
@@ -96,5 +104,9 @@
 
  .nav-item:last-child {
    padding-right: 0;
+ }
+
+ .logout-btn:hover {
+   cursor: pointer;
  }
 </style>
