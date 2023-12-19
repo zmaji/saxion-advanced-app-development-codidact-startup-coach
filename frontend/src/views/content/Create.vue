@@ -26,23 +26,25 @@
   const currentUserID = ref<string | undefined>('');
   let accessLevel: Ref<string> = ref('public');
   let contentLabels: Ref<Label[]> = ref<Label[]>([]);
+  const errorMessages: Ref<Record<string, string | null>> = ref({});
 
   interface NewContent {
     contentID?: string | null;
     user: string | undefined;
-    title: string | null;
+    title: string;
     description: string;
     category: string | null;
     labels: Label[];
     accessLevel: string | null;
     attachment: string | null;
     createdAt: string | null;
+    [key: string]: string | null | undefined | Label[];
   }
 
   const contentTemplate: NewContent = reactive({
     contentID: null,
     user: currentUserID,
-    title: null,
+    title: '',
     description: '',
     category: null,
     labels: contentLabels,
@@ -52,6 +54,11 @@
   });
 
   const addContent = async () => {
+
+    if (!validateContentTemplate()) {
+      return;
+    };
+
     try {
       const result = await httpService.postRequest(
         '/content',
@@ -77,6 +84,40 @@
       });
       console.error(error);
     }
+  }
+
+  const validateContentTemplate = () => {
+    console.log(contentTemplate.title?.length);
+      
+    if (contentTemplate.title!.length < 3) {
+      errorMessages.value['title'] = 'De titel moet minstens 3 tekens bevatten.';
+
+    } else {
+      errorMessages.value['title'] = '';
+    }
+
+    if (contentTemplate.description!.length < 10) {
+      errorMessages.value['description'] = 'De beschrijving moet minstens 10 letters lang zijn.';
+
+    } else {
+      errorMessages.value['description'] = '';
+    }
+
+    if (contentTemplate.labels && contentTemplate.labels.length < 1) {
+      errorMessages.value['labels'] = 'Er moet minimaal één label toegevoegd worden.';
+
+    } else {
+      errorMessages.value['labels'] = '';
+    }
+
+    if (!contentTemplate.category) {
+      errorMessages.value['category'] = 'Er moet één categorie gekozen worden.';
+
+    } else {
+      errorMessages.value['category'] = '';
+    }
+
+    return errorMessages.value;
   }
 
   const navigateToContentOverview = () => {
@@ -110,6 +151,7 @@
     fetchCategories();
     fetchUserData();
   });
+
 </script>
 
 <template>
@@ -128,7 +170,11 @@
           class="form-control"
           id="content-title"
           placeholder="Vul een titel in"
+          required
         />
+        <div v-if="errorMessages['title']">
+          <small class="invalid-input">{{ errorMessages['title'] }}</small>
+        </div>
       </div>
 
       <div class="pb-3 col-lg-10">
@@ -143,6 +189,10 @@
           rows="5"
           style="resize: none"
         />
+
+        <div v-if="errorMessages['description']">
+          <small class="invalid-input">{{ errorMessages['description'] }}</small>
+        </div>
       </div>
 
       <div class="pb-3 col-lg-10">
@@ -159,6 +209,9 @@
             {{ category.name }}
           </option>
         </select>
+        <div v-if="errorMessages['category']">
+          <small class="invalid-input">{{ errorMessages['category'] }}</small>
+        </div>
       </div>
 
       <div class="pb-3 col-lg-10">
@@ -176,6 +229,9 @@
 
         <LabelSelect v-model="contentTemplate.labels"/>
       </div>
+      <div v-if="errorMessages['labels']">
+          <small class="invalid-input">{{ errorMessages['labels'] }}</small>
+        </div>
     </div>
 
     <div class="col">
@@ -226,4 +282,10 @@
 
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.invalid-input {
+  border-color: var(--bs-danger);
+  color: var(--bs-danger);
+}
+</style>
