@@ -2,34 +2,20 @@
   import type { Content } from '@/typings/Content';
   import type { Label } from '@/typings/Label';
 
-  import { IconLabel, TextLabel } from '@/components';
+  import { DateLabel, IconLabel, TextLabel } from '@/components';
 
   interface Props {
     content: Content
   }
 
   withDefaults(defineProps<Props>(), {});
-
-  type CustomDateFormat = `${number} ${string} ${number}`;
-
-  const formatDate = (dateString: string): CustomDateFormat | null => {
-    const inputDate = new Date(dateString);
-
-    const options: Intl.DateTimeFormatOptions = {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    };
-
-    const formattedDate = new Intl.DateTimeFormat('nl-NL', options).format(inputDate);
-
-    return formattedDate as CustomDateFormat;
-  };
-
 </script>
 
 <template>
-  <div class="col">
+  <RouterLink
+    :to="{ name: 'knowledgeBase.show', params: { contentID: content.contentID} }"
+    class="col text-decoration-none"
+  >
     <div class="bg-white p-4 border rounded position-relative h-100 d-flex flex-column justify-content-between">
       <div class="pb-3">
         <IconLabel
@@ -42,17 +28,18 @@
           Standaard sjabloon
         </IconLabel>
 
-        <p class="fw-medium mb-0">{{ content.title }}</p>
+        <p class="fw-medium mb-0 text-dark">{{ content.title }}</p>
 
         <div class="d-flex flex-row flex-wrap ">
           <TextLabel
             v-for="(label, key) in content.labels.slice(0, 3)"
             :key="key"
+            class="mt-2"
           >
             {{ label.name}}
           </TextLabel>
 
-          <TextLabel v-if="content.labels.length > 3">
+          <TextLabel v-if="content.labels.length > 3" class="mt-2">
             {{ content.labels.length - 3 }} +
           </TextLabel>
         </div>
@@ -69,18 +56,10 @@
           <span class="text-secondary">867</span>
         </div>
 
-        <div class="d-flex align-items-center">
-          <IconLabel
-            icon="calendar-days"
-            type="primary"
-            display-style="secondary"
-          />
-
-          <span class="text-secondary">{{ formatDate(content.createdAt) }}</span>
-        </div>
+        <DateLabel :date="content.createdAt"/>
       </div>
     </div>
-  </div>
+  </RouterLink>
 </template>
 
 <style scoped>

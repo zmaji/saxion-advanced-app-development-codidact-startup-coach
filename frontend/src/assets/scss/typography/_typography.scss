@@ -6,3 +6,11 @@ h1, h2 {
   font-style: italic;
   font-family: 'Merriweather', serif;
 }
+
+h1, h2, h3, h4, h5, h6, b, p {
+  max-width: 70ch;
+}
+
+p {
+  white-space: pre-line;
+}
