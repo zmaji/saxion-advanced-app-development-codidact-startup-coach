@@ -22,9 +22,9 @@ describe('GET /companies/:companyID', () => {
     expect(response.body).toEqual(companiesIndexData[0]);
   });
 
-  it('should handle an invalid articleID', async () => {
-    const invalidArticleID = 'invalid-id';
-    const response = await request(app).get(`/companies/${invalidArticleID}`);
+  it('should handle an invalid companyID', async () => {
+    const invalidCompanyID = 'invalid-id';
+    const response = await request(app).get(`/companies/${invalidCompanyID}`);
 
     expect(response.status).toBe(StatusCodes.NOT_FOUND);
     expect(response.body).toEqual({ error: 'Unable to find company with ID invalid-id' });

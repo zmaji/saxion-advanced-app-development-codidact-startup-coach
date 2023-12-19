@@ -127,7 +127,7 @@ const createContent = async (contentData: Content): Promise<Content | null> => {
     contentData.createdAt = new Date().toISOString();
     const labels: Label[] = [];
 
-    for (const label of contentData.labels) {
+    for (const label of contentData.labels!) {
       const existingLabel = await labelModel.findOne({ labelID: label.labelID });
       let contentLabel: ContentLabel;
 

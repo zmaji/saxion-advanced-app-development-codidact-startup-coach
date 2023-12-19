@@ -1,6 +1,5 @@
 import type { Label } from './Label';
-
-import { SimpleUser } from './User';
+import type { SimpleUser } from './User';
 
 export interface Content {
     contentID: string;
@@ -8,7 +7,7 @@ export interface Content {
     title: string;
     description: string;
     category: string;
-    labels: Label[];
+    labels?: Label[];
     accessLevel: string;
     attachment: string;
     createdAt: string;

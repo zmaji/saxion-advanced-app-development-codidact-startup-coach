@@ -39,7 +39,7 @@ router.get('/:contentID', async (req: Request, res: Response) => {
     } else {
       res
           .status(StatusCodes.NOT_FOUND)
-          .json({ error: 'Unable to find content' });
+          .json({ error: `Unable to find content with ID ${req.params.contentID}` });
     }
   } catch {
     res
