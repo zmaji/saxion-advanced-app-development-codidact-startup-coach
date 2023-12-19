@@ -26,11 +26,12 @@
   const currentUserID = ref<string | undefined>('');
   let accessLevel: Ref<string> = ref('public');
   let contentLabels: Ref<Label[]> = ref<Label[]>([]);
+  const errorMessages: Ref<Record<string, string | null>> = ref({});
 
   interface NewContent {
     contentID?: string | null;
     user: string | undefined;
-    title: string | null;
+    title: string;
     description: string;
     category: string | null;
     labels: Label[];
@@ -86,58 +87,38 @@
   }
 
   const validateContentTemplate = () => {
-    const requiredFields = ['title', 'description', 'category', 'accessLevel', 'labels'];
-    for (const field of requiredFields) {
-      if (contentTemplate[field] === '') {
-        toast.error(`Vul alstublieft ${field} in.`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+    console.log(contentTemplate.title?.length);
+      
+    if (contentTemplate.title!.length < 3) {
+      errorMessages.value['title'] = 'De titel moet minstens 3 tekens bevatten.';
 
-        return false;
-      }
+    } else {
+      errorMessages.value['title'] = '';
     }
 
-    if (contentTemplate.title && contentTemplate.title.length < 3) {
-      toast.error('De titel moet minstens 3 tekens bevatten.', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+    if (contentTemplate.description!.length < 10) {
+      console.error('Entered description error!');
+      errorMessages.value['description'] = 'De beschrijving moet minstens 10 letters lang zijn.';
 
-      return false;
-    }
-
-    if (contentTemplate.description && contentTemplate.description.length < 10) {
-      toast.error('De beschrijving moet minstens 10 letters lang zijn.', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-
-      return false;
+    } else {
+      errorMessages.value['description'] = '';
     }
 
     if (contentTemplate.labels && contentTemplate.labels.length < 1) {
-      toast.error('Er moet minimaal één label toegevoegd worden.', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      errorMessages.value['labels'] = 'Er moet minimaal één label toegevoegd worden.';
 
-      return false;
+    } else {
+      errorMessages.value['labels'] = '';
     }
 
     if (!contentTemplate.category) {
-      toast.error('Er moet één categorie gekozen worden.', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      errorMessages.value['category'] = 'Er moet één categorie gekozen worden.';
 
-      return false;
+    } else {
+      errorMessages.value['category'] = '';
     }
 
-    if (!contentTemplate.user || contentTemplate.user === undefined) {
-      toast.error('U moet eerst inloggen om content te kunnen toevoegen.', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-
-      return false;
-    }
-
-    return true;
+    return errorMessages.value;
   }
 
   const navigateToContentOverview = () => {
@@ -171,6 +152,7 @@
     fetchCategories();
     fetchUserData();
   });
+
 </script>
 
 <template>
@@ -189,7 +171,11 @@
           class="form-control"
           id="content-title"
           placeholder="Vul een titel in"
+          required
         />
+        <div v-if="errorMessages['title']">
+          <small class="invalid-input">{{ errorMessages['title'] }}</small>
+        </div>
       </div>
 
       <div class="pb-3 col-lg-10">
@@ -204,6 +190,10 @@
           rows="5"
           style="resize: none"
         />
+
+        <div v-if="errorMessages['description']">
+          <small class="invalid-input">{{ errorMessages['description'] }}</small>
+        </div>
       </div>
 
       <div class="pb-3 col-lg-10">
@@ -220,6 +210,9 @@
             {{ category.name }}
           </option>
         </select>
+        <div v-if="errorMessages['category']">
+          <small class="invalid-input">{{ errorMessages['category'] }}</small>
+        </div>
       </div>
 
       <div class="pb-3 col-lg-10">
@@ -237,6 +230,9 @@
 
         <LabelSelect v-model="contentTemplate.labels"/>
       </div>
+      <div v-if="errorMessages['labels']">
+          <small class="invalid-input">{{ errorMessages['labels'] }}</small>
+        </div>
     </div>
 
     <div class="col">
@@ -287,4 +283,10 @@
 
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.invalid-input {
+  border-color: var(--bs-danger);
+  color: var(--bs-danger);
+}
+</style>
