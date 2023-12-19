@@ -1,8 +1,10 @@
 import type { Label } from './Label';
 
+import { SimpleUser } from './User';
+
 export interface Content {
     contentID: string;
-    user: string;
+    user: string | SimpleUser;
     title: string;
     description: string;
     category: string;

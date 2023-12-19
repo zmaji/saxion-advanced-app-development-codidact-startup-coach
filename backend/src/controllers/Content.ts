@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import contentModel from '../models/Content';
 import contentLabelModel from '../models/ContentLabel';
 import labelModel from '../models/Label';
+import userModel from '../models/User';
+import { SimpleUser } from '../typings/User';
 
 interface Filter {
   title?: { $regex: string; $options: string } | string;
@@ -84,7 +86,35 @@ const getAllContent = async (
 
 const getContent = async (contentID: string): Promise<Content | null> => {
   try {
-    return await contentModel.findOne({ contentID }, { _id: 0 });
+    let result: Content | null = await contentModel.findOne({ contentID }, { _id: 0 }).lean();
+
+    if (result) {
+      const relatedUser: SimpleUser | null = await userModel.findOne(
+          { userID: result.user },
+          { userID: 1, fullName: 1, _id: 0 },
+      );
+      const contentLabels = await contentLabelModel.find({ contentID });
+      const labels: Label[] = await labelModel.find({}, { _id: 0 }).lean();
+      const relatedLabels: Label[] = [];
+
+      for (const contentLabel of contentLabels) {
+        const label = labels.find((label: Label) => label.labelID === contentLabel.labelID);
+
+        if (label) {
+          relatedLabels.push(label);
+        }
+      }
+
+      result.user = relatedUser!;
+      result = {
+        ...result,
+        labels: relatedLabels,
+      };
+
+      return result;
+    }
+
+    return result;
   } catch (error) {
     console.error('Something went wrong getting content:', error);
     throw error;
