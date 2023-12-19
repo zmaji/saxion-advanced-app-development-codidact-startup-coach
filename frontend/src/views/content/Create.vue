@@ -37,12 +37,13 @@
     accessLevel: string | null;
     attachment: string | null;
     createdAt: string | null;
+    [key: string]: string | null | undefined | Label[];
   }
 
   const contentTemplate: NewContent = reactive({
     contentID: null,
     user: currentUserID,
-    title: null,
+    title: '',
     description: '',
     category: null,
     labels: contentLabels,
@@ -52,6 +53,11 @@
   });
 
   const addContent = async () => {
+
+    if (!validateContentTemplate()) {
+      return;
+    };
+
     try {
       const result = await httpService.postRequest(
         '/content',
@@ -77,6 +83,61 @@
       });
       console.error(error);
     }
+  }
+
+  const validateContentTemplate = () => {
+    const requiredFields = ['title', 'description', 'category', 'accessLevel', 'labels'];
+    for (const field of requiredFields) {
+      if (contentTemplate[field] === '') {
+        toast.error(`Vul alstublieft ${field} in.`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+
+        return false;
+      }
+    }
+
+    if (contentTemplate.title && contentTemplate.title.length < 3) {
+      toast.error('De titel moet minstens 3 tekens bevatten.', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      return false;
+    }
+
+    if (contentTemplate.description && contentTemplate.description.length < 10) {
+      toast.error('De beschrijving moet minstens 10 letters lang zijn.', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      return false;
+    }
+
+    if (contentTemplate.labels && contentTemplate.labels.length < 1) {
+      toast.error('Er moet minimaal één label toegevoegd worden.', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      return false;
+    }
+
+    if (!contentTemplate.category) {
+      toast.error('Er moet één categorie gekozen worden.', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      return false;
+    }
+
+    if (!contentTemplate.user || contentTemplate.user === undefined) {
+      toast.error('U moet eerst inloggen om content te kunnen toevoegen.', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+
+      return false;
+    }
+
+    return true;
   }
 
   const navigateToContentOverview = () => {
