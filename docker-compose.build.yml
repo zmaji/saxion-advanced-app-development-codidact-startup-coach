@@ -12,9 +12,8 @@ services:
     build:
       context: ./backend/src/database
       dockerfile: ./Dockerfile
-
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: ./Dockerfile
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: ./Dockerfile
