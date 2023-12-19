@@ -1,12 +1,14 @@
-import type { Content } from '../typings/Content';
+import type { Content, ContentFeedback } from '../typings/Content';
 import type { ContentLabel, Label } from '../typings/Label';
+import type { ContentUser, SimpleUser } from '../typings/User';
 
 import { v4 as uuidv4 } from 'uuid';
 import contentModel from '../models/Content';
 import contentLabelModel from '../models/ContentLabel';
 import labelModel from '../models/Label';
 import userModel from '../models/User';
-import { SimpleUser } from '../typings/User';
+import contentUserModel from '../models/ContentUser';
+import contentFeedbackModel from '../models/ContentFeedback';
 
 interface Filter {
   title?: { $regex: string; $options: string } | string;
@@ -93,6 +95,13 @@ const getContent = async (contentID: string): Promise<Content | null> => {
           { userID: result.user },
           { userID: 1, fullName: 1, _id: 0 },
       );
+      const contentFeedback: ContentFeedback[] = await contentFeedbackModel.find(
+          { contentID: contentID },
+          { _id: 0 },
+      ).lean();
+      const contentFeedbackWithUsers: ContentFeedback[] = [];
+      const contentUsers: ContentUser[] = await contentUserModel.find({ contentID: contentID }, { _id: 0 }).lean();
+      const relatedUsers: ContentUser[] = [];
       const contentLabels = await contentLabelModel.find({ contentID });
       const labels: Label[] = await labelModel.find({}, { _id: 0 }).lean();
       const relatedLabels: Label[] = [];
@@ -105,6 +114,43 @@ const getContent = async (contentID: string): Promise<Content | null> => {
         }
       }
 
+      for (const contentUser of contentUsers) {
+        const user: SimpleUser | null = await userModel.findOne(
+            { userID: contentUser.userID },
+            { userID: 1, fullName: 1, _id: 0 },
+        );
+
+        if (user) {
+          const relatedUser: ContentUser = {
+            ...contentUser,
+            fullName: user.fullName,
+          };
+
+          relatedUsers.push(relatedUser);
+        }
+      }
+
+      for (const feedback of contentFeedback) {
+        const user: SimpleUser | null = await userModel.findOne(
+            { userID: feedback.user },
+            { userID: 1, fullName: 1, _id: 0 },
+        );
+
+        if (user) {
+          const relatedUser: SimpleUser = {
+            userID: user.userID,
+            fullName: user.fullName,
+          };
+
+          contentFeedbackWithUsers.push({
+            ...feedback,
+            user: relatedUser,
+          });
+        }
+      }
+
+      result.contentUsers = relatedUsers;
+      result.feedback = contentFeedbackWithUsers;
       result.user = relatedUser!;
       result = {
         ...result,
