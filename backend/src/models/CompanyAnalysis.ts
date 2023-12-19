@@ -8,10 +8,9 @@ const companyAnalysisSchema: Schema<CompanyAnalysis> = new Schema({
     unique: true,
     immutable: true,
   },
-  answers: {
-    type: [String],
-    required: true,
-  },
+  phase: {
+    type: String
+  }
 }, {
   collection: 'companyAnalyses',
   versionKey: false,

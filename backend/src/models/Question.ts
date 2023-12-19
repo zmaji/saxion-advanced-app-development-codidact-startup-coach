@@ -6,23 +6,24 @@ const questionSchema: Schema<Question> = new Schema({
   questionID: {
     type: String,
     unique: true,
-    immutable: true,
-  },
-  inputType: {
-    type: String,
-    required: true,
-    immutable: true,
+    immutable: true
   },
   title: {
     type: String,
-    required: true,
-    immutable: true,
+    required: true
+  },
+  inputType: {
+    type: String,
+    required: true
   },
   description: {
     type: String,
-    required: true,
-    immutable: true,
+    required: true
   },
+  requiredPhase: {
+    type: String,
+    required: true
+  }
 }, {
   collection: 'questions',
   versionKey: false,

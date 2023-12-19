@@ -8,20 +8,16 @@ const answerSchema: Schema<Answer> = new Schema({
     unique: true,
     immutable: true,
   },
-  questionID: {
+  companyAnalysisID: {
     type: String,
     required: true,
     immutable: true,
   },
-  answer: {
-    type: String,
-    required: true,
-  },
-  followUpQuestion: {
+  selectedOption: {
     type: String,
     required: true,
     immutable: true,
-  },
+  }
 }, {
   collection: 'answers',
   versionKey: false,
