@@ -20,6 +20,14 @@ CMD mongoimport --host=mongo --db=codidact-startup-coach-db --collection=compani
   mongoimport --host=mongo --db=codidact-startup-coach-db --collection=contents --type=json --file=Contents.json --jsonArray --mode upsert --upsertFields contentID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
   echo "Content seeded successfully" && \
   mongoimport --host=mongo --db=codidact-startup-coach-db --collection=labels --type=json --file=Labels.json --jsonArray --mode upsert --upsertFields labelID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
-  echo "Labels seeded successfully" && \
-  mongoimport --host=mongo --db=codidact-startup-coach-db --collection=contentLabels --type=json --file=ContentLabels.json --jsonArray --mode upsert --upsertFields labelID,contentID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
-  echo "ContentLabels seeded successfully"
+  echo "Labels sections seeded successfully" && \
+  mongoimport --host=mongo --db=codidact-startup-coach-db --collection=analysisSections --type=json --file=AnalysisSections.json --jsonArray --mode upsert --upsertFields analysisSectionID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
+  echo "Analysis sections seeded successfully" && \
+  mongoimport --host=mongo --db=codidact-startup-coach-db --collection=questionSets --type=json --file=QuestionSets.json --jsonArray --mode upsert --upsertFields questionSetID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
+  echo "Question sets seeded successfully" && \
+  mongoimport --host=mongo --db=codidact-startup-coach-db --collection=questions --type=json --file=Questions.json --jsonArray --mode upsert --upsertFields questionID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
+  echo "Questions seeded successfully" && \
+  mongoimport --host=mongo --db=codidact-startup-coach-db --collection=questionOptions --type=json --file=QuestionOptions.json --jsonArray --mode upsert --upsertFields questionOptionID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
+  echo "Question options seeded successfully" && \
+  mongoimport --host=mongo --db=codidact-startup-coach-db --collection=answers --type=json --file=Answers.json --jsonArray --mode upsert --upsertFields answerID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
+  echo "Answers seeded successfully"

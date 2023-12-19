@@ -8,6 +8,10 @@ const questionSchema: Schema<Question> = new Schema({
     unique: true,
     immutable: true
   },
+  questionSetID: {
+    type: String,
+    immutable: true
+  },
   title: {
     type: String,
     required: true
@@ -21,7 +25,7 @@ const questionSchema: Schema<Question> = new Schema({
     required: true
   },
   requiredPhase: {
-    type: String,
+    type: [String],
     required: true
   }
 }, {
