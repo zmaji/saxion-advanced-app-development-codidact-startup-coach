@@ -1,12 +1,13 @@
 import type { Label } from './Label';
+import type { SimpleUser } from './User';
 
 export interface Content {
     contentID: string;
-    user: string;
+    user: string | SimpleUser;
     title: string;
     description: string;
     category: string;
-    labels: Label[];
+    labels?: Label[];
     accessLevel: string;
     attachment: string;
     createdAt: string;

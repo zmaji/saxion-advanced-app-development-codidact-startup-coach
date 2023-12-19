@@ -13,7 +13,7 @@
     </div>
 
     <ul class="sidebar-nav" id="sidebar-nav">
-      <slot v-if="route.name !== 'knowledgeBase.overview'">
+      <slot v-if="(route.name !== 'knowledgeBase.overview') && (route.name !== 'knowledgeBase.show')">
         <li class="sidebar-nav-item">
           <RouterLink :to="{ name: 'company.overview' }" class="nav-link">Mijn bedrijf</RouterLink>
         </li>

@@ -4,6 +4,7 @@ import Home from '@/views/Home.vue';
 import Login from '@/views/auth/Login.vue';
 import Register from '@/views/auth/Register.vue';
 import knowledgeBaseIndex from '@/views/knowledgeBase/Index.vue';
+import contentShow from '@/views/knowledgeBase/Show.vue';
 import RoadmapIndex from '@/views/roadmap/Index.vue';
 import Components from '@/views/Components.vue';
 import CompanyIndex from '@/views/company/Index.vue'
@@ -49,6 +50,15 @@ const router = createRouter({
           path: ':categoryID?',
           name: 'knowledgeBase.overview',
           component: knowledgeBaseIndex,
+          meta: {
+            title: 'De kennnisbank',
+            showNavigationBars: true,
+          },
+        },
+        {
+          path: ':contentID',
+          name: 'knowledgeBase.show',
+          component: contentShow,
           meta: {
             title: 'De kennnisbank',
             showNavigationBars: true,

@@ -51,6 +51,7 @@ module.exports = {
         '@typescript-eslint/no-non-null-assertion': 'off',
         'import/order': importOrderRule,
         '@typescript-eslint/ban-ts-comment': 'off',
+        'max-len': 'off',
       },
     },
     {
