@@ -9,7 +9,7 @@
 
   import {
     CategoryBreadCrumb,
-    ContentCategoryNavItem,
+    CategorySidebar,
     ContentItem,
     PageTitle,
     SecondaryTitle,
@@ -108,14 +108,5 @@
     />
   </div>
 
-  <Teleport to="#sidebar-nav">
-    <div v-if="categories && categories.length > 0" class="accordion accordion-flush m-0 p-0" id="categories-accordion">
-      <div class="accordion-item m-0 p-0" v-for="(category, key) in categories" :key="key">
-        <ContentCategoryNavItem
-          :category="category"
-          :categoryKey="key"
-        />
-      </div>
-    </div>
-  </Teleport>
+  <CategorySidebar/>
 </template>
