@@ -92,7 +92,7 @@ const getContent = async (contentID: string): Promise<Content | null> => {
 
     if (result) {
       const relatedUser: SimpleUser | null = await userModel.findOne(
-          { userID: result.user },
+          { userID: result.userID },
           { userID: 1, fullName: 1, _id: 0 },
       );
       const contentFeedback: ContentFeedback[] = await contentFeedbackModel.find(
@@ -132,7 +132,7 @@ const getContent = async (contentID: string): Promise<Content | null> => {
 
       for (const feedback of contentFeedback) {
         const user: SimpleUser | null = await userModel.findOne(
-            { userID: feedback.user },
+            { userID: feedback.userID },
             { userID: 1, fullName: 1, _id: 0 },
         );
 
@@ -152,6 +152,7 @@ const getContent = async (contentID: string): Promise<Content | null> => {
       result.contentUsers = relatedUsers;
       result.feedback = contentFeedbackWithUsers;
       result.user = relatedUser!;
+      result.userID = undefined;
       result = {
         ...result,
         labels: relatedLabels,

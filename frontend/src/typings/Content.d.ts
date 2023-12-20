@@ -3,7 +3,8 @@ import type { SimpleUser, ContentUser } from '@/typings/User';
 
 export interface Content {
   contentID: string;
-  user: string | SimpleUser;
+  userID?: string;
+  user?: SimpleUser;
   title: string;
   description: string;
   category: string;
@@ -19,7 +20,8 @@ export interface Content {
 export interface ContentFeedback {
   feedbackID: string,
   contentID: string,
-  user: string | SimpleUser;
+  userID?: string;
+  user?: SimpleUser;
   feedback: string;
   createdAt: string;
 }

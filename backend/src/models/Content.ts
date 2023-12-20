@@ -8,7 +8,7 @@ const contentSchema: Schema<Content> = new Schema({
     unique: true,
     immutable: true,
   },
-  user: {
+  userID: {
     type: String,
     unique: false,
   },

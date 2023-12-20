@@ -25,6 +25,8 @@ CMD mongoimport --host=mongo --db=codidact-startup-coach-db --collection=compani
   echo "ContentFeedback seeded successfully" && \
   mongoimport --host=mongo --db=codidact-startup-coach-db --collection=labels --type=json --file=Labels.json --jsonArray --mode upsert --upsertFields labelID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
   echo "Labels seeded successfully" && \
+  mongoimport --host=mongo --db=codidact-startup-coach-db --collection=contentLabels --type=json --file=ContentLabels.json --jsonArray --mode upsert --upsertFields labelID,contentID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
+  echo "ContentLabels seeded successfully" && \
   mongoimport --host=mongo --db=codidact-startup-coach-db --collection=analysisSections --type=json --file=AnalysisSections.json --jsonArray --mode upsert --upsertFields analysisSectionID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \
   echo "Analysis sections seeded successfully" && \
   mongoimport --host=mongo --db=codidact-startup-coach-db --collection=questionSets --type=json --file=QuestionSets.json --jsonArray --mode upsert --upsertFields questionSetID -u root -p admin --authenticationDatabase=admin --authenticationMechanism SCRAM-SHA-256 && \

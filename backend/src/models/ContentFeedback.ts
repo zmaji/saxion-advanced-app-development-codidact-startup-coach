@@ -9,7 +9,7 @@ const contentFeedbackSchema: Schema<ContentFeedback> = new Schema({
   contentID: {
     type: String,
   },
-  user: {
+  userID: {
     type: String,
   },
   feedback: {
