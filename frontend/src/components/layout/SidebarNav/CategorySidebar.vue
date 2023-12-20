@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { Category } from '@/typings/Category';
+import type { Ref } from 'vue';
 
-import { onMounted, ref, type Ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import ContentCategoryNavItem from '@/components/contentCategories/ContentCategoryNavItem.vue';
 import httpService from '@/plugins/http/httpService';

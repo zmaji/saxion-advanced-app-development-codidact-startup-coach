@@ -3,7 +3,7 @@ import type { Content } from '../../../typings/Content';
 export const contentsIndexData: Content[] = [
   {
     contentID: 'ea0abe91-b28d-47d0-a6ac-e9e4e3e8a8ae',
-    user: '289f486d-38a2-43c4-b475-af7394890a8c',
+    userID: '289f486d-38a2-43c4-b475-af7394890a8c',
     title: 'Bericht na diepte-interviews in de planning voor volgende week!',
     description: 'Na intensieve diepte-interviews en grondige analyses, kondigen we met genoegen aan dat ons uitgebreide rapport klaar is voor publicatie! Volgende week delen we deze waardevolle kennis met jullie.\n' +
       '\n' +
@@ -41,7 +41,7 @@ export const contentsIndexData: Content[] = [
   },
   {
     contentID: '31bb0c9b-39ff-44e3-8e20-09b2e3c99b9a',
-    user: '289f486d-38a2-43c4-b475-af7394890a8c',
+    userID: '289f486d-38a2-43c4-b475-af7394890a8c',
     title: 'Terugblik en Toekomst: Bericht over Boeiend Interview en Nieuwe Gesprekken!',
     description: 'This is a test description.',
     category: '75364dfa-376a-4173-8b1d-816575077461',
@@ -73,7 +73,7 @@ export const contentsIndexData: Content[] = [
   },
   {
     contentID: 'bd4d00da-c6c5-4a8f-a811-acc89f91a4ab',
-    user: '289f486d-38a2-43c4-b475-af7394890a8c',
+    userID: '289f486d-38a2-43c4-b475-af7394890a8c',
     title: 'Save the Date: Bericht over Panelgesprek en Communicatiestrategieën!',
     description: 'Just some placeholder text for testing purposes.',
     category: '75364dfa-376a-4173-8b1d-816575077461',
@@ -110,7 +110,7 @@ export const contentsIndexData: Content[] = [
   },
   {
     contentID: 'e97403bf-2789-43da-afda-866522c819da',
-    user: '12c20d6e-1bc6-4d7a-acaf-2021afc7a242',
+    userID: '12c20d6e-1bc6-4d7a-acaf-2021afc7a242',
     title: 'Bericht van de Expert: Afspraken voor Kennisuitwisseling in de planning!',
     description: 'Random description for testing.',
     category: 'b8b7187e-7335-477e-b087-219d0d95910a',

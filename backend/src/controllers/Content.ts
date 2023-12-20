@@ -152,6 +152,7 @@ const getContent = async (contentID: string): Promise<Content | null> => {
       result.contentUsers = relatedUsers;
       result.feedback = contentFeedbackWithUsers;
       result.user = relatedUser!;
+      result.userID = undefined;
       result = {
         ...result,
         labels: relatedLabels,

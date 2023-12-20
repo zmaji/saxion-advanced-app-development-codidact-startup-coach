@@ -4,6 +4,7 @@ import type { User } from '@/typings/User';
 import type { Company } from '@/typings/Company';
 import type { CompanyAnalysis } from '@/typings/CompanyAnalysis';
 import type { AnalysisSection } from '@/typings/AnalysisSection';
+import type { Ref } from 'vue';
 
 import { onMounted, reactive, ref } from 'vue';
 import httpService from '../../plugins/http/httpService';
@@ -29,7 +30,7 @@ const tokenStore = useTokenStore()
 let currentUser = ref<User | null>(null)
 let currentCompany = ref<Company | null>(null)
 let currentAnalysis = ref<CompanyAnalysis | null>(null)
-let analysisSections = ref<AnalysisSection[] | null>(null);
+const analysisSections: Ref<AnalysisSection[]> = ref<AnalysisSection[]>([]);
 
 let formSteps = reactive({
   1: {
@@ -148,17 +149,6 @@ const fetchCurrentCompany = async () => {
     fetchCurrentAnalysis();
   } catch (error) {
     console.error('Error fetching current company:', error);
-  }
-};
-
-const fetchAnalysisSections = async () => {
-  try {
-    const fetchedAnalysisSections = await httpService.getRequest<AnalysisSection[]>(
-      `/analysisSections`
-    );
-    analysisSections.value = fetchedAnalysisSections.data as AnalysisSection[];
-  } catch (error) {
-    console.error('Error fetching analysis sections:', error);
   }
 };
 
@@ -320,11 +310,6 @@ const toCapital = (String: string) => {
 }
 
 onMounted(fetchCurrentCompany);
-onMounted(fetchAnalysisSections);
-
-console.log('fetchAnalysisSections');
-console.log('fetchAnalysisSections');
-console.log(fetchAnalysisSections);
 </script>
 
 <template>
