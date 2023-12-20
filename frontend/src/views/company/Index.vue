@@ -71,12 +71,16 @@ const fetchCurrentCompany = async () => {
   }
 };
 
+// TODO: SORT FORMSTEPS IN RIGHT ORDER
 const setupForm = () => {
-  analysisSections.value.forEach((analysisSection: AnalysisSection, sectionIndex: number) => {
+  let formStepIndex = 1
+  let formDataIndex = 1;
+
+  analysisSections.value.forEach((analysisSection: AnalysisSection) => {
     if (analysisSection) {
       analysisSection.questionSets.forEach((questionSet: QuestionSet, index: number) => {
-        formSteps[index + 1] = {
-          number: index + 1,
+        formSteps[formStepIndex] = {
+          number: formStepIndex,
           title: `${analysisSection.title}`,
           subtitle: `${questionSet.title}`,
           description: questionSet.description,
@@ -84,48 +88,31 @@ const setupForm = () => {
         };
 
         questionSet.questions?.forEach((question: Question) => {
-          formData[question.questionID] = {
+          formData[formDataIndex] = {
             label: question.title,
-            step: formSteps[index + 1],
+            step: formSteps[formStepIndex],
             value: '',
             inputType: question.inputType,
             options: question.questionOptions.map(option => option.value),
             isValid: false,
             errorMessage: `Dit is een verplicht veld.`,
           };
+
+          formDataIndex++;
         });
+
+        formStepIndex++;
       });
     }
-    console.log(analysisSection);
+    const desiredOrder = [
+      'Starter (nog geen idee)',
+      'Pre-startup (een idee en een visie)',
+      'Startup (een product/dienst en entiteit)',
+      'Scale-up (meer dan 5 man en bestaat minstens 2 jaar)'
+    ];
   });
 };
 
-// const setupForm = () => {
-//   if (analysisSection?.value) {
-//     analysisSection.value.questionSets.forEach((questionSet: QuestionSet, index: number) => {
-//       formSteps[index + 1] = {
-//         number: index + 1,
-//         title: `${analysisSection?.value?.title}`,
-//         subtitle: `${questionSet.title}`,
-//         description: questionSet.description,
-//         completed: false,
-//       };
-
-//       questionSet.questions?.forEach((question: Question) => {
-//         formData[question.questionID] = {
-//           label: question.title,
-//           step: formSteps[index + 1],
-//           value: '',
-//           inputType: question.inputType,
-//           options: question.questionOptions.map(option => option.value),
-//           isValid: false,
-//           errorMessage: `Dit is een verplicht veld.`,
-//         };
-//       });
-//     });
-//   }
-//   console.log(analysisSection.value);
-// };
 
 const fetchAnalysisSection = async (analysisSectionID: string) => {
   try {
