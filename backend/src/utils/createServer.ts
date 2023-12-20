@@ -14,6 +14,7 @@ import userRoutes from '../routes/User';
 import contentUserRoutes from '../routes/ContentUser';
 import contentFeedbackRoutes from '../routes/ContentFeedback';
 import analysisSectionRoutees from '../routes/AnalysisSection';
+import roadmapRoutes from '../routes/Roadmap';
 
 const createServer = () => {
   const app: Express = express();
@@ -47,6 +48,7 @@ const createServer = () => {
   app.use('/contentUsers', contentUserRoutes);
   app.use('/feedback', contentFeedbackRoutes);
   app.use('/analysisSections', analysisSectionRoutees);
+  app.use('/roadmaps', roadmapRoutes);
 
   return app;
 };
