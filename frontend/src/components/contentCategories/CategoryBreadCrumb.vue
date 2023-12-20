@@ -18,9 +18,9 @@
     categoryID: undefined,
   });
 
-  const fetchCategories = async () => {
+  const fetchCategories = async (categoryID: string | string[]) => {
     try {
-      const currentCategory = props.categoryID ? props.categoryID : route.params.categoryID;
+      const currentCategory = props.categoryID ? props.categoryID : categoryID;
       const response = await httpService.getRequest<Category>(
         `/categories/${currentCategory}/parents`,
         false
@@ -35,13 +35,20 @@
   }
 
   onMounted(async () => {
-    await fetchCategories();
+    if (route.query.category)
+    {
+      await fetchCategories(route.query.category.valueOf().toString());
+    }
+    await fetchCategories(route.params.categoryID);
   });
 
   if (!props.categoryID) {
     watch(() => route.params.categoryID, async (currentCategory) => {
       if (currentCategory) {
-        await fetchCategories();
+        await fetchCategories(currentCategory);
+        
+      } else {
+        category.value = undefined;
       }
     });
   }

@@ -15,7 +15,7 @@
     TextButton,
     SubTitle
   } from '@/components';
-import router from '@/router';
+  import router from '@/router';
 
   interface Props {
     modelValue?: Content[]
@@ -89,14 +89,10 @@ import router from '@/router';
     search();
   }
 
-  onMounted(() => {
-    fetchCategories();
-    fetchLabels();
-  });
+  const updateFilter = async (categoryID: string | string[]): Promise<void> => {
+    if (categoryID) {
+      const matchedCategory = categories.value.find(category => category.categoryID === categoryID);
 
-  watch(() => route.params.categoryID, async (currentCategory) => {
-    if (currentCategory) {
-      const matchedCategory = categories.value.find(category => category.categoryID === currentCategory);
       if (matchedCategory) {
         categoryFilter.value = matchedCategory;
       }
@@ -104,6 +100,17 @@ import router from '@/router';
       categoryFilter.value = undefined;
     }
     await search();
+  }
+
+  onMounted(() => {
+    fetchCategories().then(() => {
+      updateFilter(route.params.categoryID);
+    });
+    fetchLabels();
+  });
+
+  watch(() => route.params.categoryID, async (currentCategory) => {
+    await updateFilter(currentCategory);
   });
 </script>
 

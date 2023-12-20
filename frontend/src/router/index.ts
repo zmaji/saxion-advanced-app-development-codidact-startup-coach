@@ -65,7 +65,7 @@ const router = createRouter({
           },
         },
         {
-          path: 'create',
+          path: 'content/create',
           name: 'knowledgeBase.create',
           component: ContentCreate,
           meta: {
