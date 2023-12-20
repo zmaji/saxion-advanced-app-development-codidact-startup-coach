@@ -1,69 +1,69 @@
 <script setup lang="ts">
 
-import type { Category } from '@/typings/Category';
-import type { Content } from '@/typings/Content';
-import type { Ref } from 'vue';
-import type { Label } from '@/typings/Label';
+  import type { Category } from '@/typings/Category';
+  import type { Content } from '@/typings/Content';
+  import type { Ref } from 'vue';
+  import type { Label } from '@/typings/Label';
 
-import { onMounted, ref } from 'vue';
+  import { onMounted, ref } from 'vue';
 
-import {
-  CategoryBreadCrumb,
-  CategorySidebar,
-  ContentItem,
-  PageTitle,
-  SecondaryTitle,
-  SearchBar,
-  IconButton
-} from '@/components';
-import httpService from '@/plugins/http/httpService';
+  import {
+    CategoryBreadCrumb,
+    CategorySidebar,
+    ContentItem,
+    PageTitle,
+    SecondaryTitle,
+    SearchBar,
+    IconButton
+  } from '@/components';
+  import httpService from '@/plugins/http/httpService';
 
-const categories: Ref<Category[]> = ref<Category[]>([]);
-const contents: Ref<Content[]> = ref<Content[]>([]);
-const standardContents: Ref<Content[]> = ref<Content[]>([]);
+  const categories: Ref<Category[]> = ref<Category[]>([]);
+  const contents: Ref<Content[]> = ref<Content[]>([]);
+  const standardContents: Ref<Content[]> = ref<Content[]>([]);
 
-const fetchCategories = async () => {
-  try {
-    const response = await httpService.getRequest<Category[]>('/categories', false);
+  const fetchCategories = async () => {
+    try {
+      const response = await httpService.getRequest<Category[]>('/categories', false);
 
-    if (response && response.data) {
-      categories.value = response.data;
+      if (response && response.data) {
+        categories.value = response.data;
+      }
+    } catch (e) {
+      console.error(e);
     }
-  } catch (e) {
-    console.error(e);
   }
-}
 
-const fetchContent = async () => {
-  try {
-    const response = await httpService.getRequest<Content[]>('/content', false);
+  const fetchContent = async () => {
+    try {
+      const response = await httpService.getRequest<Content[]>('/content', false);
 
-    if (response && response.data) {
-      contents.value = response.data.filter(
-        (content) => !content.labels.find((label: Label) => label.name === 'Standaard sjabloon')
-      );
+      if (response && response.data) {
+        contents.value = response.data.filter(
+          (content) => !content.labels.find((label: Label) => label.name === 'Standaard sjabloon')
+        );
 
-      standardContents.value = response.data.filter(
-        (content) => content.labels.find((label: Label) => label.name === 'Standaard sjabloon'));
+        standardContents.value = response.data.filter(
+          (content) => content.labels.find((label: Label) => label.name === 'Standaard sjabloon'));
+      }
+    } catch (e) {
+      console.error(e);
     }
-  } catch (e) {
-    console.error(e);
   }
-}
 
-const updateContent = async () => {
-  standardContents.value = contents.value.filter(
-    (content) => content.labels.find((label: Label) => label.name === 'Standaard sjabloon'));
+  const updateContent = async () => {
+    standardContents.value = contents.value.filter(
+      (content) => content.labels.find((label: Label) => label.name === 'Standaard sjabloon'));
 
-  contents.value = contents.value.filter(
-    (content) => !content.labels.find((label: Label) => label.name === 'Standaard sjabloon')
-  );
-}
+    contents.value = contents.value.filter(
+      (content) => !content.labels.find((label: Label) => label.name === 'Standaard sjabloon')
+    );
+  }
 
-onMounted(() => {
-  fetchCategories();
-  fetchContent();
-});
+  onMounted(() => {
+    fetchCategories();
+    fetchContent();
+  });
 </script>
 
 <template>

@@ -1,95 +1,95 @@
 <script setup lang="ts">
-import type { Content } from '@/typings/Content';
-import type { Label } from '@/typings/Label';
-import type { ContentUser, User } from '@/typings/User';
+  import type { Content } from '@/typings/Content';
+  import type { Label } from '@/typings/Label';
+  import type { ContentUser, User } from '@/typings/User';
 
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import { jwtDecode } from 'jwt-decode';
-import { toast } from 'vue3-toastify';
+  import { onMounted, ref } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { jwtDecode } from 'jwt-decode';
+  import { toast } from 'vue3-toastify';
 
-import {
-  CategoryBreadCrumb,
-  CategorySidebar,
-  DateLabel,
-  PageTitle,
-  SecondaryTitle,
-  TextLabel,
-  TextButton,
-  IconLabel,
-  UserSelect
-} from '@/components';
-import httpService from '@/plugins/http/httpService';
-import { useTokenStore } from '@/stores/token';
+  import {
+    CategoryBreadCrumb,
+    CategorySidebar,
+    DateLabel,
+    PageTitle,
+    SecondaryTitle,
+    TextLabel,
+    TextButton,
+    IconLabel,
+    UserSelect
+  } from '@/components';
+  import httpService from '@/plugins/http/httpService';
+  import { useTokenStore } from '@/stores/token';
 
-const route = useRoute();
-const loaded = ref(false);
-const content = ref<Content>();
-const tokenStore = useTokenStore()
-const currentUser = ref<User | null>(null)
-const currentUserID = ref<string | undefined>('');
-const addingMoreReviewers = ref(false);
-const newReviewers = ref<ContentUser[]>([]);
+  const route = useRoute();
+  const loaded = ref(false);
+  const content = ref<Content>();
+  const tokenStore = useTokenStore()
+  const currentUser = ref<User | null>(null)
+  const currentUserID = ref<string | undefined>('');
+  const addingMoreReviewers = ref(false);
+  const newReviewers = ref<ContentUser[]>([]);
 
-const canReview = (): boolean => {
-  return content.value?.contentUsers?.find((user) => user.userID === currentUser.value?.userID) !== null;
-};
+  const canReview = (): boolean => {
+    return content.value?.contentUsers?.find((user) => user.userID === currentUser.value?.userID) !== null;
+  };
 
-const isOwner = (): boolean => {
-  return content.value?.user?.userID === currentUser.value?.userID;
-};
+  const isOwner = (): boolean => {
+    return content.value?.user?.userID === currentUser.value?.userID;
+  };
 
-const addReviewers = async () => {
-  try {
-    const response = await httpService.postRequest<ContentUser[]>(
-      `/contentUsers/${route.params.contentID}`,
-      newReviewers.value,
-      true
-    );
+  const addReviewers = async () => {
+    try {
+      const response = await httpService.postRequest<ContentUser[]>(
+        `/contentUsers/${route.params.contentID}`,
+        newReviewers.value,
+        true
+      );
 
-    if (response && response.data) {
-      for (let user of response.data) {
-        content.value?.contentUsers?.push(user);
+      if (response && response.data) {
+        for (let user of response.data) {
+          content.value?.contentUsers?.push(user);
+        }
+        toast.success('Content reviewers succesvol toegevoegd!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        addingMoreReviewers.value = false;
       }
-      toast.success('Content reviewers succesvol toegevoegd!', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      addingMoreReviewers.value = false;
+    } catch (e) {
+      console.error(e);
     }
-  } catch (e) {
-    console.error(e);
   }
-}
 
-const fetchContent = async () => {
-  try {
-    const response = await httpService.getRequest<Content>(`/content/${route.params.contentID}`, false);
+  const fetchContent = async () => {
+    try {
+      const response = await httpService.getRequest<Content>(`/content/${route.params.contentID}`, false);
 
-    if (response && response.data) {
-      content.value = response.data;
+      if (response && response.data) {
+        content.value = response.data;
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      loaded.value = true;
     }
-  } catch (e) {
-    console.error(e);
-  } finally {
-    loaded.value = true;
   }
-}
 
-const fetchUserData = async () => {
-  try {
-    const userToken = tokenStore.getToken;
-    currentUser.value = jwtDecode(userToken);
-    currentUserID.value = currentUser.value?.userID;
+  const fetchUserData = async () => {
+    try {
+      const userToken = tokenStore.getToken;
+      currentUser.value = jwtDecode(userToken);
+      currentUserID.value = currentUser.value?.userID;
 
-  } catch (error) {
-    console.error('Error fetching current userID:', error);
-  }
-};
+    } catch (error) {
+      console.error('Error fetching current userID:', error);
+    }
+  };
 
-onMounted(() => {
-  fetchContent();
-  fetchUserData();
-});
+  onMounted(() => {
+    fetchContent();
+    fetchUserData();
+  });
 </script>
 
 <template>
