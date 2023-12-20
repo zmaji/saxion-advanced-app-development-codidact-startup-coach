@@ -10,20 +10,27 @@
   const route = useRoute();
   const category = ref<Category>();
 
-  const fetchCategories = async () => {
-    if (route.params.categoryID) {
-      try {
-        const response = await httpService.getRequest<Category>(
-          `/categories/${route.params.categoryID}/parents`,
-          false
-        );
+  interface Props {
+    categoryID?: string;
+  }
 
-        if (response && response.data) {
-          category.value = response.data;
-        }
-      } catch (e) {
-        console.error(e);
+  const props = withDefaults(defineProps<Props>(), {
+    categoryID: undefined,
+  });
+
+  const fetchCategories = async () => {
+    try {
+      const currentCategory = props.categoryID ? props.categoryID : route.params.categoryID;
+      const response = await httpService.getRequest<Category>(
+        `/categories/${currentCategory}/parents`,
+        false
+      );
+
+      if (response && response.data) {
+        category.value = response.data;
       }
+    } catch (e) {
+      console.error(e);
     }
   }
 
@@ -31,12 +38,13 @@
     await fetchCategories();
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  watch(() => route.params.categoryID, async (currentCategory) => {
-    if (currentCategory) {
-      await fetchCategories();
-    }
-  });
+  if (!props.categoryID) {
+    watch(() => route.params.categoryID, async (currentCategory) => {
+      if (currentCategory) {
+        await fetchCategories();
+      }
+    });
+  }
 </script>
 
 <template>
@@ -48,7 +56,7 @@
         </RouterLink>
       </li>
 
-      <CategoryCrumb v-if="route.params.categoryID && category" :category="category" />
+      <CategoryCrumb v-if="category" :category="category" />
     </ol>
   </nav>
 </template>
