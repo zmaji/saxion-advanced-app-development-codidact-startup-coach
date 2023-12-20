@@ -16,38 +16,45 @@ const getAnalysisSections = async (): Promise<AnalysisSection[]> => {
 
 const getAnalysisSection = async (analysisSectionID: string): Promise<AnalysisSection | null> => {
   try {
-    const analysisSection = await analysisSectionModel.findOne({ analysisSectionID }, { _id: 0 });
+    const analysisSection: AnalysisSection | null = await analysisSectionModel.findOne(
+        { analysisSectionID },
+        { _id: 0 },
+    ).lean();
 
     if (!analysisSection) {
       return null;
     }
 
-    const questionSets = await questionSetsModel.find({ analysisSectionID }, { _id: 0 });
+    const questionSets = await questionSetsModel.find({ analysisSectionID }, { _id: 0 }).lean();
 
     if (!questionSets || questionSets.length === 0) {
-      return analysisSection.toObject();
+      return analysisSection;
     }
 
     const questionSetsWithQuestions = await Promise.all(
-      questionSets.map(async (questionSet) => {
-        const questions = await questionModel.find({ questionSetID: questionSet.questionSetID }, { _id: 0 });
+        questionSets.map(async (questionSet) => {
+          const questions = await questionModel.find({ questionSetID: questionSet.questionSetID }, { _id: 0 }).lean();
 
-        if (!questions || questions.length === 0) {
-          return questionSet.toObject();
-        }
+          if (!questions || questions.length === 0) {
+            return { ...questionSet, questions: [] };
+          }
 
-        const questionsWithOptions = await Promise.all(
-          questions.map(async (question) => {
-            const questionOptions = await questionOptionModel.find({ questionID: question.questionID }, { _id: 0 });
-            return { ...question.toObject(), questionOptions };
-          })
-        );
+          const questionsWithOptions = await Promise.all(
+              questions.map(async (question) => {
+                const questionOptions = await questionOptionModel.find(
+                    { questionID: question.questionID },
+                    { _id: 0 },
+                ).lean();
 
-        return { ...questionSet.toObject(), questions: questionsWithOptions };
-      })
+                return { ...question, questionOptions };
+              }),
+          );
+
+          return { ...questionSet, questions: questionsWithOptions };
+        }),
     );
 
-    return { ...analysisSection.toObject(), questionSets: questionSetsWithQuestions };
+    return { ...analysisSection, questionSets: questionSetsWithQuestions };
   } catch (error) {
     console.error('Something went wrong getting an analysis section:', error);
     throw error;
@@ -56,7 +63,7 @@ const getAnalysisSection = async (analysisSectionID: string): Promise<AnalysisSe
 
 const analysisSectionController = {
   getAnalysisSections,
-  getAnalysisSection
+  getAnalysisSection,
 };
 
 export default analysisSectionController;
