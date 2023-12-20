@@ -55,6 +55,7 @@
           position: toast.POSITION.TOP_RIGHT,
         });
         addingMoreReviewers.value = false;
+        newReviewers.value = [];
       }
     } catch (e) {
       console.error(e);
@@ -174,7 +175,11 @@
         <SecondaryTitle>Reviewers</SecondaryTitle>
 
         <div class="bg-white px-4 py-3 border rounded w-fit">
-          <div v-for="(contentUser, key) in content.contentUsers" :key="key" class="d-flex align-items-center pb-3">
+          <div
+            v-for="(contentUser, key) in content.contentUsers as ContentUser[]"
+            :key="key"
+            class="d-flex align-items-center pb-3"
+          >
             <IconLabel icon="user" type="primary" display-style="secondary" />
 
             <span class="text-secondary">{{ contentUser.fullName }}</span>
