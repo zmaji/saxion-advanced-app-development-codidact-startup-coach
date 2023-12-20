@@ -9,7 +9,7 @@ import type { Question } from '@/typings/Question';
 import type { QuestionOption } from '@/typings/QuestionOption';
 import type { Answer } from '@/typings/Answer';
 
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, type Ref } from 'vue';
 import httpService from '../../plugins/http/httpService';
 import { useTokenStore } from '../../stores/token';
 import { jwtDecode } from 'jwt-decode';
@@ -27,7 +27,7 @@ const currentUser = ref<User | null>(null)
 const currentCompany = ref<Company | null>(null)
 const currentAnalysis = ref<CompanyAnalysis | null>(null)
 const analysisSection = ref<AnalysisSection | null>(null)
-// const analysisSections: Ref<AnalysisSection[]> = ref<AnalysisSection[]>([]);
+const analysisSections: Ref<AnalysisSection[]> = ref<AnalysisSection[]>([]);
 
 const formSteps: Record<string, FormStep> = {};
 const formData: Record<string, FormData> = {};
@@ -72,42 +72,82 @@ const fetchCurrentCompany = async () => {
 };
 
 const setupForm = () => {
-  if (analysisSection?.value) {
-    analysisSection.value.questionSets.forEach((questionSet: QuestionSet, index: number) => {
-      formSteps[index + 1] = {
-        number: index + 1,
-        title: `${analysisSection?.value?.title}`,
-        subtitle: `${questionSet.title}`,
-        description: questionSet.description,
-        completed: false,
-      };
-
-      questionSet.questions?.forEach((question: Question) => {
-        formData[question.questionID] = {
-          label: question.title,
-          step: formSteps[index + 1],
-          value: '',
-          inputType: question.inputType,
-          options: question.questionOptions.map(option => option.value),
-          isValid: false,
-          errorMessage: `Dit is een verplicht veld.`,
+  analysisSections.value.forEach((analysisSection: AnalysisSection, sectionIndex: number) => {
+    if (analysisSection) {
+      analysisSection.questionSets.forEach((questionSet: QuestionSet, index: number) => {
+        formSteps[index + 1] = {
+          number: index + 1,
+          title: `${analysisSection.title}`,
+          subtitle: `${questionSet.title}`,
+          description: questionSet.description,
+          completed: false,
         };
+
+        questionSet.questions?.forEach((question: Question) => {
+          formData[question.questionID] = {
+            label: question.title,
+            step: formSteps[index + 1],
+            value: '',
+            inputType: question.inputType,
+            options: question.questionOptions.map(option => option.value),
+            isValid: false,
+            errorMessage: `Dit is een verplicht veld.`,
+          };
+        });
       });
-    });
-  }
-  console.log(analysisSection.value);
+    }
+    console.log(analysisSection);
+  });
 };
 
+// const setupForm = () => {
+//   if (analysisSection?.value) {
+//     analysisSection.value.questionSets.forEach((questionSet: QuestionSet, index: number) => {
+//       formSteps[index + 1] = {
+//         number: index + 1,
+//         title: `${analysisSection?.value?.title}`,
+//         subtitle: `${questionSet.title}`,
+//         description: questionSet.description,
+//         completed: false,
+//       };
 
-const fetchAnalysisSection = async () => {
+//       questionSet.questions?.forEach((question: Question) => {
+//         formData[question.questionID] = {
+//           label: question.title,
+//           step: formSteps[index + 1],
+//           value: '',
+//           inputType: question.inputType,
+//           options: question.questionOptions.map(option => option.value),
+//           isValid: false,
+//           errorMessage: `Dit is een verplicht veld.`,
+//         };
+//       });
+//     });
+//   }
+//   console.log(analysisSection.value);
+// };
+
+const fetchAnalysisSection = async (analysisSectionID: string) => {
   try {
-    const response = await httpService.getRequest<AnalysisSection>('/analysisSections/5efd305b-b1c0-44b4-bb7e-069084219b36', false);
+    const response = await httpService.getRequest<AnalysisSection>(`/analysisSections/${analysisSectionID}`, false);
 
     if (response && response.data) {
       console.log(response.data)
-      analysisSection.value = response.data;
-      setupForm();
+      analysisSections.value.push(response.data);
     }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+const fetchAnalysisSections = async () => {
+  try {
+    const response = await httpService.getRequest<AnalysisSection[]>('/analysisSections/', false);
+
+    if (response && response.data) {
+      await Promise.all(response.data.map((analysisSection) => fetchAnalysisSection(analysisSection.analysisSectionID)));
+    }
+    setupForm();
   } catch (e) {
     console.error(e);
   }
@@ -274,6 +314,7 @@ const toCapital = (String: string) => {
 onMounted(() => {
   fetchCurrentCompany();
   fetchAnalysisSection();
+  fetchAnalysisSections();
 });
 </script>
 
