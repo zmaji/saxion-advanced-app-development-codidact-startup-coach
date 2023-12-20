@@ -1,389 +1,385 @@
 <script setup lang="ts">
-  import type { FormData, FormStep } from '@/typings/Form';
-  import type { User } from '@/typings/User';
-  import type { Company } from '@/typings/Company';
-  import type { CompanyAnalysis } from '@/typings/CompanyAnalysis';
-  import type { AnalysisSection } from '@/typings/AnalysisSection';
-  import type { QuestionSet } from '@/typings/QuestionSet';
-  import type { Question } from '@/typings/Question';
-  import type { QuestionOption } from '@/typings/QuestionOption';
-  import type { Answer } from '@/typings/Answer';
+import type { FormData, FormStep } from '@/typings/Form';
+import type { User } from '@/typings/User';
+import type { Company } from '@/typings/Company';
+import type { CompanyAnalysis } from '@/typings/CompanyAnalysis';
+import type { AnalysisSection } from '@/typings/AnalysisSection';
+import type { QuestionSet } from '@/typings/QuestionSet';
+import type { Question } from '@/typings/Question';
+import type { QuestionOption } from '@/typings/QuestionOption';
+import type { Answer } from '@/typings/Answer';
 
-  import { onMounted, ref, type Ref } from 'vue';
-  import httpService from '../../plugins/http/httpService';
-  import { useTokenStore } from '../../stores/token';
-  import { jwtDecode } from 'jwt-decode';
+import { onMounted, ref, type Ref } from 'vue';
+import httpService from '../../plugins/http/httpService';
+import { useTokenStore } from '../../stores/token';
+import { jwtDecode } from 'jwt-decode';
 
-  import {
-    TextButton,
-    PageTitle,
-    SubTitle,
-    SecondaryTitle,
-    SubHeader
-  } from '@/components';
+import {
+  TextButton,
+  PageTitle,
+  SubTitle,
+  SecondaryTitle,
+  SubHeader
+} from '@/components';
 
-  const tokenStore = useTokenStore();
-  const currentUser = ref<User | null>(null);
-  const currentCompany = ref<Company | null>(null);
-  const currentAnalysis = ref<CompanyAnalysis | null>(null);
-  const analysisSections: Ref<AnalysisSection[]> = ref<AnalysisSection[]>([]);
-  const categories = ref<string[] | null>(null);
-  const companyPhase = ref<string>('');
+const tokenStore = useTokenStore();
+const currentUser = ref<User | null>(null);
+const currentCompany = ref<Company | null>(null);
+const currentAnalysis = ref<CompanyAnalysis | null>(null);
+const analysisSections: Ref<AnalysisSection[]> = ref<AnalysisSection[]>([]);
+const categories = ref<string[] | null>(null);
+const companyPhase = ref<string>('');
 
-  let formSteps: Record<string, FormStep> = {};
-  let formData: Record<string, FormData> = {};
-  const currentStep = ref<FormStep>();
-  const currentStepFields = ref<FormData[] | null>(null);
-  const showForm = ref(false);
-  const showInformation = ref(true);
-  const canValidate = ref(false);
-  const showOverview = ref(false);
+let formSteps: Record<string, FormStep> = {};
+let formData: Record<string, FormData> = {};
+const currentStep = ref<FormStep>();
+const currentStepFields = ref<FormData[] | null>(null);
+const showForm = ref(false);
+const showInformation = ref(true);
+const canValidate = ref(false);
+const showOverview = ref(false);
 
-  const fetchUser = async () => {
-    try {
-      const userToken = tokenStore.getToken;
-      currentUser.value = jwtDecode(userToken);
-    } catch (error) {
-      console.error('Error fetching current user:', error);
+const fetchUser = async () => {
+  try {
+    const userToken = tokenStore.getToken;
+    currentUser.value = jwtDecode(userToken);
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+  }
+};
+
+const fetchCurrentCompany = async () => {
+  try {
+    fetchUser();
+    const response = await httpService.getRequest<Company>(
+      `/companies/${currentUser.value?.company}`
+    );
+
+    if (response && response.data) {
+      currentCompany.value = response.data;
+      if (currentCompany.value.companyAnalysis) {
+        fetchCurrentAnalysis();
+      }
     }
-  };
+  } catch (error) {
+    console.error('Error fetching current company:', error);
+  }
+};
 
-  const fetchCurrentCompany = async () => {
-    try {
-      fetchUser();
-      const response = await httpService.getRequest<Company>(
-        `/companies/${currentUser.value?.company}`
-      );
+const fetchCurrentAnalysis = async () => {
+  try {
+    const response = await httpService.getRequest<CompanyAnalysis>(
+      `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
+    );
 
-      if (response && response.data) {
-        currentCompany.value = response.data;
-        if (currentCompany.value.companyAnalysis) {
-          fetchCurrentAnalysis();
+    if (response && response.data) {
+      currentAnalysis.value = response.data;
+      console.log(currentAnalysis.value)
+    }
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+  }
+};
+
+const fetchAnalysisSection = async (analysisSectionID: string) => {
+  try {
+    const response = await httpService.getRequest<AnalysisSection>(`/analysisSections/${analysisSectionID}`, false);
+
+    if (response && response.data) {
+      analysisSections.value.push(response.data);
+    }
+
+    if (analysisSections && analysisSections.value.length > 0) {
+      initialiseCategories();
+      analysisSections.value.sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+const fetchAnalysisSections = async () => {
+  try {
+    const response = await httpService.getRequest<AnalysisSection[]>('/analysisSections/', false);
+
+    if (response && response.data) {
+      await Promise.all(response.data.map((analysisSection) => fetchAnalysisSection(analysisSection.analysisSectionID)));
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+const initialiseCategories = async () => {
+  try {
+    const uniqueCategories = new Set<string>();
+
+    for (const section of analysisSections.value) {
+      for (const questionSet of section.questionSets) {
+        if (typeof questionSet.title === 'string') {
+          uniqueCategories.add(questionSet.title);
         }
       }
-    } catch (error) {
-      console.error('Error fetching current company:', error);
     }
-  };
-
-  const fetchCurrentAnalysis = async () => {
-    try {
-      const response = await httpService.getRequest<CompanyAnalysis>(
-        `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
-      );
-
-      if (response && response.data) {
-        currentAnalysis.value = response.data;
-        console.log(currentAnalysis.value)
-      }
-    } catch (error) {
-      console.error('Error fetching current user:', error);
-    }
-  };
-
-  const fetchAnalysisSection = async (analysisSectionID: string) => {
-    try {
-      const response = await httpService.getRequest<AnalysisSection>(`/analysisSections/${analysisSectionID}`, false);
-
-      if (response && response.data) {
-        analysisSections.value.push(response.data);
-      }
-
-      if (analysisSections.value && analysisSections.value.length > 0) {
-        initialiseCategories();
-        analysisSections.value.sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    categories.value = Array.from(uniqueCategories);
+  } catch (error) {
+    console.error('Error initializing categories:', error);
   }
+};
 
-  const fetchAnalysisSections = async () => {
-    try {
-      const response = await httpService.getRequest<AnalysisSection[]>('/analysisSections/', false);
+const setupInitialQuestion = (questionSetTitle: string) => {
+  analysisSections.value.forEach((analysisSection: AnalysisSection) => {
+    if (analysisSection) {
+      analysisSection.questionSets
+        .filter((questionSet: QuestionSet) => questionSet.title === questionSetTitle)
+        .forEach((questionSet: QuestionSet) => {
+          formSteps[1] = {
+            number: 1,
+            title: `${analysisSection.title}`,
+            subtitle: `${questionSet.title}`,
+            description: questionSet.description,
+            completed: false,
+          };
 
-      if (response && response.data) {
-        await Promise.all(response.data.map(
-          (analysisSection) => fetchAnalysisSection(analysisSection.analysisSectionID)
-        ));
-      }
-    } catch (e) {
-      console.error(e);
+          questionSet.questions?.forEach((question: Question) => {
+            formData[1] = {
+              label: question.title,
+              step: formSteps[1],
+              value: '',
+              inputType: question.inputType,
+              options: question.questionOptions,
+              isValid: false,
+              errorMessage: `Dit is een verplicht veld.`,
+            };
+          });
+        });
     }
-  }
+  });
+};
 
-  const initialiseCategories = async () => {
-    try {
-      const uniqueCategories = new Set<string>();
+const setupForm = (companyPhase: string) => {
+  let formStepIndex = 1;
+  let formDataIndex = 1;
 
-      for (const section of analysisSections.value) {
-        for (const questionSet of section.questionSets) {
-          if (typeof questionSet.title === 'string') {
-            uniqueCategories.add(questionSet.title);
-          }
-        }
-      }
-      categories.value = Array.from(uniqueCategories);
-    } catch (error) {
-      console.error('Error initializing categories:', error);
-    }
-  };
+  analysisSections.value.forEach((analysisSection: AnalysisSection) => {
+    if (analysisSection) {
+      analysisSection.questionSets.forEach((questionSet: QuestionSet, index: number) => {
+        if (questionSet.title !== 'Bedrijfsfase') {
+          const filteredQuestions = questionSet.questions.filter(
+            (question: Question) =>
+              question.requiredPhase.includes(companyPhase.toLowerCase())
+          );
 
-  const setupInitialQuestion = (questionSetTitle: string) => {
-    analysisSections.value.forEach((analysisSection: AnalysisSection) => {
-      if (analysisSection) {
-        analysisSection.questionSets
-          .filter((questionSet: QuestionSet) => questionSet.title === questionSetTitle)
-          .forEach((questionSet: QuestionSet) => {
-            formSteps[1] = {
-              number: 1,
+          if (filteredQuestions.length > 0) {
+            formSteps[formStepIndex] = {
+              number: formStepIndex,
               title: `${analysisSection.title}`,
               subtitle: `${questionSet.title}`,
               description: questionSet.description,
               completed: false,
             };
 
-            questionSet.questions?.forEach((question: Question) => {
-              formData[1] = {
+            filteredQuestions.forEach((question: Question) => {
+              formData[formDataIndex] = {
                 label: question.title,
-                step: formSteps[1],
+                step: formSteps[formStepIndex],
                 value: '',
                 inputType: question.inputType,
                 options: question.questionOptions,
                 isValid: false,
-                errorMessage: 'Dit is een verplicht veld.',
+                errorMessage: `Dit is een verplicht veld.`,
               };
+
+              formDataIndex++;
             });
-          });
-      }
-    });
-  };
 
-  const setupForm = (companyPhase: string) => {
-    let formStepIndex = 1;
-    let formDataIndex = 1;
-
-    analysisSections.value.forEach((analysisSection: AnalysisSection) => {
-      if (analysisSection) {
-        analysisSection.questionSets.forEach((questionSet: QuestionSet) => {
-          if (questionSet.title !== 'Bedrijfsfase') {
-            const filteredQuestions = questionSet.questions.filter(
-              (question: Question) =>
-                question.requiredPhase.includes(companyPhase.toLowerCase())
-            );
-
-            if (filteredQuestions.length > 0) {
-              formSteps[formStepIndex] = {
-                number: formStepIndex,
-                title: `${analysisSection.title}`,
-                subtitle: `${questionSet.title}`,
-                description: questionSet.description,
-                completed: false,
-              };
-
-              filteredQuestions.forEach((question: Question) => {
-                formData[formDataIndex] = {
-                  label: question.title,
-                  step: formSteps[formStepIndex],
-                  value: '',
-                  inputType: question.inputType,
-                  options: question.questionOptions,
-                  isValid: false,
-                  errorMessage: 'Dit is een verplicht veld.',
-                };
-
-                formDataIndex++;
-              });
-
-              formStepIndex++;
-            }
+            formStepIndex++;
           }
-        });
-      }
-    });
-  };
+        }
+      });
+    }
+  });
+};
 
-  const startAnalysis = () => {
-    setupInitialQuestion('Bedrijfsfase');
-    showInformation.value = false;
-    showForm.value = true;
-    currentStep.value = formSteps[1];
-    currentStepFields.value = getCurrentStepFields();
-  }
+const startAnalysis = () => {
+  setupInitialQuestion('Bedrijfsfase');
+  showInformation.value = false;
+  showForm.value = true;
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+}
 
-  const resetInitialQuestion = () => {
-    formSteps = {};
-    formData = {};
-    setupInitialQuestion('Bedrijfsfase');
+const resetInitialQuestion = () => {
+  formSteps = {};
+  formData = {};
+  setupInitialQuestion('Bedrijfsfase');
+  canValidate.value = true;
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+}
+
+const generateForm = () => {
+  // @ts-ignore
+  companyPhase.value = formData[1].value.value
+  setupForm(companyPhase.value);
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+}
+
+const nextStep = () => {
+  currentStepFields.value = getCurrentStepFields();
+
+  const isStepValid = currentStepFields.value.every((field) => {
     canValidate.value = true;
-    currentStep.value = formSteps[1];
-    currentStepFields.value = getCurrentStepFields();
-  }
+    field.isValid = field.value !== '';
 
-  const generateForm = () => {
-    // @ts-ignore
-    companyPhase.value = formData[1].value.value
-    setupForm(companyPhase.value);
-    currentStep.value = formSteps[1];
-    currentStepFields.value = getCurrentStepFields();
-  }
+    return field.isValid;
+  });
 
-  const nextStep = () => {
-    currentStepFields.value = getCurrentStepFields();
-
-    const isStepValid = currentStepFields.value.every((field) => {
-      canValidate.value = true;
-      field.isValid = field.value !== '';
-
-      return field.isValid;
-    });
-
-    if (isStepValid) {
-      if (currentStep.value?.title === 'Bedrijfsfase') {
-        generateForm();
-      } else {
-        currentStep.value!.completed = true;
-        currentStep.value = formSteps[currentStep.value!.number + 1]
-        currentStepFields.value = getCurrentStepFields();
-        showInformation.value = false;
-        showForm.value = true;
-        canValidate.value = false;
-      }
+  if (isStepValid) {
+    if (currentStep.value?.title === 'Bedrijfsfase') {
+      generateForm();
     } else {
-      alert('Vul alle verplichte velden in.');
-      currentStep.value!.completed = false;
-    }
-  };
-
-  const previousStep = () => {
-    canValidate.value = true;
-    currentStep.value = formSteps[currentStep.value!.number - 1]
-    currentStepFields.value = getCurrentStepFields();
-  };
-
-  const continueAnalysis = () => {
-    showForm.value = true;
-    showInformation.value = false;
-
-    if (!currentStep.value) {
-      currentStep.value = formSteps[1];
+      currentStep.value!.completed = true;
+      currentStep.value = formSteps[currentStep.value!.number + 1]
       currentStepFields.value = getCurrentStepFields();
-    }
-  };
-
-  const restartAnalysis = () => {
-    resetInitialQuestion();
-    currentAnalysis.value = null;
-    showInformation.value = false;
-    showForm.value = true;
-    currentStep.value = formSteps[1];
-    currentStepFields.value = getCurrentStepFields();
-    currentStep.value.completed = false;
-    alert('U herstart de analyse.');
-  };
-
-  const goToOverview = () => {
-    showInformation.value = true;
-    showForm.value = false;
-    alert('U gaat terug naar het overzicht.');
-  };
-
-  const reviewForm = () => {
-    currentStepFields.value = getCurrentStepFields();
-
-    const isFormValid = currentStepFields.value.every((field) => {
-      canValidate.value = true;
-
-      field.isValid = typeof field.value === 'string' ? field.value.length > 0 : true;
-
-      return field.isValid;
-    });
-
-    if (isFormValid) {
-      showForm.value = false;
-      showOverview.value = true;
+      showInformation.value = false;
+      showForm.value = true;
       canValidate.value = false;
     }
+  } else {
+    alert('Vul alle verplichte velden in.');
+    currentStep.value!.completed = false;
   }
+};
 
-  const closeOverview = () => {
-    showForm.value = true;
-    showOverview.value = false;
+const previousStep = () => {
+  canValidate.value = true;
+  currentStep.value = formSteps[currentStep.value!.number - 1]
+  currentStepFields.value = getCurrentStepFields();
+};
+
+const continueAnalysis = () => {
+  showForm.value = true;
+  showInformation.value = false;
+
+  if (!currentStep.value) {
+    currentStep.value = formSteps[1];
+    currentStepFields.value = getCurrentStepFields();
   }
+};
 
-  const submitForm = async () => {
-    currentStep.value = formSteps[currentStep.value!.number + 1]
-    showOverview.value = false;
-    showInformation.value = true;
-    showForm.value = false;
+const restartAnalysis = () => {
+  resetInitialQuestion();
+  currentAnalysis.value = null;
+  showInformation.value = false;
+  showForm.value = true;
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+  currentStep.value.completed = false;
+  alert('U herstart de analyse.');
+};
 
-    try {
-      const answers: Answer[] = [];
+const goToOverview = () => {
+  showInformation.value = true;
+  showForm.value = false;
+  alert('U gaat terug naar het overzicht.');
+};
 
-      for (const key in formData) {
-        if (formData[key].value) {
-          // @ts-ignore
-          const selectedValue = formData[key].value.value;
-          const matchingOption = formData[key].options.find(
-            (questionOption: QuestionOption) => questionOption.value === selectedValue
-          );
+const reviewForm = () => {
+  currentStepFields.value = getCurrentStepFields();
 
-          if (matchingOption) {
-            const answer: Answer = {
-              answerID: '',
-              companyAnalysisID: '',
-              selectedOption: matchingOption.questionOptionID,
-            };
+  const isFormValid = currentStepFields.value.every((field) => {
+    canValidate.value = true;
 
-            answers.push(answer);
-          }
-        }
-      }
+    field.isValid = typeof field.value === 'string' ? field.value.length > 0 : true;
 
-      const formFields = {
-        phase: companyPhase.value,
-        answers: answers
-      }
-
-      const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields);
-      const newCompanyAnalysisData = newCompanyAnalysis.data
-
-      if (newCompanyAnalysisData) {
-        const companyData = {
-          companyAnalysis: newCompanyAnalysisData.companyAnalysisID
-        }
-
-        if (currentCompany.value) {
-          await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
-        }
-      }
-    } catch (error) {
-      console.error('Error creating company analysis:', error);
-    }
-    alert('Analyse succesvol opgeslagen.');
-  };
-
-  const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
-    try {
-      await httpService.putRequest<Company>(`/companies/${companyID}`, companyData);
-      fetchCurrentCompany();
-    } catch (error) {
-      console.error('Error associating company analysis:', error);
-    }
-  };
-
-  const getCurrentStepFields = () => {
-    return Object.values(formData).filter((field) => field.step.number === currentStep?.value?.number);
-  }
-
-  const toCapital = (String: string) => {
-    return String.charAt(0).toUpperCase() + String.slice(1);
-  }
-
-  onMounted(() => {
-    fetchCurrentCompany();
-    fetchAnalysisSections();
+    return field.isValid;
   });
+
+  if (isFormValid) {
+    showForm.value = false;
+    showOverview.value = true;
+    canValidate.value = false;
+  }
+}
+
+const closeOverview = () => {
+  showForm.value = true;
+  showOverview.value = false;
+}
+
+const submitForm = async () => {
+  currentStep.value = formSteps[currentStep.value!.number + 1]
+  showOverview.value = false;
+  showInformation.value = true;
+  showForm.value = false;
+
+  try {
+    const answers: Answer[] = [];
+
+    for (const key in formData) {
+      if (formData[key].value) {
+        // @ts-ignore
+        const selectedValue = formData[key].value.value;
+        const matchingOption = formData[key].options.find((questionOption: QuestionOption) => questionOption.value === selectedValue);
+
+        if (matchingOption) {
+          const answer: Answer = {
+            answerID: '',
+            companyAnalysisID: '',
+            selectedOption: matchingOption.questionOptionID,
+          };
+
+          answers.push(answer);
+        }
+      }
+    }
+
+    const formFields = {
+      phase: companyPhase.value,
+      answers: answers
+    }
+
+    const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields);
+    const newCompanyAnalysisData = newCompanyAnalysis.data
+
+    if (newCompanyAnalysisData) {
+      const companyData = {
+        companyAnalysis: newCompanyAnalysisData.companyAnalysisID
+      }
+
+      if (currentCompany.value) {
+        await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
+      }
+    }
+  } catch (error) {
+    console.error('Error creating company analysis:', error);
+  }
+  alert('Analyse succesvol opgeslagen.');
+};
+
+const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
+  try {
+    await httpService.putRequest<Company>(`/companies/${companyID}`, companyData);
+    fetchCurrentCompany();
+  } catch (error) {
+    console.error('Error associating company analysis:', error);
+  }
+};
+
+const getCurrentStepFields = () => {
+  return Object.values(formData).filter((field) => field.step.number === currentStep?.value?.number);
+}
+
+const toCapital = (String: string) => {
+  return String.charAt(0).toUpperCase() + String.slice(1);
+}
+
+onMounted(() => {
+  fetchCurrentCompany();
+  fetchAnalysisSections();
+});
 </script>
 
 <template>
@@ -539,8 +535,7 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-center pt-4">
-        <TextButton v-if="currentStep && currentStep.title === 'Bedrijfsfase'" type="secondary" 
-          display-style="secondary"
+        <TextButton v-if="currentStep && currentStep.title === 'Bedrijfsfase'" type="secondary" display-style="secondary"
           class="me-4" data-test="previousStepButton">
           Vorige
         </TextButton>
@@ -559,8 +554,7 @@
           Volgende
         </TextButton>
 
-        <TextButton v-if="currentStep.number === Object.keys(formSteps).length && currentStep.number !== 1" 
-          type="primary"
+        <TextButton v-if="currentStep.number === Object.keys(formSteps).length && currentStep.number !== 1" type="primary"
           @click="reviewForm" data-test="reviewAnalysisButton">
           Controleer analyse
         </TextButton>
