@@ -21,6 +21,6 @@ const roadmapSchema: Schema<Roadmap> = new Schema({
   versionKey: false,
 });
 
-const RoadmapModel = mongoose.model<Roadmap>('Module', roadmapSchema);
+const RoadmapModel = mongoose.model<Roadmap>('Roadmap', roadmapSchema);
 
 export default RoadmapModel;
