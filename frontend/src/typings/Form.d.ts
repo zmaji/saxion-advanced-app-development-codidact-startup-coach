@@ -2,7 +2,8 @@ type formFieldTypes = 'text' | 'large-text' | 'select';
 
 export interface FormStep {
   number: number;
-  name: string;
+  title: string;
+  subtitle: string;
   description: string;
   completed: boolean;
 }

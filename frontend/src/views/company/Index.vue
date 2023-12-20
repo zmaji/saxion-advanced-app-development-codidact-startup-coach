@@ -1,315 +1,277 @@
 <script setup lang="ts">
-  import type { FormData, FormStep } from '@/typings/Form';
-  import type { User } from '@/typings/User';
-  import type { Company } from '@/typings/Company';
-  import type { CompanyAnalysis } from '@/typings/CompanyAnalysis';
-  import type { AnalysisSection } from '@/typings/AnalysisSection';
-  import type { Ref } from 'vue';
+import type { FormData, FormStep } from '@/typings/Form';
+import type { User } from '@/typings/User';
+import type { Company } from '@/typings/Company';
+import type { CompanyAnalysis } from '@/typings/CompanyAnalysis';
+import type { AnalysisSection } from '@/typings/AnalysisSection';
+import type { QuestionSet } from '@/typings/QuestionSet';
+import type { Question } from '@/typings/Question';
+import type { QuestionOption } from '@/typings/QuestionOption';
+import type { Answer } from '@/typings/Answer';
 
-  import { onMounted, reactive, ref } from 'vue';
-  import httpService from '../../plugins/http/httpService';
-  import { useTokenStore } from '../../stores/token';
-  import { jwtDecode } from 'jwt-decode';
+import { onMounted, ref } from 'vue';
+import httpService from '../../plugins/http/httpService';
+import { useTokenStore } from '../../stores/token';
+import { jwtDecode } from 'jwt-decode';
 
-  import {
-    TextButton,
-    PageTitle,
-    SubTitle,
-    SecondaryTitle,
-    SubHeader
-  } from '@/components';
+import {
+  TextButton,
+  PageTitle,
+  SubTitle,
+  SecondaryTitle,
+  SubHeader
+} from '@/components';
 
-  let currentStep = ref<FormStep | null>(null);
-  let currentStepFields = ref<FormData[] | null>(null);
-  let showForm = ref(false);
-  let showInformation = ref(true);
-  let canValidate = ref(false);
-  let showOverview = ref(false);
+const tokenStore = useTokenStore()
+const currentUser = ref<User | null>(null)
+const currentCompany = ref<Company | null>(null)
+const currentAnalysis = ref<CompanyAnalysis | null>(null)
+const analysisSection = ref<AnalysisSection | null>(null)
+// const analysisSections: Ref<AnalysisSection[]> = ref<AnalysisSection[]>([]);
 
-  const tokenStore = useTokenStore()
-  let currentUser = ref<User | null>(null)
-  let currentCompany = ref<Company | null>(null)
-  let currentAnalysis = ref<CompanyAnalysis | null>(null)
-  const analysisSections: Ref<AnalysisSection[]> = ref<AnalysisSection[]>([]);
+const formSteps: Record<string, FormStep> = {};
+const formData: Record<string, FormData> = {};
+const currentStep = ref<FormStep>();
+const currentStepFields = ref<FormData[] | null>(null);
+const showForm = ref(false);
+const showInformation = ref(true);
+const canValidate = ref(false);
+const showOverview = ref(false);
 
-  let formSteps = reactive({
-    1: {
-      number: 1,
-      name: 'Bedrijfsgegevens',
-      description: 'Vul de benodigde informatie in met betrekking tot de bedrijfsgegevens.',
-      completed: false,
-    },
-    2: {
-      number: 2,
-      name: 'Doelen',
-      description: 'Definieer de doelen die het bedrijf in de toekomst wil bereiken.',
-      completed: false,
-    },
-    3: {
-      number: 3,
-      name: 'Doelgroep',
-      description: 'Identificeer en beschrijf de doelgroep van het bedrijf.',
-      completed: false,
-    },
-  } as Record<string, FormStep>);
-
-  let formData = reactive({
-    industry: {
-      label: 'Industrie',
-      step: formSteps[1],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul een geldige industrie in.',
-    },
-    nrOfEmployees: {
-      label: 'Aantal werknemers',
-      step: formSteps[1],
-      value: 0,
-      isValid: false,
-      errorMessage: 'Vul een geldig aantal werknemers in.',
-    },
-    stage: {
-      label: 'Fase',
-      step: formSteps[1],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul een geldige fase in.',
-    },
-    serviceInformation: {
-      label: 'Service informatie',
-      step: formSteps[2],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige service-informatie in.',
-    },
-    businessGoals: {
-      label: 'Doelen',
-      step: formSteps[2],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige zakelijke doelen in.',
-    },
-    painPoints: {
-      label: 'Pijnpunten',
-      step: formSteps[2],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige pijnpunten in.',
-    },
-    targetAudience: {
-      label: 'Doelgroep',
-      step: formSteps[3],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul een geldige doelgroep in.',
-    },
-    competitors: {
-      label: 'Competitie',
-      step: formSteps[3],
-      value: '',
-      isValid: false,
-      errorMessage: 'Vul geldige informatie over concurrenten in.',
-    },
-    budget: {
-      label: 'Budget',
-      step: formSteps[3],
-      value: 0,
-      isValid: false,
-      errorMessage: 'Vul een geldig budget in.',
-    },
-  } as Record<string, FormData>);
-
-  const fetchUser = async () => {
-    try {
-      const userToken = tokenStore.getToken;
-      currentUser.value = jwtDecode(userToken);
-    } catch (error) {
-      console.error('Error fetching current user:', error);
-    }
-  };
-
-  const fetchCurrentAnalysis = async () => {
-    try {
-      const analysis = await httpService.getRequest<CompanyAnalysis>(
-        `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
-      );
-      currentAnalysis.value = analysis.data;
-    } catch (error) {
-      console.error('Error fetching current user:', error);
-    }
-  };
-
-  const fetchCurrentCompany = async () => {
-    try {
-      fetchUser();
-      const company = await httpService.getRequest<Company>(
-        `/companies/${currentUser.value?.company}`
-      );
-      currentCompany.value = company.data;
-      fetchCurrentAnalysis();
-    } catch (error) {
-      console.error('Error fetching current company:', error);
-    }
-  };
-
-  const startAnalysis = () => {
-    showInformation.value = false;
-    showForm.value = true;
-    currentStep.value = formSteps[1];
-    currentStepFields.value = getCurrentStepFields();
+const fetchUser = async () => {
+  try {
+    const userToken = tokenStore.getToken;
+    currentUser.value = jwtDecode(userToken);
+  } catch (error) {
+    console.error('Error fetching current user:', error);
   }
+};
 
-  const nextStep = () => {
-    currentStepFields.value = getCurrentStepFields();
+const fetchCurrentAnalysis = async () => {
+  try {
+    const response = await httpService.getRequest<CompanyAnalysis>(
+      `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
+    );
+    currentAnalysis.value = response.data;
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+  }
+};
 
-    const isStepValid = currentStepFields.value.every((field) => {
-      canValidate.value = true;
-      field.isValid = field.value !== '';
+const fetchCurrentCompany = async () => {
+  try {
+    fetchUser();
+    const response = await httpService.getRequest<Company>(
+      `/companies/${currentUser.value?.company}`
+    );
+    currentCompany.value = response.data;
+    fetchCurrentAnalysis();
+  } catch (error) {
+    console.error('Error fetching current company:', error);
+  }
+};
 
-      return field.isValid;
+const setupForm = () => {
+  if (analysisSection?.value) {
+    analysisSection.value.questionSets.forEach((questionSet: QuestionSet, index: number) => {
+      formSteps[index + 1] = {
+        number: index + 1,
+        title: `${analysisSection?.value?.title}`,
+        subtitle: `${questionSet.title}`,
+        description: questionSet.description,
+        completed: false,
+      };
+
+      questionSet.questions?.forEach((question: Question) => {
+        formData[question.questionID] = {
+          label: question.title,
+          step: formSteps[index + 1],
+          value: '',
+          isValid: false,
+          errorMessage: `Dit is een verplicht veld.`,
+        };
+      });
     });
+  }
+  console.log(analysisSection.value);
+};
 
-    if (isStepValid) {
-      currentStep.value!.completed = true;
-      currentStep.value = formSteps[currentStep.value!.number + 1]
-      currentStepFields.value = getCurrentStepFields();
-      showInformation.value = false;
-      showForm.value = true;
-      canValidate.value = false;
-    } else {
-      alert('Vul alle verplichte velden in.');
-      currentStep.value!.completed = false;
+const fetchAnalysisSection = async () => {
+  try {
+    const response = await httpService.getRequest<AnalysisSection>('/analysisSections/5efd305b-b1c0-44b4-bb7e-069084219b36', false);
+
+    if (response && response.data) {
+      console.log(response.data)
+      analysisSection.value = response.data;
+      setupForm();
     }
-  };
+  } catch (e) {
+    console.error(e);
+  }
+}
 
-  const previousStep = () => {
+const startAnalysis = () => {
+  showInformation.value = false;
+  showForm.value = true;
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+}
+
+const nextStep = () => {
+  currentStepFields.value = getCurrentStepFields();
+
+  const isStepValid = currentStepFields.value.every((field) => {
     canValidate.value = true;
+    field.isValid = field.value !== '';
 
-    if (currentStep.value === formSteps[1]) {
-      showInformation.value = true;
-      showForm.value = false;
-      alert('U gaat terug naar het overzicht.');
-    } else {
-      currentStep.value = formSteps[currentStep.value!.number - 1]
-      currentStepFields.value = getCurrentStepFields();
-    }
-  };
+    return field.isValid;
+  });
 
-  const continueAnalysis = () => {
-    showForm.value = true;
-    showInformation.value = false;
-
-    if (!currentStep.value) {
-      currentStep.value = formSteps[1];
-      currentStepFields.value = getCurrentStepFields();
-    }
-  };
-
-  const restartAnalysis = () => {
-    resetForm();
-    currentAnalysis.value = null;
+  if (isStepValid) {
+    currentStep.value!.completed = true;
+    currentStep.value = formSteps[currentStep.value!.number + 1]
+    currentStepFields.value = getCurrentStepFields();
     showInformation.value = false;
     showForm.value = true;
-    currentStep.value = formSteps[1];
-    currentStep.value.completed = false;
-    alert('U herstart de analyse.');
-  };
+    canValidate.value = false;
+  } else {
+    alert('Vul alle verplichte velden in.');
+    currentStep.value!.completed = false;
+  }
+};
 
-  const goToOverview = () => {
+const previousStep = () => {
+  canValidate.value = true;
+
+  if (currentStep.value === formSteps[1]) {
     showInformation.value = true;
     showForm.value = false;
     alert('U gaat terug naar het overzicht.');
-  };
-
-  const reviewForm = () => {
+  } else {
+    currentStep.value = formSteps[currentStep.value!.number - 1]
     currentStepFields.value = getCurrentStepFields();
-
-    const isFormValid = currentStepFields.value.every((field) => {
-      canValidate.value = true;
-
-      field.isValid = typeof field.value === 'string' ? field.value.length > 0 : true;
-
-      return field.isValid;
-    });
-
-    if (isFormValid) {
-      showForm.value = false;
-      showOverview.value = true;
-      canValidate.value = false;
-    }
   }
+};
 
-  const closeOverview = () => {
-    showForm.value = true;
-    showOverview.value = false;
-  }
+const continueAnalysis = () => {
+  showForm.value = true;
+  showInformation.value = false;
 
-  const submitForm = async () => {
-    currentStep.value = formSteps[currentStep.value!.number + 1]
-    showOverview.value = false;
-    showInformation.value = true;
-    showForm.value = false;
-
-    try {
-      const formFields = new FormData();
-
-      // TODO: Change logic based on Juul's input, could then be made dynamically as well 
-      formFields.append('industry', String(formData.industry.value));
-      formFields.append('serviceInformation', String(formData.serviceInformation.value));
-      formFields.append('nrOfEmployees', String(formData.nrOfEmployees.value));
-      formFields.append('stage', String(formData.stage.value));
-      formFields.append('businessGoals', JSON.stringify([String(formData.businessGoals.value)]));
-      formFields.append('painPoints', JSON.stringify([String(formData.painPoints.value)]));
-      formFields.append('competitors', JSON.stringify([String(formData.competitors.value)]));
-      formFields.append('targetAudience', String(formData.targetAudience.value));
-      formFields.append('budget', String(formData.budget.value));
-
-      const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields);
-      const newCompanyAnalysisData = newCompanyAnalysis.data
-
-      if (newCompanyAnalysisData) {
-        const companyData = {
-          companyAnalysis: newCompanyAnalysisData.companyAnalysisID
-        }
-
-        if (currentCompany.value) {
-          await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
-        }
-      }
-    } catch (error) {
-      console.error('Error creating company analysis:', error);
-    }
-    alert('Analyse succesvol opgeslagen.');
-  };
-
-  const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
-    try {
-      await httpService.putRequest<Company>(`/companies/${companyID}`, companyData);
-      fetchCurrentCompany();
-    } catch (error) {
-      console.error('Error associating company analysis:', error);
-    }
-  };
-
-  const resetForm = () => {
-    for (const key in formData) {
-      formData[key].value = '';
-      formData[key].isValid = false;
-    }
+  if (!currentStep.value) {
     currentStep.value = formSteps[1];
     currentStepFields.value = getCurrentStepFields();
+  }
+};
+
+const restartAnalysis = () => {
+  resetForm();
+  currentAnalysis.value = null;
+  showInformation.value = false;
+  showForm.value = true;
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+  currentStep.value.completed = false;
+  alert('U herstart de analyse.');
+};
+
+const goToOverview = () => {
+  showInformation.value = true;
+  showForm.value = false;
+  alert('U gaat terug naar het overzicht.');
+};
+
+const reviewForm = () => {
+  currentStepFields.value = getCurrentStepFields();
+
+  const isFormValid = currentStepFields.value.every((field) => {
+    canValidate.value = true;
+
+    field.isValid = typeof field.value === 'string' ? field.value.length > 0 : true;
+
+    return field.isValid;
+  });
+
+  if (isFormValid) {
+    showForm.value = false;
+    showOverview.value = true;
     canValidate.value = false;
-  };
-
-  const getCurrentStepFields = () => {
-    return Object.values(formData).filter((field) => field.step === currentStep.value);
   }
+}
 
-  const toCapital = (String: string) => {
-    return String.charAt(0).toUpperCase() + String.slice(1);
+const closeOverview = () => {
+  showForm.value = true;
+  showOverview.value = false;
+}
+
+const submitForm = async () => {
+  currentStep.value = formSteps[currentStep.value!.number + 1]
+  showOverview.value = false;
+  showInformation.value = true;
+  showForm.value = false;
+
+  try {
+    const formFields = new FormData();
+
+    // TODO: Change logic based on Juul's input, could then be made dynamically as well 
+    formFields.append('industry', String(formData.industry.value));
+    formFields.append('serviceInformation', String(formData.serviceInformation.value));
+    formFields.append('nrOfEmployees', String(formData.nrOfEmployees.value));
+    formFields.append('stage', String(formData.stage.value));
+    formFields.append('businessGoals', JSON.stringify([String(formData.businessGoals.value)]));
+    formFields.append('painPoints', JSON.stringify([String(formData.painPoints.value)]));
+    formFields.append('competitors', JSON.stringify([String(formData.competitors.value)]));
+    formFields.append('targetAudience', String(formData.targetAudience.value));
+    formFields.append('budget', String(formData.budget.value));
+
+    const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields);
+    const newCompanyAnalysisData = newCompanyAnalysis.data
+
+    if (newCompanyAnalysisData) {
+      const companyData = {
+        companyAnalysis: newCompanyAnalysisData.companyAnalysisID
+      }
+
+      if (currentCompany.value) {
+        await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
+      }
+    }
+  } catch (error) {
+    console.error('Error creating company analysis:', error);
   }
+  alert('Analyse succesvol opgeslagen.');
+};
 
-  onMounted(fetchCurrentCompany);
+const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
+  try {
+    await httpService.putRequest<Company>(`/companies/${companyID}`, companyData);
+    fetchCurrentCompany();
+  } catch (error) {
+    console.error('Error associating company analysis:', error);
+  }
+};
+
+const resetForm = () => {
+  for (const key in formData) {
+    formData[key].value = '';
+    formData[key].isValid = false;
+  }
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+  canValidate.value = false;
+};
+
+const getCurrentStepFields = () => {
+  return Object.values(formData).filter((field) => field.step.number === currentStep?.value?.number);
+}
+
+const toCapital = (String: string) => {
+  return String.charAt(0).toUpperCase() + String.slice(1);
+}
+
+onMounted(() => {
+  fetchCurrentCompany();
+  fetchAnalysisSection();
+});
 </script>
 
 <template>
@@ -335,7 +297,7 @@
     <div v-if="currentAnalysis">
       <div class=" row">
         <div class="col-4 mb-4" v-for="( step, index ) in formSteps" :key="index">
-          <h3>{{ step.name }}</h3>
+          <h3>{{ step.subtitle }}</h3>
           <div v-for="( field, fieldName ) in  formData " :key="fieldName">
             <div v-if="field.step === step">
               <div class="fw-bold me-2">{{ field.label }}</div>
@@ -409,7 +371,8 @@
         <div class="col-1" />
 
         <div class="col-7">
-          <SubHeader>Stap {{ currentStep.number }}: {{ currentStep.name }}</SubHeader>
+          <SubHeader>Stap {{ currentStep.number }}: {{ currentStep.title }}</SubHeader>
+          <SubHeader>{{ currentStep.subtitle }}</SubHeader>
 
           <p>{{ currentStep.description }}</p>
 

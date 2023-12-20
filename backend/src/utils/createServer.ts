@@ -12,7 +12,7 @@ import categoryRoutes from '../routes/Category';
 import labelRoutes from '../routes/Label';
 import userRoutes from '../routes/User';
 import contentUserRoutes from '../routes/ContentUser';
-import analysisSectionRoutees from '../routes/AnalysisSection';
+import analysisSectionRoutes from '../routes/AnalysisSection';
 
 const createServer = () => {
   const app: Express = express();
@@ -44,7 +44,7 @@ const createServer = () => {
   app.use('/labels', labelRoutes);
   app.use('/users', userRoutes);
   app.use('/contentUsers', contentUserRoutes);
-  app.use('/analysisSections', analysisSectionRoutees);
+  app.use('/analysisSections', analysisSectionRoutes);
 
   return app;
 };
