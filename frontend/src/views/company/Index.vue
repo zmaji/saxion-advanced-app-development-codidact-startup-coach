@@ -3,6 +3,7 @@ import type { FormData, FormStep } from '@/typings/Form';
 import type { User } from '@/typings/User';
 import type { Company } from '@/typings/Company';
 import type { CompanyAnalysis } from '@/typings/CompanyAnalysis';
+import type { AnalysisSection } from '@/typings/AnalysisSection';
 
 import { onMounted, reactive, ref } from 'vue';
 import httpService from '../../plugins/http/httpService';
@@ -28,41 +29,7 @@ const tokenStore = useTokenStore()
 let currentUser = ref<User | null>(null)
 let currentCompany = ref<Company | null>(null)
 let currentAnalysis = ref<CompanyAnalysis | null>(null)
-
-const getUser = async () => {
-  try {
-    const userToken = tokenStore.getToken;
-    currentUser.value = jwtDecode(userToken);
-  } catch (error) {
-    console.error('Error fetching current user:', error);
-  }
-};
-
-const getAnalysis = async () => {
-  try {
-    const fetchedAnalysis = await httpService.getRequest<CompanyAnalysis>(
-      `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
-    );
-    currentAnalysis.value = fetchedAnalysis.data;
-  } catch (error) {
-    console.error('Error fetching current user:', error);
-  }
-};
-
-const fetchCurrentCompany = async () => {
-  try {
-    getUser();
-    const fetchedCompany = await httpService.getRequest<Company>(
-      `/companies/${currentUser.value?.company}`
-    );
-    currentCompany.value = fetchedCompany.data;
-    getAnalysis();
-  } catch (error) {
-    console.error('Error fetching current company:', error);
-  }
-};
-
-onMounted(fetchCurrentCompany);
+let analysisSections = ref<AnalysisSection[] | null>(null);
 
 let formSteps = reactive({
   1: {
@@ -150,6 +117,50 @@ let formData = reactive({
     errorMessage: 'Vul een geldig budget in.',
   },
 } as Record<string, FormData>);
+
+const fetchUser = async () => {
+  try {
+    const userToken = tokenStore.getToken;
+    currentUser.value = jwtDecode(userToken);
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+  }
+};
+
+const fetchCurrentAnalysis = async () => {
+  try {
+    const analysis = await httpService.getRequest<CompanyAnalysis>(
+      `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
+    );
+    currentAnalysis.value = analysis.data;
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+  }
+};
+
+const fetchCurrentCompany = async () => {
+  try {
+    fetchUser();
+    const company = await httpService.getRequest<Company>(
+      `/companies/${currentUser.value?.company}`
+    );
+    currentCompany.value = company.data;
+    fetchCurrentAnalysis();
+  } catch (error) {
+    console.error('Error fetching current company:', error);
+  }
+};
+
+const fetchAnalysisSections = async () => {
+  try {
+    const fetchedAnalysisSections = await httpService.getRequest<AnalysisSection[]>(
+      `/analysisSections`
+    );
+    analysisSections.value = fetchedAnalysisSections.data as AnalysisSection[];
+  } catch (error) {
+    console.error('Error fetching analysis sections:', error);
+  }
+};
 
 const startAnalysis = () => {
   showInformation.value = false;
@@ -307,6 +318,13 @@ const getCurrentStepFields = () => {
 const toCapital = (String: string) => {
   return String.charAt(0).toUpperCase() + String.slice(1);
 }
+
+onMounted(fetchCurrentCompany);
+onMounted(fetchAnalysisSections);
+
+console.log('fetchAnalysisSections');
+console.log('fetchAnalysisSections');
+console.log(fetchAnalysisSections);
 </script>
 
 <template>

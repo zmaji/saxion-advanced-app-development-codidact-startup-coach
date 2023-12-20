@@ -54,7 +54,6 @@ const getAnalysisSection = async (analysisSectionID: string): Promise<AnalysisSe
   }
 };
 
-
 const analysisSectionController = {
   getAnalysisSections,
   getAnalysisSection
