@@ -73,7 +73,7 @@
   <PageTitle>De kennisbank</PageTitle>
 
   <div class="d-flex flex-row flex-wrap align-items-center">
-    <CategoryBreadCrumb/>
+    <CategoryBreadCrumb />
 
     <IconButton
       icon="plus"
@@ -87,29 +87,19 @@
 
   <SecondaryTitle>Zoeken en filteren</SecondaryTitle>
 
-  <SearchBar v-model="contents" @update:modelValue="updateContent()"/>
+  <SearchBar v-model="contents" @update:modelValue="updateContent()" />
 
   <div v-if="standardContents && standardContents.length > 0" class="row row-cols-2 g-4 pb-4">
-    <ContentItem
-      v-for="(content, key) in standardContents"
-      :key="key"
-      :content="content"
-    />
+    <ContentItem v-for="(content, key) in standardContents" :key="key" :content="content" />
   </div>
 
-  <SecondaryTitle
-    v-if="(contents && contents.length > 0) && (standardContents && standardContents.length > 0)"
-  >
+  <SecondaryTitle v-if="(contents && contents.length > 0) && (standardContents && standardContents.length > 0)">
     Overige posts
   </SecondaryTitle>
 
   <div class="row row-cols-2 g-4 pt-2 pb-4">
-    <ContentItem
-      v-for="(content, key) in contents"
-      :key="key"
-      :content="content"
-    />
+    <ContentItem v-for="(content, key) in contents" :key="key" :content="content" />
   </div>
 
-  <CategorySidebar/>
+  <CategorySidebar />
 </template>

@@ -3,6 +3,8 @@
   import type { User } from '@/typings/User';
   import type { Company } from '@/typings/Company';
   import type { CompanyAnalysis } from '@/typings/CompanyAnalysis';
+  import type { AnalysisSection } from '@/typings/AnalysisSection';
+  import type { Ref } from 'vue';
 
   import { onMounted, reactive, ref } from 'vue';
   import httpService from '../../plugins/http/httpService';
@@ -28,41 +30,7 @@
   let currentUser = ref<User | null>(null)
   let currentCompany = ref<Company | null>(null)
   let currentAnalysis = ref<CompanyAnalysis | null>(null)
-
-  const getUser = async () => {
-    try {
-      const userToken = tokenStore.getToken;
-      currentUser.value = jwtDecode(userToken);
-    } catch (error) {
-      console.error('Error fetching current user:', error);
-    }
-  };
-
-  const getAnalysis = async () => {
-    try {
-      const fetchedAnalysis = await httpService.getRequest<CompanyAnalysis>(
-        `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
-      );
-      currentAnalysis.value = fetchedAnalysis.data;
-    } catch (error) {
-      console.error('Error fetching current user:', error);
-    }
-  };
-
-  const fetchCurrentCompany = async () => {
-    try {
-      getUser();
-      const fetchedCompany = await httpService.getRequest<Company>(
-        `/companies/${currentUser.value?.company}`
-      );
-      currentCompany.value = fetchedCompany.data;
-      getAnalysis();
-    } catch (error) {
-      console.error('Error fetching current company:', error);
-    }
-  };
-
-  onMounted(fetchCurrentCompany);
+  const analysisSections: Ref<AnalysisSection[]> = ref<AnalysisSection[]>([]);
 
   let formSteps = reactive({
     1: {
@@ -150,6 +118,39 @@
       errorMessage: 'Vul een geldig budget in.',
     },
   } as Record<string, FormData>);
+
+  const fetchUser = async () => {
+    try {
+      const userToken = tokenStore.getToken;
+      currentUser.value = jwtDecode(userToken);
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+    }
+  };
+
+  const fetchCurrentAnalysis = async () => {
+    try {
+      const analysis = await httpService.getRequest<CompanyAnalysis>(
+        `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
+      );
+      currentAnalysis.value = analysis.data;
+    } catch (error) {
+      console.error('Error fetching current user:', error);
+    }
+  };
+
+  const fetchCurrentCompany = async () => {
+    try {
+      fetchUser();
+      const company = await httpService.getRequest<Company>(
+        `/companies/${currentUser.value?.company}`
+      );
+      currentCompany.value = company.data;
+      fetchCurrentAnalysis();
+    } catch (error) {
+      console.error('Error fetching current company:', error);
+    }
+  };
 
   const startAnalysis = () => {
     showInformation.value = false;
@@ -307,6 +308,8 @@
   const toCapital = (String: string) => {
     return String.charAt(0).toUpperCase() + String.slice(1);
   }
+
+  onMounted(fetchCurrentCompany);
 </script>
 
 <template>
