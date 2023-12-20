@@ -17,9 +17,9 @@ interface Filter {
 }
 
 const getAllContent = async (
-    title: string,
-    labels: string[],
-    category: string,
+  title: string,
+  labels: string[],
+  category: string,
 ): Promise<Content[]> => {
   try {
     let labelIDs: string[] = [];
@@ -37,8 +37,8 @@ const getAllContent = async (
 
     if (labelIDs.length > 0) {
       const contentLabelResults: ContentLabel[] = await contentLabelModel.find(
-          { labelID: { $in: labelIDs } },
-          { contentID: 1 },
+        { labelID: { $in: labelIDs } },
+        { contentID: 1 },
       );
       const contentIDs = contentLabelResults.map((contentLabel) => contentLabel.contentID);
 
@@ -58,7 +58,7 @@ const getAllContent = async (
 
       for (const content of result) {
         const labelsOfContent = contentLabels.filter(
-            (contentLabel: ContentLabel) => contentLabel.contentID === content.contentID,
+          (contentLabel: ContentLabel) => contentLabel.contentID === content.contentID,
         );
         const relatedLabels: Label[] = [];
 
@@ -92,12 +92,12 @@ const getContent = async (contentID: string): Promise<Content | null> => {
 
     if (result) {
       const relatedUser: SimpleUser | null = await userModel.findOne(
-          { userID: result.user },
-          { userID: 1, fullName: 1, _id: 0 },
+        { userID: result.userID },
+        { userID: 1, fullName: 1, _id: 0 },
       );
       const contentFeedback: ContentFeedback[] = await contentFeedbackModel.find(
-          { contentID: contentID },
-          { _id: 0 },
+        { contentID: contentID },
+        { _id: 0 },
       ).lean();
       const contentFeedbackWithUsers: ContentFeedback[] = [];
       const contentUsers: ContentUser[] = await contentUserModel.find({ contentID: contentID }, { _id: 0 }).lean();
@@ -116,8 +116,8 @@ const getContent = async (contentID: string): Promise<Content | null> => {
 
       for (const contentUser of contentUsers) {
         const user: SimpleUser | null = await userModel.findOne(
-            { userID: contentUser.userID },
-            { userID: 1, fullName: 1, _id: 0 },
+          { userID: contentUser.userID },
+          { userID: 1, fullName: 1, _id: 0 },
         );
 
         if (user) {
@@ -132,8 +132,8 @@ const getContent = async (contentID: string): Promise<Content | null> => {
 
       for (const feedback of contentFeedback) {
         const user: SimpleUser | null = await userModel.findOne(
-            { userID: feedback.user },
-            { userID: 1, fullName: 1, _id: 0 },
+          { userID: feedback.userID },
+          { userID: 1, fullName: 1, _id: 0 },
         );
 
         if (user) {
@@ -211,14 +211,14 @@ const createContent = async (contentData: Content): Promise<Content | null> => {
 };
 
 const updateContent = async (
-    contentID: string,
-    newContentData: Content,
+  contentID: string,
+  newContentData: Content,
 ): Promise<Content | null> => {
   try {
     const updatedContent = await contentModel.findOneAndUpdate(
-        { contentID },
-        newContentData,
-        { new: true },
+      { contentID },
+      newContentData,
+      { new: true },
     );
 
     return updatedContent;
