@@ -96,16 +96,14 @@ import router from '@/router';
 
   watch(() => route.params.categoryID, async (currentCategory) => {
     if (currentCategory) {
-      if (currentCategory) {
-        const matchedCategory = categories.value.find(category => category.categoryID === currentCategory);
-
-        if (matchedCategory) {
-          categoryFilter.value = matchedCategory;
-        }
-
-        await search();
+      const matchedCategory = categories.value.find(category => category.categoryID === currentCategory);
+      if (matchedCategory) {
+        categoryFilter.value = matchedCategory;
       }
+    } else {
+      categoryFilter.value = undefined;
     }
+    await search();
   });
 </script>
 
