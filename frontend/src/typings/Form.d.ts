@@ -1,5 +1,3 @@
-type formFieldTypes = 'text' | 'large-text' | 'select';
-
 export interface FormStep {
   number: number;
   title: string;
@@ -14,5 +12,6 @@ export interface FormData {
   value: string | number;
   isValid: boolean;
   errorMessage: string;
-  type?: formFieldTypes;
+  inputType: string;
+  options: string[];
 }

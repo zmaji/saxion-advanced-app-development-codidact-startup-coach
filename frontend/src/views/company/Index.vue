@@ -87,6 +87,8 @@ const setupForm = () => {
           label: question.title,
           step: formSteps[index + 1],
           value: '',
+          inputType: question.inputType,
+          options: question.questionOptions.map(option => option.value),
           isValid: false,
           errorMessage: `Dit is een verplicht veld.`,
         };
@@ -95,6 +97,7 @@ const setupForm = () => {
   }
   console.log(analysisSection.value);
 };
+
 
 const fetchAnalysisSection = async () => {
   try {
@@ -377,15 +380,24 @@ onMounted(() => {
           <p>{{ currentStep.description }}</p>
 
           <div class="col-7">
-            <div class="pb-3" v-for="( formField, key ) in  currentStepFields " :key="key">
+            <div class="pb-3" v-for="(formField, key) in currentStepFields" :key="key">
               <label :for="formField.label" class="form-label">{{ formField.label }}</label>
 
-              <input type="text" class="form-control" :id="formField.label" v-model="formField.value"
-                :class="{ 'is-invalid': !formField.isValid && canValidate }"
-                v-if="formField.label !== 'Aantal werknemers' && formField.label !== 'Budget'">
+              <template v-if="formField.inputType === 'Radio'">
+                <div v-for="(option, index) in formField.options" :key="index">
+                  <input type="radio" :id="`${formField.label}-${index}`" :value="option" v-model="formField.value">
+                  <label class="ms-2" :for="`${formField.label}-${index}`">{{ option }}</label>
+                </div>
+              </template>
 
-              <input type="number" class="form-control" :id="formField.label" v-model="formField.value"
-                :class="{ 'is-invalid': !formField.isValid && canValidate }" v-else>
+              <template v-else>
+                <input v-if="formField.label !== 'Aantal werknemers' && formField.label !== 'Budget'" type="text"
+                  class="form-control" :id="formField.label" v-model="formField.value"
+                  :class="{ 'is-invalid': !formField.isValid && canValidate }" />
+
+                <input v-else type="number" class="form-control" :id="formField.label" v-model="formField.value"
+                  :class="{ 'is-invalid': !formField.isValid && canValidate }" />
+              </template>
 
               <small class="invalid-feedback">{{ formField.errorMessage }}</small>
             </div>
@@ -446,7 +458,7 @@ onMounted(() => {
 
         <div v-for="(  formStep, key  ) in   formSteps  " :key="key">
           <div class="pb-3">
-            <SubHeader class="pb-1" data-test="reviewFormStepName">{{ formStep.name }}</SubHeader>
+            <SubHeader class="pb-1" data-test="reviewFormStepName">{{ formStep.subtitle }}</SubHeader>
 
             <div v-for="(  formField, fieldKey  ) in   formData  " :key="fieldKey">
               <div v-if="formField.step === formStep" class="d-flex">
