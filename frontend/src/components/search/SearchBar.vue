@@ -4,8 +4,9 @@
   import type { Category } from '@/typings/Category';
   import type { Label } from '@/typings/Label';
 
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, watch } from 'vue';
   import VueMultiselect from 'vue-multiselect';
+  import { useRoute } from 'vue-router';
 
   import httpService from '@/plugins/http/httpService';
   import {
@@ -14,6 +15,7 @@
     TextButton,
     SubTitle
   } from '@/components';
+import router from '@/router';
 
   interface Props {
     modelValue?: Content[]
@@ -22,6 +24,8 @@
   withDefaults(defineProps<Props>(), {
     modelValue: undefined
   });
+
+  const route = useRoute();
 
   const searchQuery = ref('');
   const labelFilter = ref<Label[]>([]);
@@ -79,6 +83,8 @@
     searchQuery.value = '';
     labelFilter.value = [];
     categoryFilter.value = undefined;
+    
+    router.push({ name: 'knowledgeBase.overview' });
 
     search();
   }
@@ -86,6 +92,20 @@
   onMounted(() => {
     fetchCategories();
     fetchLabels();
+  });
+
+  watch(() => route.params.categoryID, async (currentCategory) => {
+    if (currentCategory) {
+      if (currentCategory) {
+        const matchedCategory = categories.value.find(category => category.categoryID === currentCategory);
+
+        if (matchedCategory) {
+          categoryFilter.value = matchedCategory;
+        }
+
+        await search();
+      }
+    }
   });
 </script>
 
