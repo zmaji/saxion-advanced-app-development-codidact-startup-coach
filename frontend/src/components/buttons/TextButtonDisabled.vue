@@ -1,25 +1,18 @@
 <script setup lang="ts">
-  import type { RouteLocationRaw } from 'vue-router';
   import type { buttonTypes, buttonSizes, buttonDisplayStyles } from '.';
 
   import { computed } from 'vue';
 
   interface Props {
     size?: buttonSizes;
-    renderAs?: 'button' | 'a';
-    buttonType?: 'submit' | 'button' | null;
     type?: buttonTypes;
     displayStyle?: buttonDisplayStyles;
-    to?: RouteLocationRaw;
   }
 
   const props = withDefaults(defineProps<Props>(), {
     size: undefined,
-    renderAs: 'a',
-    buttonType: 'button',
     type: 'primary',
     displayStyle: 'primary',
-    to: '#',
   });
 
   const dynamicDomClasses = computed<string>(() => {
@@ -46,20 +39,11 @@
 
 <template>
   <button
-    v-if="props.renderAs === 'button'"
-    :type="buttonType ? buttonType : 'submit'"
+    type="button"
     :class="dynamicDomClasses"
-     class="px-4 py-2"
+    class="px-4 py-2"
+    disabled
   >
     <slot></slot>
   </button>
-
-  <RouterLink
-    v-else
-    :class="dynamicDomClasses"
-    class="px-4 py-2"
-    :to="to"
-  >
-    <slot></slot>
-  </RouterLink>
 </template>

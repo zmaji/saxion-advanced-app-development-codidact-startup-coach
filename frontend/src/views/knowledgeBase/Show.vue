@@ -17,6 +17,7 @@
     SecondaryTitle,
     TextLabel,
     TextButton,
+    TextButtonDisabled,
     IconLabel,
     UserSelect
   } from '@/components';
@@ -31,7 +32,7 @@
   const currentUserID = ref<string | undefined>('');
   const addingMoreReviewers = ref(false);
   const newReviewers = ref<ContentUser[]>([]);
-  const newFeedback = ref<string>();
+  const newFeedback = ref<string>('');
 
   const canReview = (): boolean => {
     return content.value?.contentUsers?.find((user) => user.userID === currentUser.value?.userID) !== null;
@@ -199,7 +200,13 @@
           rows="4"
         />
 
-        <TextButton display-style="primary" @click="postFeedback()">Feedback plaatsen</TextButton>
+        <TextButton v-show="newFeedback.length > 0" display-style="primary" @click="postFeedback()">
+          Feedback plaatsen
+        </TextButton>
+
+        <TextButtonDisabled v-show="newFeedback.length === 0" type="secondary" display-style="primary">
+          Feedback plaatsen
+        </TextButtonDisabled>
       </div>
 
       <div v-if="isOwner()" class="col">

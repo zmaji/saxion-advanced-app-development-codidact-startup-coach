@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 export { default as TextButton } from '@/components/buttons/TextButton.vue';
+export { default as TextButtonDisabled } from '@/components/buttons/TextButtonDisabled.vue';
 export { default as IconButton } from '@/components/buttons/IconButton.vue';
 
 // Layout components
