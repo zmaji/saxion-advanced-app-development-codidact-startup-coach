@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import type { Content } from '@/typings/Content';
+  import type { Content, ContentFeedback } from '@/typings/Content';
   import type { Label } from '@/typings/Label';
   import type { ContentUser, User } from '@/typings/User';
+  import type { Ref } from 'vue';
 
   import { onMounted, ref } from 'vue';
   import { useRoute } from 'vue-router';
@@ -24,12 +25,13 @@
 
   const route = useRoute();
   const loaded = ref(false);
-  const content = ref<Content>();
+  const content: Ref<Content | undefined> = ref<Content>();
   const tokenStore = useTokenStore()
   const currentUser = ref<User | null>(null)
   const currentUserID = ref<string | undefined>('');
   const addingMoreReviewers = ref(false);
   const newReviewers = ref<ContentUser[]>([]);
+  const newFeedback = ref<string>();
 
   const canReview = (): boolean => {
     return content.value?.contentUsers?.find((user) => user.userID === currentUser.value?.userID) !== null;
@@ -56,6 +58,29 @@
         });
         addingMoreReviewers.value = false;
         newReviewers.value = [];
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  const postFeedback = async () => {
+    try {
+      const response = await httpService.postRequest<ContentFeedback>(
+        `/feedback/${route.params.contentID}`,
+        {
+          feedback: newFeedback.value
+        },
+        true
+      );
+
+      if (response && response.data) {
+        content.value?.feedback?.push(response.data);
+
+        toast.success('Feedback succesvol geplaatst!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        newFeedback.value = '';
       }
     } catch (e) {
       console.error(e);
@@ -94,13 +119,7 @@
 </script>
 
 <template>
-  <div v-if="!loaded">
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-  </div>
-
-  <div v-else-if="loaded && content">
+  <div v-if="loaded && content">
     <PageTitle>{{ content.title }}</PageTitle>
 
     <div class="d-flex flex-row flex-wrap align-items-center pb-3">
@@ -124,8 +143,14 @@
     </div>
 
     <div class="d-flex flex-row flex-wrap pb-4">
-      <IconLabel v-if="content.labels.find((label: Label) => label.name === 'Standaard sjabloon')" icon="file"
-        type="success" display-style="secondary" size="lg" class="mt-2">
+      <IconLabel
+        v-if="content.labels.find((label: Label) => label.name === 'Standaard sjabloon')"
+        icon="file"
+        type="success"
+        display-style="secondary"
+        size="lg"
+        class="mt-2"
+      >
         Standaard sjabloon
       </IconLabel>
 
@@ -136,7 +161,7 @@
       </template>
     </div>
 
-    <p class="mb-0 pb-4">{{ content.description }}</p>
+    <p class="mb-0 pb-4">{{ content!.description }}</p>
 
     <SecondaryTitle>Bijlage</SecondaryTitle>
 
@@ -166,9 +191,15 @@
 
         <SecondaryTitle class="pt-3">Feedback plaatsen</SecondaryTitle>
 
-        <textarea class="form-control mb-2" id="contentFeedback" placeholder="Vul hier uw feedback in" rows="4" />
+        <textarea
+          v-model="newFeedback"
+          class="form-control mb-2"
+          id="contentFeedback"
+          placeholder="Vul hier uw feedback in"
+          rows="4"
+        />
 
-        <TextButton display-style="primary">Feedback plaatsen</TextButton>
+        <TextButton display-style="primary" @click="postFeedback()">Feedback plaatsen</TextButton>
       </div>
 
       <div v-if="isOwner()" class="col">

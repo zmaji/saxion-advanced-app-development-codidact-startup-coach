@@ -8,16 +8,18 @@ const router = Router();
 
 router.post('/:contentID', isLoggedIn, isReviewer, async (req: Request, res: Response) => {
   try {
-    const result = await feedbackController.addFeedback(req.params.contentID, req.body);
+    if (req.headers.authorization) {
+      const result = await feedbackController.addFeedback(req.params.contentID, req.headers.authorization, req.body);
 
-    if (result) {
-      res
-          .status(StatusCodes.OK)
-          .json(result);
-    } else {
-      res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ error: 'Unable to add feedback' });
+      if (result) {
+        res
+            .status(StatusCodes.OK)
+            .json(result);
+      } else {
+        res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ error: 'Unable to add feedback' });
+      }
     }
   } catch {
     res
