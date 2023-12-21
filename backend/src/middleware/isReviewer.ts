@@ -21,8 +21,9 @@ const isReviewer = async (req: Request, res: Response, next: NextFunction) => {
 
     const contentUsers: ContentUser[] = await contentUserModel.find({ contentID: contentID });
     const isReviewer = contentUsers?.some((user) => user.userID === userID && user.accessLevel === 'review');
+    const isContentOwner = content.userID === userID;
 
-    if (isReviewer) {
+    if (isReviewer || isContentOwner) {
       next();
     } else {
       res.status(StatusCodes.FORBIDDEN).json({ error: 'You do not have permission to add feedback to this content' });
