@@ -35,11 +35,11 @@
   }
 
   onMounted(async () => {
-    if (route.query.category)
-    {
-      await fetchCategories(route.query.category.valueOf().toString());
-    }
-    await fetchCategories(route.params.categoryID);
+    await fetchCategories(
+        route.query.category 
+        ? route.query.category.valueOf().toString() 
+        : route.params.categoryID
+      );
   });
 
   if (!props.categoryID) {
