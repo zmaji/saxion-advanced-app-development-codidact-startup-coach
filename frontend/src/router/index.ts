@@ -56,7 +56,7 @@ const router = createRouter({
           },
         },
         {
-          path: ':contentID',
+          path: 'content/:contentID',
           name: 'knowledgeBase.show',
           component: contentShow,
           meta: {
@@ -65,7 +65,7 @@ const router = createRouter({
           },
         },
         {
-          path: 'create',
+          path: 'content/create',
           name: 'knowledgeBase.create',
           component: ContentCreate,
           meta: {

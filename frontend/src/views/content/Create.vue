@@ -5,6 +5,7 @@
   import type { Category } from '@/typings/Category';
 
   import { onMounted, reactive, ref } from 'vue';
+  import { useRoute } from 'vue-router';
   import { jwtDecode } from 'jwt-decode';
   import { toast } from 'vue3-toastify';
 
@@ -12,6 +13,7 @@
   import router from '@/router/index';
   import httpService from '@/plugins/http/httpService';
   import {
+    CategoryBreadCrumb,
     PageTitle,
     SecondaryTitle,
     TextButton,
@@ -19,6 +21,8 @@
   } from '@/components';
   import { LabelSelect } from '@/components'
   import { CompanySelect } from '@/components'
+
+  const route = useRoute();
 
   const tokenStore = useTokenStore()
   const categories: Ref<Category[]> = ref<Category[]>([]);
@@ -148,7 +152,11 @@
   }
 
   onMounted(() => {
-    fetchCategories();
+    fetchCategories().then(() => {
+      if (route.query.category) {
+        contentTemplate.category = route.query.category.valueOf().toString();
+      }
+    })
     fetchUserData();
   });
 
@@ -156,6 +164,10 @@
 
 <template>
   <PageTitle>Content Toevoegen</PageTitle>
+
+  <div class="d-flex flex-row flex-wrap align-items-center">
+    <CategoryBreadCrumb/>
+  </div>
 
   <form class="row g-2 g-lg-3">
     <div class="col col-lg-6">

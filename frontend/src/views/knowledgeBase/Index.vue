@@ -6,6 +6,7 @@
   import type { Label } from '@/typings/Label';
 
   import { onMounted, ref } from 'vue';
+  import { useRoute } from 'vue-router';
 
   import {
     CategoryBreadCrumb,
@@ -17,6 +18,8 @@
     IconButton
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
+
+  const route = useRoute();
 
   const categories: Ref<Category[]> = ref<Category[]>([]);
   const contents: Ref<Content[]> = ref<Content[]>([]);
@@ -72,8 +75,14 @@
   <div class="d-flex flex-row flex-wrap align-items-center">
     <CategoryBreadCrumb />
 
-    <IconButton icon="plus" type="primary" display-style="secondary" :render-as-circle="true"
-      :to="{ name: 'knowledgeBase.create' }" class="ms-3" />
+    <IconButton
+      icon="plus"
+      type="primary"
+      display-style="secondary"
+      :render-as-circle="true"
+      :to="{ name: 'knowledgeBase.create', query: { category: route.params.categoryID }}"
+      class="ms-3"
+    />
   </div>
 
   <SecondaryTitle>Zoeken en filteren</SecondaryTitle>

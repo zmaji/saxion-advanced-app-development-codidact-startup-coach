@@ -103,7 +103,7 @@
     <PageTitle>{{ content.title }}</PageTitle>
 
     <div class="d-flex flex-row flex-wrap align-items-center pb-3">
-      <CategoryBreadCrumb />
+      <CategoryBreadCrumb :categoryID="content.category"/>
     </div>
 
     <div class="d-flex flex-row flex-wrap justify-content-start pb-2">
