@@ -18,10 +18,10 @@ router.post('/:contentID', isLoggedIn, async (req: Request, res: Response) => {
           .status(StatusCodes.NOT_FOUND)
           .json({ error: 'Unable to add users' });
     }
-  } catch {
+  } catch (error) {
     res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: 'An error occurred adding new users to content' });
+        .json({ error: 'An error occurred adding new users to content: ' + error });
   }
 });
 
