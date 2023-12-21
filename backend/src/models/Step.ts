@@ -21,9 +21,9 @@ const stepSchema: Schema<Step> = new Schema({
     type: String,
     required: true,
   },
-  content: {
+  linkedContentID: {
     type: String,
-    required: true,
+    required: false,
   },
   status: {
     type: String,

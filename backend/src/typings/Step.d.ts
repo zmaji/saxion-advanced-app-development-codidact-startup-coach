@@ -1,5 +1,3 @@
-import type { Content } from './Content';
-
 export interface Step {
   stepID: string,
   moduleID: string,
@@ -7,6 +5,6 @@ export interface Step {
   description: string,
   content: string,
   status: string,
-  linkedContent?: Content[],
+  linkedContentID?: string,
   isDefault: boolean
 }

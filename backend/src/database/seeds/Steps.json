@@ -4,7 +4,7 @@
     "moduleID": "eb8c22d0-e183-4d59-a839-762307639faf",
     "name": "Market Research Planning",
     "description": "Define the scope and objectives of your market research. Identify key questions to answer and set goals for collecting relevant data.",
-    "content": "Conduct a stakeholder analysis, define target demographics, and choose appropriate research methods.",
+    "linkedContent": "31bb0c9b-39ff-44e3-8e20-09b2e3c99b9a",
     "status": "in progress"
   },
   {
@@ -12,7 +12,7 @@
     "moduleID": "eb8c22d0-e183-4d59-a839-762307639faf",
     "name": "Data Collection and Analysis",
     "description": "Gather data from primary and secondary sources. Analyze the data to extract valuable insights about market trends and customer preferences.",
-    "content": "Conduct surveys, interviews, and competitor analysis. Use tools like SWOT analysis to assess market opportunities and threats.",
+    "linkedContent": "",
     "status": "finished"
   },
   {
@@ -20,7 +20,7 @@
     "moduleID": "eb8c22d0-e183-4d59-a839-762307639faf",
     "name": "Validation and Feedback",
     "description": "Validate your startup idea by obtaining feedback from potential customers. Use the insights gained to refine and improve your product concept.",
-    "content": "Create prototypes for testing, conduct focus groups, and gather feedback through beta testing. Iterate based on user responses.",
+    "linkedContent": "ea0abe91-b28d-47d0-a6ac-e9e4e3e8a8ae",
     "status": "in review"
   },
   {
@@ -28,7 +28,7 @@
     "moduleID": "71f9fcbf-4902-43a0-aa4b-5a92223c5dc9",
     "name": "Prototyping Initial Design",
     "description": "Create a preliminary design for your product prototype. Focus on essential features and functionalities.",
-    "content": "Sketch wireframes, define user flows, and select technologies for the prototype. Consider user experience (UX) in the design.",
+    "linkedContent": "bd4d00da-c6c5-4a8f-a811-acc89f91a4ab",
     "status": "in progress"
   },
   {
@@ -36,7 +36,7 @@
     "moduleID": "71f9fcbf-4902-43a0-aa4b-5a92223c5dc9",
     "name": "MVP Development",
     "description": "Build the Minimum Viable Product (MVP) based on the prototyped design. Focus on functionality that provides core value to users.",
-    "content": "Implement core features, conduct alpha testing, and gather initial user feedback. Iterate on the MVP based on user responses.",
+    "linkedContent": "e97403bf-2789-43da-afda-866522c819da",
     "status": "finished"
   },
   {
@@ -44,7 +44,6 @@
     "moduleID": "71f9fcbf-4902-43a0-aa4b-5a92223c5dc9",
     "name": "User Feedback Iteration",
     "description": "Review user feedback from the MVP and make necessary iterations to enhance the product. Aim for improved usability and user satisfaction.",
-    "content": "Analyze user feedback, prioritize feature enhancements, and implement changes. Conduct beta testing to validate improvements.",
     "status": "in review"
   },
   {
@@ -52,7 +51,6 @@
     "moduleID": "1aae8e51-92fb-4a1d-83ea-0a07c48255df",
     "name": "Identifying Team Skills",
     "description": "Assess the skills needed for your startup and identify gaps in the founding team's expertise. Aim for a well-rounded skill set.",
-    "content": "Conduct a skills assessment, define roles and responsibilities, and identify areas where additional expertise is required.",
     "status": "in progress"
   },
   {
@@ -60,7 +58,6 @@
     "moduleID": "1aae8e51-92fb-4a1d-83ea-0a07c48255df",
     "name": "Team Recruitment",
     "description": "Recruit team members with complementary skills to fill identified gaps. Look for individuals who share the startup's vision and values.",
-    "content": "Create job descriptions, conduct interviews, and assess cultural fit. Build a cohesive team that can collaborate effectively.",
     "status": "finished"
   },
   {
@@ -68,7 +65,6 @@
     "moduleID": "1aae8e51-92fb-4a1d-83ea-0a07c48255df",
     "name": "Team Building Activities",
     "description": "Foster a strong team culture through team-building activities. Strengthen communication and trust among team members.",
-    "content": "Organize team-building events, workshops, and regular check-ins. Encourage open communication and collaboration within the team.",
     "status": "in review"
   },
   {
@@ -76,7 +72,6 @@
     "moduleID": "dbdfd9dc-3830-4297-86d8-f281874663f8",
     "name": "Target Audience Definition",
     "description": "Define your target audience based on market research. Understand the demographics, needs, and preferences of potential customers.",
-    "content": "Create customer personas, analyze market segmentation, and identify key characteristics of your ideal customers.",
     "status": "in progress"
   },
   {
@@ -84,7 +79,6 @@
     "moduleID": "dbdfd9dc-3830-4297-86d8-f281874663f8",
     "name": "Distribution Channel Strategy",
     "description": "Develop a strategy for distributing your product to the target audience. Explore various channels and choose the most effective ones.",
-    "content": "Research distribution channels, negotiate partnerships, and create a plan for product delivery. Consider both online and offline channels.",
     "status": "finished"
   },
   {
@@ -92,7 +86,6 @@
     "moduleID": "dbdfd9dc-3830-4297-86d8-f281874663f8",
     "name": "Promotional Tactics",
     "description": "Plan and implement promotional tactics to create awareness and generate interest in your product. Build anticipation for the launch.",
-    "content": "Develop a marketing plan, create promotional materials, and leverage social media and other advertising channels. Monitor campaign effectiveness.",
     "status": "in review"
   },
   {
@@ -100,7 +93,6 @@
     "moduleID": "a76e8fd1-f74d-4d1f-911c-ef625d999036",
     "name": "Financial Planning Foundations",
     "description": "Establish the foundational elements of your startup's financial plan. Define budgets, set financial goals, and understand key financial metrics.",
-    "content": "Create a detailed budget, forecast financial projections, and identify key performance indicators (KPIs) for financial success.",
     "status": "in progress"
   },
   {
@@ -108,7 +100,6 @@
     "moduleID": "a76e8fd1-f74d-4d1f-911c-ef625d999036",
     "name": "Funding Exploration",
     "description": "Explore various funding options available for startups. Understand the pros and cons of different funding sources.",
-    "content": "Research angel investors, venture capital, and crowdfunding platforms. Evaluate the suitability of each option based on your startup's needs.",
     "status": "finished"
   },
   {
@@ -116,7 +107,6 @@
     "moduleID": "a76e8fd1-f74d-4d1f-911c-ef625d999036",
     "name": "Financial Management Plan",
     "description": "Develop a plan for effective financial management. Implement controls and processes to ensure financial stability and growth.",
-    "content": "Establish accounting practices, implement financial controls, and regularly review financial reports. Adjust strategies based on performance.",
     "status": "in review"
   }
 ]
