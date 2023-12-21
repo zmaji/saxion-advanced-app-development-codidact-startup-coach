@@ -12,7 +12,7 @@ import categoryRoutes from '../routes/Category';
 import labelRoutes from '../routes/Label';
 import userRoutes from '../routes/User';
 import contentUserRoutes from '../routes/ContentUser';
-import feedbackRoutes from '../routes/Feedback';
+import contentFeedbackRoutes from '../routes/ContentFeedback';
 import analysisSectionRoutees from '../routes/AnalysisSection';
 
 const createServer = () => {
@@ -45,7 +45,7 @@ const createServer = () => {
   app.use('/labels', labelRoutes);
   app.use('/users', userRoutes);
   app.use('/contentUsers', contentUserRoutes);
-  app.use('/feedback', feedbackRoutes);
+  app.use('/feedback', contentFeedbackRoutes);
   app.use('/analysisSections', analysisSectionRoutees);
 
   return app;

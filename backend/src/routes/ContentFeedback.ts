@@ -2,14 +2,18 @@ import { Router, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import isLoggedIn from '../middleware/isLoggedIn';
 import isReviewer from '../middleware/isReviewer';
-import feedbackController from '../controllers/Feedback';
+import contentFeedbackController from '../controllers/ContentFeedback';
 
 const router = Router();
 
 router.post('/:contentID', isLoggedIn, isReviewer, async (req: Request, res: Response) => {
   try {
     if (req.headers.authorization) {
-      const result = await feedbackController.addFeedback(req.params.contentID, req.headers.authorization, req.body);
+      const result = await contentFeedbackController.addFeedback(
+          req.params.contentID,
+          req.headers.authorization,
+          req.body,
+      );
 
       if (result) {
         res

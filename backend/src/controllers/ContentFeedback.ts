@@ -42,8 +42,8 @@ const addFeedback = async (
   }
 };
 
-const feedbackController = {
+const contentFeedbackController = {
   addFeedback,
 };
 
-export default feedbackController;
+export default contentFeedbackController;
