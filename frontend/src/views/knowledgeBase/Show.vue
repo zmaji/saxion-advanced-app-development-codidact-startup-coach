@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type { Content, ContentFeedback } from '@/typings/Content';
   import type { Label } from '@/typings/Label';
-  import type { ContentUser, User } from '@/typings/User';
+  import type { User } from '@/typings/User';
   import type { Ref } from 'vue';
 
   import { onMounted, ref } from 'vue';
@@ -19,7 +19,7 @@
     TextButton,
     TextButtonDisabled,
     IconLabel,
-    UserSelect
+    Reviewers
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
   import { useTokenStore } from '@/stores/token';
@@ -30,8 +30,6 @@
   const tokenStore = useTokenStore()
   const currentUser = ref<User | null>(null)
   const currentUserID = ref<string | undefined>('');
-  const addingMoreReviewers = ref(false);
-  const newReviewers = ref<ContentUser[]>([]);
   const newFeedback = ref<string>('');
 
   const canReview = (): boolean => {
@@ -41,29 +39,6 @@
   const isOwner = (): boolean => {
     return content.value?.user?.userID === currentUser.value?.userID;
   };
-
-  const addReviewers = async () => {
-    try {
-      const response = await httpService.postRequest<ContentUser[]>(
-        `/contentUsers/${route.params.contentID}`,
-        newReviewers.value,
-        true
-      );
-
-      if (response && response.data) {
-        for (let user of response.data) {
-          content.value?.contentUsers?.push(user);
-        }
-        toast.success('Content reviewers succesvol toegevoegd!', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        addingMoreReviewers.value = false;
-        newReviewers.value = [];
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }
 
   const postFeedback = async () => {
     try {
@@ -212,36 +187,12 @@
       <div v-if="isOwner()" class="col">
         <SecondaryTitle>Reviewers</SecondaryTitle>
 
-        <div class="bg-white px-4 py-3 border rounded w-fit">
-          <div
-            v-for="(contentUser, key) in content.contentUsers as ContentUser[]"
-            :key="key"
-            class="d-flex align-items-center pb-3"
-          >
-            <IconLabel icon="user" type="primary" display-style="secondary" />
-
-            <span class="text-secondary">{{ contentUser.fullName }}</span>
-          </div>
-
-          <TextButton v-show="!addingMoreReviewers" @click="(addingMoreReviewers = true)" display-style="secondary">
-            Toevoegen
-          </TextButton>
-
-          <UserSelect v-show="addingMoreReviewers" v-model="newReviewers" />
-
-          <TextButton v-show="addingMoreReviewers" @click="addReviewers()" display-style="secondary">
-            Opslaan
-          </TextButton>
-        </div>
+        <Reviewers
+          v-model:content-reviewers="content.contentUsers"
+        />
       </div>
     </div>
   </div>
 
   <CategorySidebar />
 </template>
-
-<style scoped>
-.w-fit {
-  width: fit-content;
-}
-</style>

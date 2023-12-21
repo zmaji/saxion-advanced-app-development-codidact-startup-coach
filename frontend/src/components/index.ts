@@ -26,6 +26,7 @@ export { default as CompanySelect } from './content/CompanySelect.vue'
 export { default as UserSelect } from './content/UserSelect.vue'
 export { default as ContentCategory } from './contentCategories/ContentCategory.vue';
 export { default as ContentItem } from './content/ContentItem.vue';
+export { default as Reviewers } from './content/Reviewers.vue';
 export { default as ContentCategoryAccordion } from './contentCategories/ContentCategoryAccordion.vue';
 export { default as ContentCategoryNavItem } from './contentCategories/ContentCategoryNavItem.vue';
 export { default as CategoryBreadCrumb } from './contentCategories/CategoryBreadCrumb.vue';
