@@ -14,6 +14,10 @@ import { labelsIndexData } from '../mocks/data/Labels';
 import { contentsIndexData } from '../mocks/data/Contents';
 import { contentLabelsIndexData } from '../mocks/data/ContentLabels';
 import { usersIndexData } from '../mocks/data/Users';
+import { contentFeedbackIndexData } from '../mocks/data/ContentFeedback';
+import contentFeedbackModel from '../../models/ContentFeedback';
+import { contentUsersIndexData } from '../mocks/data/ContentUsers';
+import contentUserModel from '../../models/ContentUser';
 
 let mongoServer: MongoMemoryServer;
 
@@ -55,6 +59,16 @@ beforeAll(async () => {
   for (const contentLabel of contentLabelsIndexData) {
     const newMockContentLabel = new contentLabelModel(contentLabel);
     await newMockContentLabel.save();
+  }
+
+  for (const contentUser of contentUsersIndexData) {
+    const newMockContentUser = new contentUserModel(contentUser);
+    await newMockContentUser.save();
+  }
+
+  for (const contentFeedback of contentFeedbackIndexData) {
+    const newMockContentFeedback = new contentFeedbackModel(contentFeedback);
+    await newMockContentFeedback.save();
   }
 }, 60000);
 

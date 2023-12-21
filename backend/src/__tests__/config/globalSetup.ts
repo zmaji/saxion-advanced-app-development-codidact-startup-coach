@@ -17,11 +17,7 @@ export = async function globalSetup() {
     (global as any).__MONGOINSTANCE = instance;
     process.env.MONGO_URI = uri;
 
-    await mongoose.connect(uri, {
-      // @ts-ignore
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(uri, { });
 
     // Ensure the database is clean before tests start
     await mongoose.connection.db.dropDatabase();
