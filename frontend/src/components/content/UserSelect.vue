@@ -32,13 +32,9 @@
       const response = await httpService.getRequest<SimpleUser[]>('/users', true);
 
       if (response && response.data) {
-        users.value = response.data;
-      }
-
-      if (!props.showCurrentUser && currentUser) {
-        users.value = props.showCurrentUser
-          ? response.data
-          : response.data.filter((user) => user.userID !== currentUser.value!.userID);
+        users.value = response.data.filter(user =>
+          props.showCurrentUser || user.userID !== currentUser.value?.userID
+        );
       }
     } catch (e) {
       console.error(e);
