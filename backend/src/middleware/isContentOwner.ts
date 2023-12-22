@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import contentModel from '../models/Content';
 
-const isReviewer = async (req: Request, res: Response, next: NextFunction) => {
+const isContentOwner = async (req: Request, res: Response, next: NextFunction) => {
   const contentID = req.params.contentID;
   const userID = req.user?.userID;
 
@@ -17,9 +17,9 @@ const isReviewer = async (req: Request, res: Response, next: NextFunction) => {
       return;
     }
 
-    const isContentOwner = content.userID === userID;
+    const isOwner = content.userID === userID;
 
-    if (isContentOwner) {
+    if (isOwner) {
       next();
     } else {
       res
@@ -34,4 +34,4 @@ const isReviewer = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export default isReviewer;
+export default isContentOwner;
