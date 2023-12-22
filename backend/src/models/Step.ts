@@ -29,6 +29,10 @@ const stepSchema: Schema<Step> = new Schema({
     type: String,
     required: true,
   },
+  isDefault: {
+    type: Boolean,
+    required: true,
+  },
 }, {
   collection: 'steps',
   versionKey: false,
