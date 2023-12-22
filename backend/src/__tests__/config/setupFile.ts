@@ -8,12 +8,18 @@ import labelModel from '../../models/Label';
 import contentModel from '../../models/Content';
 import contentLabelModel from '../../models/ContentLabel';
 import userModel from '../../models/User';
+import roadmapModel from '../../models/Roadmap';
+import moduleModel from '../../models/Module';
 import { companiesIndexData } from '../mocks/data/Companies';
 import { companyAnalysesIndexData } from '../mocks/data/CompanyAnalyses';
 import { labelsIndexData } from '../mocks/data/Labels';
 import { contentsIndexData } from '../mocks/data/Contents';
 import { contentLabelsIndexData } from '../mocks/data/ContentLabels';
 import { usersIndexData } from '../mocks/data/Users';
+import { roadmapIndexData } from '../mocks/data/Roadmap';
+import { moduleIndexData } from '../mocks/data/Modules';
+import { stepsIndexData } from '../mocks/data/Steps';
+import StepModel from '../../models/Step';
 
 let mongoServer: MongoMemoryServer;
 
@@ -55,6 +61,21 @@ beforeAll(async () => {
   for (const contentLabel of contentLabelsIndexData) {
     const newMockContentLabel = new contentLabelModel(contentLabel);
     await newMockContentLabel.save();
+  }
+
+  for (const roadmap of roadmapIndexData) {
+    const newMockRoadmap = new roadmapModel(roadmap);
+    await newMockRoadmap.save();
+  }
+
+  for (const module of moduleIndexData) {
+    const newMockModule = new moduleModel(module);
+    await newMockModule.save();
+  }
+
+  for (const step of stepsIndexData) {
+    const newMockStep = new StepModel(step);
+    await newMockStep.save();
   }
 }, 60000);
 
