@@ -21,13 +21,16 @@
   const fetchCategories = async (categoryID: string | string[]) => {
     try {
       const currentCategory = props.categoryID ? props.categoryID : categoryID;
-      const response = await httpService.getRequest<Category>(
-        `/categories/${currentCategory}/parents`,
-        false
-      );
 
-      if (response && response.data) {
-        category.value = response.data;
+      if (currentCategory) {
+        const response = await httpService.getRequest<Category>(
+          `/categories/${currentCategory}/parents`,
+          false
+        );
+
+        if (response && response.data) {
+          category.value = response.data;
+        }
       }
     } catch (e) {
       console.error(e);

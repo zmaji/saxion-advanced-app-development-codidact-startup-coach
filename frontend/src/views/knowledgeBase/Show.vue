@@ -4,7 +4,7 @@
   import type { User } from '@/typings/User';
   import type { Ref } from 'vue';
 
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, computed } from 'vue';
   import { useRoute } from 'vue-router';
   import { jwtDecode } from 'jwt-decode';
   import { toast } from 'vue3-toastify';
@@ -32,13 +32,10 @@
   const currentUserID = ref<string | undefined>('');
   const newFeedback = ref<string>('');
 
-  const canReview = (): boolean => {
-    return content.value?.contentUsers?.find((user) => user.userID === currentUser.value?.userID) !== null;
-  };
-
-  const isOwner = (): boolean => {
-    return content.value?.user?.userID === currentUser.value?.userID;
-  };
+  const canReview = computed(() => content.value?.contentUsers?.some(
+    user => user.userID === currentUser.value?.userID)
+  );
+  const isOwner = computed(() => content.value?.user?.userID === currentUser.value?.userID)
 
   const postFeedback = async () => {
     try {
@@ -150,7 +147,7 @@
       {{ content?.attachment }}
     </div>
 
-    <div v-if="canReview() || isOwner()" class="row g-5 pt-4">
+    <div v-if="canReview || isOwner" class="row g-5 pt-4">
       <div class="col col-lg-7">
         <SecondaryTitle>Feedback</SecondaryTitle>
 
@@ -187,7 +184,7 @@
         </TextButtonDisabled>
       </div>
 
-      <div v-if="isOwner()" class="col">
+      <div v-if="isOwner" class="col">
         <SecondaryTitle>Reviewers</SecondaryTitle>
 
         <Reviewers
