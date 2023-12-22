@@ -1,7 +1,12 @@
+import type { Roadmap } from '../typings/Roadmap';
+
+import { Company } from '../typings/Company';
+import jwt from 'jsonwebtoken';
+import { User } from '../typings/User';
 import ModuleModel from '../models/Module';
 import RoadmapModel from '../models/Roadmap';
 import StepModel from '../models/Step';
-import { Roadmap } from '../typings/Roadmap';
+import CompanyModel from '../models/Company';
 
 const getAllRoadmaps = async (): Promise<Roadmap[] | null> => {
   try {
@@ -12,9 +17,17 @@ const getAllRoadmaps = async (): Promise<Roadmap[] | null> => {
   }
 };
 
-const getRoadmap = async (roadmapID: string): Promise<Roadmap | null> => {
+const getRoadmap = async (headers: string): Promise<Roadmap | null> => {
+  const userToken: string = headers.split(' ')[1];
+  const user = jwt.decode(userToken) as User | null;
+
+  const company: Company | null = await CompanyModel.findOne(
+      { companyID: user!.company },
+      { _id: 0 },
+  );
+
   const roadmap: Roadmap | null = await RoadmapModel.findOne(
-      { roadmapID },
+      { roadmapID: company!.roadmap },
       { _id: 0 },
   ).lean();
 
@@ -22,7 +35,7 @@ const getRoadmap = async (roadmapID: string): Promise<Roadmap | null> => {
     return null;
   }
 
-  const modules = await ModuleModel.find({ roadmapID }, { _id: 0 }).lean();
+  const modules = await ModuleModel.find({ roadmapID: company!.roadmap }, { _id: 0 }).lean();
 
   if (!modules || modules.length === 0) {
     return roadmap;
