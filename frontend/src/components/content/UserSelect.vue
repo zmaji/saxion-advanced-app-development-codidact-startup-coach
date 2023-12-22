@@ -17,11 +17,11 @@
     showCurrentUser: true,
   });
 
-  const tokenStore = useTokenStore()
+  const tokenStore = useTokenStore();
   const userToken = tokenStore.getToken;
   const currentUser = ref<User | null>(null);
-  let selectedUsers: Ref<SimpleUser[]> = ref([])
-  let users: Ref<SimpleUser[]> = ref<SimpleUser[]>([]);
+  const selectedUsers: Ref<SimpleUser[]> = ref([]);
+  const users: Ref<SimpleUser[]> = ref<SimpleUser[]>([]);
 
   if (userToken) {
     currentUser.value = jwtDecode(userToken);
