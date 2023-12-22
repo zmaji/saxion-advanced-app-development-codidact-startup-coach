@@ -21,4 +21,16 @@ export const usersIndexData: User[] = [
     secret: 'zLZviOqVhZ',
     roles: ['user'],
   },
+  {
+    userID: '56823d1b-c117-408b-a52b-af03de9dcc07',
+    company: 'cb092a25-422a-468d-a959-83bcf3f2203b',
+    userName: 'Alex',
+    emailAddress: 'alexsios@paardenstaart.nl',
+    fullName: 'Alex M',
+    password: '$2a$12$q0CXLVgH/WHjG92XoOD1feHGN0LDrgD53HFQ0/yFVpi/pD3JBM42u',
+    secret: 'zLZviOqVhZ',
+    roles: [
+      'user',
+    ],
+  },
 ];

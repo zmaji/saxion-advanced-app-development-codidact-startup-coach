@@ -1,21 +1,40 @@
 <script setup lang="ts">
-  import type { SimpleUser } from '@/typings/User';
+  import type { SimpleUser, User } from '@/typings/User';
   import type { Ref } from 'vue';
   
   import VueMultiselect from 'vue-multiselect'
   import { ref, onMounted } from 'vue';
+  import { jwtDecode } from 'jwt-decode';
 
   import httpService from '@/plugins/http/httpService';
+  import { useTokenStore } from '@/stores/token';
 
-  let selectedUsers: Ref<SimpleUser[]> = ref([])
-  let users: Ref<SimpleUser[]> = ref<SimpleUser[]>([]);
+  interface Props {
+    showCurrentUser?: boolean;
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    showCurrentUser: true,
+  });
+
+  const tokenStore = useTokenStore();
+  const userToken = tokenStore.getToken;
+  const currentUser = ref<User | null>(null);
+  const selectedUsers: Ref<SimpleUser[]> = ref([]);
+  const users: Ref<SimpleUser[]> = ref<SimpleUser[]>([]);
+
+  if (userToken) {
+    currentUser.value = jwtDecode(userToken);
+  }
 
   const fetchUsers = async () => {
     try {
       const response = await httpService.getRequest<SimpleUser[]>('/users', true);
 
       if (response && response.data) {
-        users.value = response.data;
+        users.value = response.data.filter(user =>
+          props.showCurrentUser || user.userID !== currentUser.value?.userID
+        );
       }
     } catch (e) {
       console.error(e);

@@ -35,11 +35,12 @@
             v-for="(label, key) in content.labels.slice(0, 3)"
             :key="key"
             class="mt-2"
+            type="secondary-subtle"
           >
             {{ label.name}}
           </TextLabel>
 
-          <TextLabel v-if="content.labels.length > 3" class="mt-2">
+          <TextLabel v-if="content.labels.length > 3" class="mt-2" type="secondary-subtle">
             {{ content.labels.length - 3 }} +
           </TextLabel>
         </div>

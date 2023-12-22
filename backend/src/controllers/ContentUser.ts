@@ -27,6 +27,8 @@ const addContentUsers = async (contentID: string, users: SimpleUser[]): Promise<
             ...contentUser,
             fullName: user.fullName,
           });
+        } else {
+          throw new Error(`User with ID ${user.userID} is already a reviewer for this content.`);
         }
       }
 

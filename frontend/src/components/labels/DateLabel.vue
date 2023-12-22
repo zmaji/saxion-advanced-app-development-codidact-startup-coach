@@ -17,6 +17,13 @@
   type CustomDateFormat = `${number} ${string} ${number}`;
   const formatDate = (dateString: string): CustomDateFormat | null => {
     const inputDate = new Date(dateString);
+
+    if (isNaN(inputDate.getTime())) {
+      console.error('Invalid date:', dateString);
+
+      return null;
+    }
+
     const options: Intl.DateTimeFormatOptions = {
       day: 'numeric',
       month: 'long',

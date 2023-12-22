@@ -36,7 +36,6 @@
         ${props.size ? 'btn-' + props.size : ''}
        `;
     default:
-      // primary
       return `
         btn btn-${(props.type ? props.type : 'primary')}
         ${props.size ? 'btn-' + props.size : ''}

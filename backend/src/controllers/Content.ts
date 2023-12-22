@@ -144,6 +144,7 @@ const getContent = async (contentID: string): Promise<Content | null> => {
 
           contentFeedbackWithUsers.push({
             ...feedback,
+            userID: undefined,
             user: relatedUser,
           });
         }
