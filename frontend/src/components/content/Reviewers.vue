@@ -57,12 +57,12 @@
         addingMoreReviewers.value = false;
         newReviewers.value = [];
       }
-    } catch (e) {
+    } catch (error) {
       toast.error(
-        'Er ging iets fout met reviewers toevoegen.', {
+        'Fout bij het toevoegen van reviewers. Probeer het opnieuw.', {
           position: toast.POSITION.TOP_RIGHT,
         });
-      console.error(e);
+      console.error('Error adding reviewers:', error);
     }
   }
 

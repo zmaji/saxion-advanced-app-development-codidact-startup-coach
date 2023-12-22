@@ -15,26 +15,19 @@
     displayStyle: 'primary',
   });
 
-  const dynamicDomClasses = computed<string>(() => {
-    switch (props.displayStyle) {
+const dynamicDomClasses = computed<string>(() => {
+  const btnType = props.type || 'primary';
+  const btnSize = props.size ? `btn-${props.size}` : '';
+  
+  switch (props.displayStyle) {
     case 'secondary':
-      return `
-        btn text-${(props.type ? props.type : 'primary')}
-        bg-${(props.type ? props.type : 'primary')}-subtle
-        ${props.size ? 'btn-' + props.size : ''}
-       `;
+      return `btn text-${btnType} bg-${btnType}-subtle ${btnSize}`;
     case 'tertiary':
-      return `
-        btn bg-white text-${(props.type ? props.type : 'primary')}
-        ${props.size ? 'btn-' + props.size : ''}
-       `;
+      return `btn bg-white text-${btnType} ${btnSize}`;
     default:
-      return `
-        btn btn-${(props.type ? props.type : 'primary')}
-        ${props.size ? 'btn-' + props.size : ''}
-       `;
-    }
-  });
+      return `btn btn-${btnType} ${btnSize}`;
+  }
+});
 </script>
 
 <template>
