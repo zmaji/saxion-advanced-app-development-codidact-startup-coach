@@ -1,10 +1,8 @@
 import type { Content } from '../typings/Content';
-import type { ContentUser } from '../typings/User';
 
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import contentModel from '../models/Content';
-import contentUserModel from '../models/ContentUser';
 
 const isReviewer = async (req: Request, res: Response, next: NextFunction) => {
   const contentID = req.params.contentID;

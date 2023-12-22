@@ -36,10 +36,10 @@
 
   onMounted(async () => {
     await fetchCategories(
-        route.query.category 
+      route.query.category 
         ? route.query.category.valueOf().toString() 
         : route.params.categoryID
-      );
+    );
   });
 
   if (!props.categoryID) {
