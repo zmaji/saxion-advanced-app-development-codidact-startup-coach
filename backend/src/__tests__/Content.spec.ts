@@ -19,7 +19,9 @@ describe('GET /content/:contentID', () => {
     const response = await request(app).get(`/content/${contentsSingleContent.contentID}`);
 
     expect(response.status).toBe(StatusCodes.OK);
-    expect(response.body).toEqual(contentsSingleContent);
+    expect(response.body).toEqual({
+      ...contentsSingleContent,
+    });
   });
 
   it('should handle an invalid contentID', async () => {
