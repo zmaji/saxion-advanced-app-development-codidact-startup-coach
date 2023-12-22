@@ -21,7 +21,7 @@
   const currentReviewers = ref<ContentUser[]>([]);
   const newReviewers = ref<ContentUser[]>([]);
   const emit = defineEmits<{(event: 'update:modelValue', value: ContentUser[]): void,}>();
-  
+
   const addReviewers = async () => {
     try {
       const reviewersAlreadyExist = newReviewers.value.some(newReviewer =>
@@ -29,7 +29,7 @@
           currentReviewer.userID === newReviewer.userID
         )
       );
-      
+
       if (reviewersAlreadyExist) {
         toast.warning('De geselecteerde gebruiker is al een reviewer!', {
           position: toast.POSITION.TOP_RIGHT,
@@ -48,10 +48,12 @@
         for (let user of response.data) {
           currentReviewers.value.push(user);
         }
+
         toast.success('Content reviewers succesvol toegevoegd!', {
           position: toast.POSITION.TOP_RIGHT,
         });
-        emit('update:modelValue', currentReviewers);
+        
+        emit('update:modelValue', currentReviewers.value);
         addingMoreReviewers.value = false;
         newReviewers.value = [];
       }
@@ -65,7 +67,7 @@
   }
 
   onMounted(() => {
-    currentReviewers.value = props.contentReviewers;
+    currentReviewers.value = props.contentReviewers || [];
   });
 </script>
 
@@ -85,7 +87,7 @@
       Toevoegen
     </TextButton>
 
-    <UserSelect v-show="addingMoreReviewers" v-model="newReviewers" />
+    <UserSelect v-show="addingMoreReviewers" v-model="newReviewers" :show-current-user="false"/>
 
     <TextButton v-show="addingMoreReviewers" @click="addReviewers()" display-style="secondary">
       Opslaan
