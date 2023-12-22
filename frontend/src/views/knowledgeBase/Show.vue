@@ -59,6 +59,9 @@
         newFeedback.value = '';
       }
     } catch (e) {
+      toast.error('Fout bij het plaatsen van feedback.', {
+        position: toast.POSITION.TOP_RIGHT
+      });
       console.error(e);
     }
   }
