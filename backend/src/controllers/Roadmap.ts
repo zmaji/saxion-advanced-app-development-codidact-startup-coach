@@ -26,6 +26,10 @@ const getRoadmap = async (headers: string): Promise<Roadmap | null> => {
       { _id: 0 },
   );
 
+  if (!company) {
+    return null;
+  }
+
   const roadmap: Roadmap | null = await RoadmapModel.findOne(
       { roadmapID: company!.roadmap },
       { _id: 0 },
@@ -38,6 +42,8 @@ const getRoadmap = async (headers: string): Promise<Roadmap | null> => {
   const modules = await ModuleModel.find({ roadmapID: company!.roadmap }, { _id: 0 }).lean();
 
   if (!modules || modules.length === 0) {
+    roadmap.modules = [];
+
     return roadmap;
   }
 
