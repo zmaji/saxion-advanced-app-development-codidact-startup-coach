@@ -75,6 +75,8 @@ beforeAll(async () => {
   for (const contentFeedback of contentFeedbackIndexData) {
     const newMockContentFeedback = new contentFeedbackModel(contentFeedback);
     await newMockContentFeedback.save();
+  }
+
   for (const roadmap of roadmapIndexData) {
     const newMockRoadmap = new roadmapModel(roadmap);
     await newMockRoadmap.save();
