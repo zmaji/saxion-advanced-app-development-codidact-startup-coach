@@ -8,4 +8,5 @@ export interface QuestionSet {
   title: string;
   description: string;
   requiredPhase: string;
+  displayNumber?: number;
 }

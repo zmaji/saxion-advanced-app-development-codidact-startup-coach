@@ -30,17 +30,13 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<CompanyAna
     const questionAnswerPairs = [];
 
     for (const answer of analysisAnswers) {
-      const questionOption = await questionOptionModel.findOne({
-        questionOptionID: answer.selectedOption,
-      }, { _id: 0 }).lean();
+      const questionOption = await questionOptionModel.findOne({ questionOptionID: answer.selectedOption }, { _id: 0 }).lean();
 
       if (questionOption) {
         const question = await questionModel.findOne({ questionID: questionOption.questionID }, { _id: 0 }).lean();
 
         if (question) {
-          const questionSet = await questionSetModel.findOne({
-            questionSetID: question.questionSetID,
-          }, { _id: 0 }).lean();
+          const questionSet = await questionSetModel.findOne({ questionSetID: question.questionSetID }, { _id: 0 }).lean();
 
           if (questionSet) {
             questionAnswerPairs.push({
