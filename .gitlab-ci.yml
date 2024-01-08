@@ -144,8 +144,8 @@ release-seed:
   stage: release
   services:
     - docker:dind
-  # only:
-  #   - main
+  only:
+    - main
   before_script:
     - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
   script:
@@ -156,19 +156,19 @@ release-seed:
 deploy:
   stage: deploy
   image: ubuntu:latest
-  # only:
-  #   - main
+  only:
+    - main
   script:
-   - apt-get update -qy
+   - apt-get update --qy
    - apt-get install -y openssh-client
    - apt-get install sshpass
    - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker pull zikria40/codidact-startup-coach-seed:latest"
    - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker pull zikria40/codidact-startup-coach-backend:latest"
    - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker pull zikria40/codidact-startup-coach-frontend:latest"
-   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker stop api-backend || true"
-   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker rm api-backend || true"
-   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker stop frontend || true"
-   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker rm frontend || true"
-   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker stop mongo-seed || true"
-   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker rm mongo-seed || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker stop src_backend_1 || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker rm src_backend_1 || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker stop src_frontend_1 || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker rm src_frontend_1 || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker stop src_seed_1 || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker rm src_seed_1 || true"
    - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "cd 09/ && docker-compose -f docker-compose.yml up -d backend frontend seed"
