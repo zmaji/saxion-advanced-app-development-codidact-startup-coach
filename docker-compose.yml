@@ -36,5 +36,3 @@ services:
     image: 'zikria40/codidact-startup-coach-frontend:latest'
     container_name: frontend
     restart: always
-    ports:
-      - 8080:80
