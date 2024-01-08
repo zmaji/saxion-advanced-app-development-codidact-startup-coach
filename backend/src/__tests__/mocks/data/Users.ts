@@ -32,6 +32,8 @@ export const usersIndexData: User[] = [
     roles: [
       'user',
     ],
+  },
+  {
     userID: '40bdb4fe-277b-4f63-80df-f2e265cda95b',
     company: 'Invalid companyID',
     userName: 'Zikria2',
