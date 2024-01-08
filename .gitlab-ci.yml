@@ -144,8 +144,8 @@ release-seed:
   stage: release
   services:
     - docker:dind
-  only:
-    - main
+  # only:
+  #   - main
   before_script:
     - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
   script:
@@ -156,8 +156,8 @@ release-seed:
 deploy:
   stage: deploy
   image: ubuntu:latest
-  only:
-    - main
+  # only:
+  #   - main
   script:
    - apt-get update --qy
    - apt-get install -y openssh-client
