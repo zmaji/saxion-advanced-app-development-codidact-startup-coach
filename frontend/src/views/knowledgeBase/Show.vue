@@ -35,7 +35,18 @@
   const canReview = computed(() => content.value?.contentUsers?.some(
     user => user.userID === currentUser.value?.userID)
   );
+
   const isOwner = computed(() => content.value?.user?.userID === currentUser.value?.userID)
+
+  const attachmentType = computed(() => {
+    if (!content.value?.attachment) return null;
+
+    const ext = content.value.attachment?.split('.').pop()?.toLowerCase() ?? '';
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) return 'image';
+    if (['pdf'].includes(ext)) return 'pdf';
+
+    return 'other';
+  });
 
   const postFeedback = async () => {
     try {
@@ -140,11 +151,15 @@
     <p class="mb-0 pb-4">{{ content!.description }}</p>
 
     <SecondaryTitle>Bijlage</SecondaryTitle>
-
-    <div class="bg-white px-4 py-3 border rounded d-flex flex-row justify-content-start align-items-center w-fit">
+    <div v-if="attachmentType === 'image'" class="bg-white px-4 py-3 border rounded">
+      <img :src="`http://localhost:3000/${content.contentID}_${content.attachment}`" alt="Afbeelding" />
+    </div>
+    <div v-else-if="attachmentType === 'pdf'" class="bg-white px-4 py-3 border rounded">
+      <iframe :src="`http://localhost:3000/${content.contentID}_${content.attachment}`" width="100%" height="500px"></iframe>
+    </div>
+    <div v-else class="bg-white px-4 py-3 border rounded d-flex flex-row justify-content-start align-items-center w-fit">
       <IconLabel icon="file" type="primary" display-style="secondary" class="me-3" />
-
-      {{ content?.attachment }}
+      <a :href="`http://localhost:3000/${content.contentID}_${content?.attachment}`" target="_blank">{{ content?.attachment }}</a>
     </div>
 
     <div v-if="canReview || isOwner" class="row g-5 pt-4">
