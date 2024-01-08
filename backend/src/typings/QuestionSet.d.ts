@@ -1,3 +1,4 @@
+import { NumberExpression } from 'mongoose';
 import type { Question } from './QuestionOption';
 
 export interface QuestionSet {
@@ -7,5 +8,6 @@ export interface QuestionSet {
   questions: Question[];
   title: string;
   description: string;
-  requiredPhase: string;
+  requiredPhase?: string;
+  displayOrder?: number;
 }

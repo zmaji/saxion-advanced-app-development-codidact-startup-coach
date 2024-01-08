@@ -1,5 +1,20 @@
 [
   {
+    "questionOptionID": "918a63ed-24c0-4257-a17f-1d898869fb3c",
+    "questionID": "93d119af-b201-4747-a49b-a81fa5167caa",
+    "value": "Pre-startup"
+  },
+  {
+    "questionOptionID": "2e3467cf-1810-4ee6-941e-b3d28f26113e",
+    "questionID": "93d119af-b201-4747-a49b-a81fa5167caa",
+    "value": "Startup"
+  },
+  {
+    "questionOptionID": "517626b9-6f82-4799-8ffa-d8b88d21436b",
+    "questionID": "93d119af-b201-4747-a49b-a81fa5167caa",
+    "value": "Scale-up"
+  },
+  {
     "questionOptionID": "cf907c23-21a6-4ea3-b6b7-621442312a8d",
     "questionID": "fd446cdc-5871-4a5c-9f2a-34cf285c1a6f",
     "value": "Ja"
@@ -180,7 +195,18 @@
     "value": "Rand van de wet"
   },
   {
+    "questionOptionID": "525a1f57-cb38-4e19-8326-cdb490aff48e",
     "questionID": "4a4251fe-af11-4bc2-8bc1-7d0506b7d7d1",
     "value": "Samenwerkingen"
+  },
+  {
+    "questionOptionID": "b83f7e9a-1e76-4e16-97b4-79ab8e6c1083",
+    "questionID": "88d660e8-9b27-4bc2-b154-c7eb20bf39e2",
+    "value": "Ja"
+  },
+  {
+    "questionOptionID": "04055834-4200-43ee-9e13-0c6dc01179ce",
+    "questionID": "88d660e8-9b27-4bc2-b154-c7eb20bf39e2",
+    "value": "Nee"
   }
 ]

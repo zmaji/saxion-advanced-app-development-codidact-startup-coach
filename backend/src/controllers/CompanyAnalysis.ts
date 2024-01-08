@@ -1,6 +1,8 @@
 import type { CompanyAnalysis } from '../typings/CompanyAnalysis';
+import type { Answer } from '../typings/Answer';
 
 import companyAnalysisModel from '../models/CompanyAnalysis';
+import answerModel from '../models/Answer';
 import { v4 as uuidv4 } from 'uuid';
 import { removeIdField } from '../helpers/removeMongoID';
 
@@ -27,9 +29,17 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<CompanyAna
 const createCompanyAnalysis = async (companyAnalysisData: CompanyAnalysis): Promise<CompanyAnalysis | null> => {
   try {
     companyAnalysisData.companyAnalysisID = uuidv4();
-
     const newCompanyAnalysis = new companyAnalysisModel(companyAnalysisData);
     const companyAnalysis = await newCompanyAnalysis.save();
+
+    for (const answer of companyAnalysisData.answers) {
+      const newAnswer = new answerModel({
+        answerID: uuidv4(),
+        companyAnalysisID: companyAnalysisData.companyAnalysisID,
+        selectedOption: answer.selectedOption,
+      });
+      await newAnswer.save();
+    }
 
     return removeIdField(companyAnalysis);
   } catch (error) {

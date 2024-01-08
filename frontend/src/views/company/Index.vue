@@ -26,11 +26,11 @@ const tokenStore = useTokenStore()
 const currentUser = ref<User | null>(null)
 const currentCompany = ref<Company | null>(null)
 const currentAnalysis = ref<CompanyAnalysis | null>(null)
-const analysisSection = ref<AnalysisSection | null>(null)
 const analysisSections: Ref<AnalysisSection[]> = ref<AnalysisSection[]>([]);
+const companyPhase = ref<string>('');
 
-const formSteps: Record<string, FormStep> = {};
-const formData: Record<string, FormData> = {};
+let formSteps: Record<string, FormStep> = {};
+let formData: Record<string, FormData> = {};
 const currentStep = ref<FormStep>();
 const currentStepFields = ref<FormData[] | null>(null);
 const showForm = ref(false);
@@ -71,57 +71,16 @@ const fetchCurrentCompany = async () => {
   }
 };
 
-// TODO: SORT FORMSTEPS IN RIGHT ORDER
-const setupForm = () => {
-  let formStepIndex = 1
-  let formDataIndex = 1;
-
-  analysisSections.value.forEach((analysisSection: AnalysisSection) => {
-    if (analysisSection) {
-      analysisSection.questionSets.forEach((questionSet: QuestionSet, index: number) => {
-        formSteps[formStepIndex] = {
-          number: formStepIndex,
-          title: `${analysisSection.title}`,
-          subtitle: `${questionSet.title}`,
-          description: questionSet.description,
-          completed: false,
-        };
-
-        questionSet.questions?.forEach((question: Question) => {
-          formData[formDataIndex] = {
-            label: question.title,
-            step: formSteps[formStepIndex],
-            value: '',
-            inputType: question.inputType,
-            options: question.questionOptions.map(option => option.value),
-            isValid: false,
-            errorMessage: `Dit is een verplicht veld.`,
-          };
-
-          formDataIndex++;
-        });
-
-        formStepIndex++;
-      });
-    }
-    const desiredOrder = [
-      'Starter (nog geen idee)',
-      'Pre-startup (een idee en een visie)',
-      'Startup (een product/dienst en entiteit)',
-      'Scale-up (meer dan 5 man en bestaat minstens 2 jaar)'
-    ];
-  });
-};
-
-
 const fetchAnalysisSection = async (analysisSectionID: string) => {
   try {
     const response = await httpService.getRequest<AnalysisSection>(`/analysisSections/${analysisSectionID}`, false);
 
     if (response && response.data) {
-      console.log(response.data)
       analysisSections.value.push(response.data);
     }
+
+    if (analysisSections && analysisSections.value.length > 0)
+      analysisSections.value.sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   } catch (e) {
     console.error(e);
   }
@@ -134,15 +93,97 @@ const fetchAnalysisSections = async () => {
     if (response && response.data) {
       await Promise.all(response.data.map((analysisSection) => fetchAnalysisSection(analysisSection.analysisSectionID)));
     }
-    setupForm();
+    setupInitialQuestion('Bedrijfsfase');
   } catch (e) {
     console.error(e);
   }
 }
 
+const setupInitialQuestion = (questionSetTitle: string) => {
+  analysisSections.value.forEach((analysisSection: AnalysisSection) => {
+    if (analysisSection) {
+      analysisSection.questionSets
+        .filter((questionSet: QuestionSet) => questionSet.title === questionSetTitle)
+        .forEach((questionSet: QuestionSet) => {
+          formSteps[1] = {
+            number: 1,
+            title: `${analysisSection.title}`,
+            subtitle: `${questionSet.title}`,
+            description: questionSet.description,
+            completed: false,
+          };
+
+          questionSet.questions?.forEach((question: Question) => {
+            formData[1] = {
+              label: question.title,
+              step: formSteps[1],
+              value: '',
+              inputType: question.inputType,
+              options: question.questionOptions,
+              isValid: false,
+              errorMessage: `Dit is een verplicht veld.`,
+            };
+          });
+        });
+    }
+  });
+};
+
+const setupForm = (companyPhase: string) => {
+  let formStepIndex = 1;
+  let formDataIndex = 1;
+
+  analysisSections.value.forEach((analysisSection: AnalysisSection) => {
+    if (analysisSection) {
+      analysisSection.questionSets.forEach((questionSet: QuestionSet, index: number) => {
+        if (questionSet.title !== 'Bedrijfsfase') {
+          const filteredQuestions = questionSet.questions.filter(
+            (question: Question) =>
+              question.requiredPhase.includes(companyPhase.toLowerCase())
+          );
+
+          if (filteredQuestions.length > 0) {
+            formSteps[formStepIndex] = {
+              number: formStepIndex,
+              title: `${analysisSection.title}`,
+              subtitle: `${questionSet.title}`,
+              description: questionSet.description,
+              completed: false,
+            };
+
+            filteredQuestions.forEach((question: Question) => {
+              formData[formDataIndex] = {
+                label: question.title,
+                step: formSteps[formStepIndex],
+                value: '',
+                inputType: question.inputType,
+                options: question.questionOptions,
+                isValid: false,
+                errorMessage: `Dit is een verplicht veld.`,
+              };
+
+              formDataIndex++;
+            });
+
+            formStepIndex++;
+          }
+        }
+      });
+    }
+  });
+};
+
 const startAnalysis = () => {
   showInformation.value = false;
   showForm.value = true;
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+}
+
+const startForm = () => {
+  // @ts-ignore
+  companyPhase.value = formData[1].value.value
+  setupForm(companyPhase.value);
   currentStep.value = formSteps[1];
   currentStepFields.value = getCurrentStepFields();
 }
@@ -241,17 +282,28 @@ const submitForm = async () => {
 
   try {
     const formFields = new FormData();
+    const answers: Answer[] = [];
 
-    // TODO: Change logic based on Juul's input, could then be made dynamically as well 
-    formFields.append('industry', String(formData.industry.value));
-    formFields.append('serviceInformation', String(formData.serviceInformation.value));
-    formFields.append('nrOfEmployees', String(formData.nrOfEmployees.value));
-    formFields.append('stage', String(formData.stage.value));
-    formFields.append('businessGoals', JSON.stringify([String(formData.businessGoals.value)]));
-    formFields.append('painPoints', JSON.stringify([String(formData.painPoints.value)]));
-    formFields.append('competitors', JSON.stringify([String(formData.competitors.value)]));
-    formFields.append('targetAudience', String(formData.targetAudience.value));
-    formFields.append('budget', String(formData.budget.value));
+    for (const key in formData) {
+      if (formData[key].value) {
+        // @ts-ignore
+        const selectedValue = formData[key].value.value;
+        const matchingOption = formData[key].options.find((questionOption: QuestionOption) => questionOption.value === selectedValue);
+
+        if (matchingOption) {
+          const answer: Answer = {
+            answerID: '',
+            companyAnalysisID: '',
+            selectedOption: matchingOption.questionOptionID,
+          };
+
+          answers.push(answer);
+        }
+      }
+    }
+
+    formFields.append('phase', String(companyPhase.value));
+    formFields.append('answers', JSON.stringify(answers));
 
     const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields);
     const newCompanyAnalysisData = newCompanyAnalysis.data
@@ -300,7 +352,6 @@ const toCapital = (String: string) => {
 
 onMounted(() => {
   fetchCurrentCompany();
-  fetchAnalysisSection();
   fetchAnalysisSections();
 });
 </script>
@@ -325,7 +376,7 @@ onMounted(() => {
     <SecondaryTitle>Behoeften</SecondaryTitle>
 
     <!-- TODO: Change array logic based on Juul's input -->
-    <div v-if="currentAnalysis">
+    <!-- <div v-if="currentAnalysis">
       <div class=" row">
         <div class="col-4 mb-4" v-for="( step, index ) in formSteps" :key="index">
           <h3>{{ step.subtitle }}</h3>
@@ -346,7 +397,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <p>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -402,7 +453,7 @@ onMounted(() => {
         <div class="col-1" />
 
         <div class="col-7">
-          <SubHeader>Stap {{ currentStep.number }}: {{ currentStep.title }}</SubHeader>
+          <SubHeader v-if="companyPhase !== ''">Stap {{ currentStep.number }}: {{ currentStep.title }}</SubHeader>
           <SubHeader>{{ currentStep.subtitle }}</SubHeader>
 
           <p>{{ currentStep.description }}</p>
@@ -414,7 +465,7 @@ onMounted(() => {
               <template v-if="formField.inputType === 'Radio'">
                 <div v-for="(option, index) in formField.options" :key="index">
                   <input type="radio" :id="`${formField.label}-${index}`" :value="option" v-model="formField.value">
-                  <label class="ms-2" :for="`${formField.label}-${index}`">{{ option }}</label>
+                  <label class="ms-2" :for="`${formField.label}-${index}`">{{ option.value }}</label>
                 </div>
               </template>
 
@@ -433,7 +484,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="d-flex flex-row align-items-center justify-content-center pt-5">
+      <div class="d-flex flex-row align-items-center justify-content-center pt-5" v-if="companyPhase !== ''">
         <template v-if="currentStep.number > 0">
           <template v-for="( step, key, index ) in  formSteps " :key="key">
             <div v-if="index === 0" class="progress-circle not-active"
@@ -457,11 +508,17 @@ onMounted(() => {
           Vorige
         </TextButton>
 
-        <TextButton v-if="currentStep.number !== Object.keys(formSteps).length" @click="nextStep" data-test="nextStep">
+        <TextButton v-if="currentStep.number !== Object.keys(formSteps).length && companyPhase !== ''" @click="nextStep"
+          data-test="nextStep">
           Volgende
         </TextButton>
 
-        <TextButton v-else type="primary" @click="reviewForm" data-test="reviewAnalysisButton">
+        <TextButton v-if="companyPhase === ''" @click="startForm">
+          Volgende
+        </TextButton>
+
+        <TextButton v-if="currentStep.number === Object.keys(formSteps).length && companyPhase !== ''" type="primary"
+          @click="reviewForm" data-test="reviewAnalysisButton">
           Controleer analyse
         </TextButton>
       </div>

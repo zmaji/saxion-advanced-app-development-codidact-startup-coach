@@ -1,3 +1,5 @@
+import type { QuestionOption } from './QuestionOption';
+
 export interface FormStep {
   number: number;
   title: string;
@@ -13,5 +15,5 @@ export interface FormData {
   isValid: boolean;
   errorMessage: string;
   inputType: string;
-  options: string[];
+  options: QuestionOption[];
 }
