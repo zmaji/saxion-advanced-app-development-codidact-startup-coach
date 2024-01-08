@@ -4,8 +4,18 @@ services:
   mongo:
     image: mongo:latest
     container_name: api-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
     ports:
       - 27017:27017
+
+  seed:
+    image: 'zikria40/codidact-startup-coach-seed:latest'
+    depends_on:
+      - mongo
+    container_name: mongo-seed
+    restart: "no"
 
   backend:
     image: 'zikria40/codidact-startup-coach-backend:latest'
@@ -16,13 +26,15 @@ services:
     depends_on:
       - mongo
     environment:
-      DB_HOST: mongo
+      DB_HOST: api-mongo
       DB_PORT: 27017
       DB_NAME: codidact-startup-coach-db
+      DB_USER: root
+      DB_PASSWORD: admin
 
   frontend:
     image: 'zikria40/codidact-startup-coach-frontend:latest'
     container_name: frontend
     restart: always
     ports:
-      - 80:80
+      - 8080:80
