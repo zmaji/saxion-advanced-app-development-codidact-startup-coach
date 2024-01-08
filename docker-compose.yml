@@ -2,8 +2,9 @@ name: codidact-startup-coach
 
 services:
   mongo:
-    image: mongo:4.4
+    image: mongo
     container_name: api-mongo
+    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: admin
