@@ -18,6 +18,7 @@ stages:
   - build
   - test
   - release
+  - deploy
 
 # Check if the branch is allowed to make a merge request to the target branch
 allowed-to-merge:
