@@ -1,4 +1,4 @@
-FROM mongo:latest
+FROM mongo:4.4
 
 WORKDIR /seeds
 COPY seeds/ .
