@@ -2,7 +2,7 @@ name: codidact-startup-coach
 
 services:
   mongo:
-    image: mongo
+    image: mongo:4.4
     container_name: api-mongo
     restart: always
     environment:
