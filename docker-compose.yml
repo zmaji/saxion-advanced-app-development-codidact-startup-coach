@@ -4,6 +4,9 @@ services:
   mongo:
     image: mongo:4.4
     container_name: api-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -17,12 +20,6 @@ services:
       - mongo
     container_name: mongo-seed
     restart: "no"
-    environment:
-      - MONGO_HOST=85.10.149.169
-      - MONGO_DB_NAME=codidact-startup-coach-db
-      - MONGO_USER=root
-      - MONGO_PASSWORD=admin
-      - MONGO_AUTH_DB=admin
 
   backend:
     image: 'zikria40/codidact-startup-coach-backend:latest'
@@ -44,4 +41,4 @@ services:
     container_name: frontend
     restart: always
     ports:
-      - 80:80
+      - 8080:80
