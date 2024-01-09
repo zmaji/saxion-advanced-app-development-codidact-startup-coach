@@ -77,20 +77,20 @@ beforeAll(async () => {
     await newMockContentFeedback.save();
   }
 
-async function saveDataToDatabase(dataArray, Model) {
-  try {
-    await Promise.all(dataArray.map(data => {
-      const modelInstance = new Model(data);
-      return modelInstance.save();
-    }));
-  } catch (error) {
-    console.error('Fout bij het opslaan van data:', error);
+  for (const roadmap of roadmapIndexData) {
+    const newMockRoadmap = new roadmapModel(roadmap);
+    await newMockRoadmap.save();
   }
-}
 
-await saveDataToDatabase(roadmapIndexData, RoadmapModel);
-await saveDataToDatabase(moduleIndexData, ModuleModel);
-await saveDataToDatabase(stepsIndexData, StepModel);
+  for (const module of moduleIndexData) {
+    const newMockModule = new moduleModel(module);
+    await newMockModule.save();
+  }
+
+  for (const step of stepsIndexData) {
+    const newMockStep = new StepModel(step);
+    await newMockStep.save();
+  }
 }, 60000);
 
 afterAll(async () => {
