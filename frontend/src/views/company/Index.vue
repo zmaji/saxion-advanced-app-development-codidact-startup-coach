@@ -22,10 +22,10 @@ import {
   SubHeader
 } from '@/components';
 
-const tokenStore = useTokenStore()
-const currentUser = ref<User | null>(null)
-const currentCompany = ref<Company | null>(null)
-const currentAnalysis = ref<CompanyAnalysis | null>(null)
+const tokenStore = useTokenStore();
+const currentUser = ref<User | null>(null);
+const currentCompany = ref<Company | null>(null);
+const currentAnalysis = ref<CompanyAnalysis | null>(null);
 const analysisSections: Ref<AnalysisSection[]> = ref<AnalysisSection[]>([]);
 const companyPhase = ref<string>('');
 
@@ -66,7 +66,6 @@ const fetchCurrentAnalysis = async () => {
       `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
     );
     currentAnalysis.value = response.data;
-    console.log(response.data.companyAnalysisID)
   } catch (error) {
     console.error('Error fetching current user:', error);
   }
@@ -182,7 +181,6 @@ const startAnalysis = () => {
 }
 
 const resetInitialQuestion = () => {
-  // companyPhase.value = '';
   formSteps = {};
   formData = {};
   setupInitialQuestion('Bedrijfsfase');
