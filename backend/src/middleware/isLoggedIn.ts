@@ -27,7 +27,7 @@ const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
     }
   }
 
-  res.status(StatusCodes.UNAUTHORIZED).send('Authentication required');
+  res.status(StatusCodes.UNAUTHORIZED).send({ error: 'Authentication required' });
 };
 
 const getTokenFromRequest = (req: Request) => {

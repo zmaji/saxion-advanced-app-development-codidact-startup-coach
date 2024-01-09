@@ -21,12 +21,16 @@ const stepSchema: Schema<Step> = new Schema({
     type: String,
     required: true,
   },
-  content: {
+  linkedContentID: {
     type: String,
-    required: true,
+    required: false,
   },
   status: {
     type: String,
+    required: true,
+  },
+  isDefault: {
+    type: Boolean,
     required: true,
   },
 }, {
@@ -34,6 +38,6 @@ const stepSchema: Schema<Step> = new Schema({
   versionKey: false,
 });
 
-const StepModel = mongoose.model<Step>('Module', stepSchema);
+const StepModel = mongoose.model<Step>('Step', stepSchema);
 
 export default StepModel;
