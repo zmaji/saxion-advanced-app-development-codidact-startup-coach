@@ -5,8 +5,11 @@ export interface QuestionSet {
   analysisSectionID?: string;
   inputType: string;
   questions: Question[];
+  questions: Question[];
   title: string;
   description: string;
+  requiredPhase?: string;
+  displayOrder?: number;
   requiredPhase?: string;
   displayOrder?: number;
 }

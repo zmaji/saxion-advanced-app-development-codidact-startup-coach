@@ -1,5 +1,7 @@
 import type { QuestionOption } from './QuestionOption';
 
+import type { QuestionOption } from "./QuestionOption";
+
 export interface Question {
   questionID: string;
   questionSetID?: string;
