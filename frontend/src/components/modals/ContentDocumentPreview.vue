@@ -2,7 +2,7 @@
   import { computed, onMounted, ref } from 'vue';
   import axios from 'axios';
 
-  import { IconButton, TextButton } from '@/components';
+  import { IconButton, SubTitle, TextButton } from '@/components';
 
   interface Props {
     contentID: string;
@@ -76,10 +76,10 @@
 
         <div class="modal-body px-4 py-3">
           <div v-if="attachmentType === 'other'">
-            <div class="alert alert-warning w-fit" role="alert">
-              Het weergeven van dit bestandstype wordt momenteel niet ondersteund. <br>
-              Als u dit bestand alsnog wilt inzien kunt u deze download met de knop hieronder.
-            </div>
+            <SubTitle class="d-block">
+              Het weergeven van dit bestandstype wordt momenteel niet ondersteund.
+              Als u dit bestand alsnog wilt inzien kunt u deze downloaden met de knop hieronder.
+            </SubTitle>
 
             <IconButton
               icon="cloud-arrow-down"
