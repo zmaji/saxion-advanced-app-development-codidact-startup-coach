@@ -17,8 +17,8 @@ const getAnalysisSections = async (): Promise<AnalysisSection[]> => {
 const getAnalysisSection = async (analysisSectionID: string): Promise<AnalysisSection | null> => {
   try {
     const analysisSection: AnalysisSection | null = await analysisSectionModel.findOne(
-        { analysisSectionID },
-        { _id: 0 },
+      { analysisSectionID },
+      { _id: 0 },
     ).lean();
 
     if (!analysisSection) {
@@ -32,26 +32,26 @@ const getAnalysisSection = async (analysisSectionID: string): Promise<AnalysisSe
     }
 
     const questionSetsWithQuestions = await Promise.all(
-        questionSets.map(async (questionSet) => {
-          const questions = await questionModel.find({ questionSetID: questionSet.questionSetID }, { _id: 0 }).lean();
+      questionSets.map(async (questionSet) => {
+        const questions = await questionModel.find({ questionSetID: questionSet.questionSetID }, { _id: 0 }).lean();
 
-          if (!questions || questions.length === 0) {
-            return { ...questionSet, questions: [] };
-          }
+        if (!questions || questions.length === 0) {
+          return { ...questionSet, questions: [] };
+        }
 
-          const questionsWithOptions = await Promise.all(
-              questions.map(async (question) => {
-                const questionOptions = await questionOptionModel.find(
-                    { questionID: question.questionID },
-                    { _id: 0 },
-                ).lean();
+        const questionsWithOptions = await Promise.all(
+          questions.map(async (question) => {
+            const questionOptions = await questionOptionModel.find(
+              { questionID: question.questionID },
+              { _id: 0 },
+            ).lean();
 
-                return { ...question, questionOptions };
-              }),
-          );
+            return { ...question, questionOptions };
+          }),
+        );
 
-          return { ...questionSet, questions: questionsWithOptions };
-        }),
+        return { ...questionSet, questions: questionsWithOptions };
+      }),
     );
 
     return { ...analysisSection, questionSets: questionSetsWithQuestions };
