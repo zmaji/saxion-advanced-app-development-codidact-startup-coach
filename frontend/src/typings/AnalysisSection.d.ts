@@ -5,4 +5,5 @@ export interface AnalysisSection {
   title: string;
   description: string;
   questionSets: QuestionSet[];
+  displayOrder?: number;
 }

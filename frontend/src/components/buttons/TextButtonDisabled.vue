@@ -15,19 +15,19 @@
     displayStyle: 'primary',
   });
 
-const dynamicDomClasses = computed<string>(() => {
-  const btnType = props.type || 'primary';
-  const btnSize = props.size ? `btn-${props.size}` : '';
+  const dynamicDomClasses = computed<string>(() => {
+    const btnType = props.type || 'primary';
+    const btnSize = props.size ? `btn-${props.size}` : '';
   
-  switch (props.displayStyle) {
+    switch (props.displayStyle) {
     case 'secondary':
       return `btn text-${btnType} bg-${btnType}-subtle ${btnSize}`;
     case 'tertiary':
       return `btn bg-white text-${btnType} ${btnSize}`;
     default:
       return `btn btn-${btnType} ${btnSize}`;
-  }
-});
+    }
+  });
 </script>
 
 <template>

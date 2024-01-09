@@ -21,6 +21,10 @@ const questionSetSchema: Schema<QuestionSet> = new Schema({
     type: String,
     required: true,
   },
+  displayOrder: {
+    type: Number,
+    required: false,
+  },
 }, {
   collection: 'questionSets',
   versionKey: false,
