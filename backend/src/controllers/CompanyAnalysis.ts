@@ -69,15 +69,12 @@ const createCompanyAnalysis = async (companyAnalysisData: CompanyAnalysis): Prom
     const newCompanyAnalysis = new companyAnalysisModel(companyAnalysisData);
     const companyAnalysis = await newCompanyAnalysis.save();
 
-    console.log(companyAnalysisData.answers);
-
     for (const answer of companyAnalysisData.answers as Answer[]) {
       const newAnswer = new answerModel({
         answerID: uuidv4(),
         companyAnalysisID: companyAnalysisData.companyAnalysisID,
         selectedOption: answer.selectedOption,
       });
-      console.log(newAnswer);
       await newAnswer.save();
     }
 
