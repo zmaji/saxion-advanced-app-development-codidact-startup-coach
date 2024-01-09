@@ -4,6 +4,7 @@ import companyAnalysisModel from '../models/CompanyAnalysis';
 import answerModel from '../models/Answer';
 import questionOptionModel from '../models/QuestionOption';
 import questionModel from '../models/Question';
+import questionSetModel from '../models/QuestionSet';
 import { v4 as uuidv4 } from 'uuid';
 import { removeIdField } from '../helpers/removeMongoID';
 import { Answer } from '../typings/Answer';
@@ -35,19 +36,21 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<CompanyAna
         const question = await questionModel.findOne({ questionID: questionOption.questionID }, { _id: 0 }).lean();
 
         if (question) {
-          questionAnswerPairs.push({
-            question: {
-              title: question.title,
-              description: question.description,
-            },
-            answer: questionOption.value,
-          });
+          const questionSet = await questionSetModel.findOne({ questionSetID: question.questionSetID }, { _id: 0 }).lean();
+
+          if (questionSet) {
+            questionAnswerPairs.push({
+              question: {
+                setTitle: questionSet.title,
+                title: question.title,
+                description: question.description,
+              },
+              answer: questionOption.value,
+            });
+          }
         }
       }
     }
-
-    console.log('questionAnswerPairs');
-    console.log(questionAnswerPairs);
 
     return { ...companyAnalysis, answers: questionAnswerPairs };
   } catch (error) {

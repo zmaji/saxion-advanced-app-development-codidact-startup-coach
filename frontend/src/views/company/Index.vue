@@ -27,6 +27,7 @@ const currentUser = ref<User | null>(null);
 const currentCompany = ref<Company | null>(null);
 const currentAnalysis = ref<CompanyAnalysis | null>(null);
 const analysisSections: Ref<AnalysisSection[]> = ref<AnalysisSection[]>([]);
+const categories = ref<string[] | null>(null);
 const companyPhase = ref<string>('');
 
 let formSteps: Record<string, FormStep> = {};
@@ -53,8 +54,13 @@ const fetchCurrentCompany = async () => {
     const response = await httpService.getRequest<Company>(
       `/companies/${currentUser.value?.company}`
     );
-    currentCompany.value = response.data;
-    fetchCurrentAnalysis();
+
+    if (response && response.data) {
+      currentCompany.value = response.data;
+      if (currentCompany.value.companyAnalysis) {
+        fetchCurrentAnalysis();
+      }
+    }
   } catch (error) {
     console.error('Error fetching current company:', error);
   }
@@ -65,7 +71,11 @@ const fetchCurrentAnalysis = async () => {
     const response = await httpService.getRequest<CompanyAnalysis>(
       `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
     );
-    currentAnalysis.value = response.data;
+
+    if (response && response.data) {
+      currentAnalysis.value = response.data;
+      console.log(currentAnalysis.value)
+    }
   } catch (error) {
     console.error('Error fetching current user:', error);
   }
@@ -79,8 +89,10 @@ const fetchAnalysisSection = async (analysisSectionID: string) => {
       analysisSections.value.push(response.data);
     }
 
-    if (analysisSections && analysisSections.value.length > 0)
+    if (analysisSections && analysisSections.value.length > 0) {
+      initialiseCategories();
       analysisSections.value.sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
+    }
   } catch (e) {
     console.error(e);
   }
@@ -97,6 +109,23 @@ const fetchAnalysisSections = async () => {
     console.error(e);
   }
 }
+
+const initialiseCategories = async () => {
+  try {
+    const uniqueCategories = new Set<string>();
+
+    for (const section of analysisSections.value) {
+      for (const questionSet of section.questionSets) {
+        if (typeof questionSet.title === 'string') {
+          uniqueCategories.add(questionSet.title);
+        }
+      }
+    }
+    categories.value = Array.from(uniqueCategories);
+  } catch (error) {
+    console.error('Error initializing categories:', error);
+  }
+};
 
 const setupInitialQuestion = (questionSetTitle: string) => {
   analysisSections.value.forEach((analysisSection: AnalysisSection) => {
@@ -372,29 +401,29 @@ onMounted(() => {
 
     <SecondaryTitle>Behoeften</SecondaryTitle>
 
-    <!-- TODO: Change array logic based on Juul's input -->
-    <!-- <div v-if="currentAnalysis">
-      <div class=" row">
-        <div class="col-4 mb-4" v-for="( step, index ) in formSteps" :key="index">
-          <h3>{{ step.subtitle }}</h3>
-          <div v-for="( field, fieldName ) in  formData " :key="fieldName">
-            <div v-if="field.step === step">
-              <div class="fw-bold me-2">{{ field.label }}</div>
-              <div v-if="currentAnalysis && Array.isArray(currentAnalysis[fieldName])">
-                <ul>
-                  <li v-for="( item, itemIndex ) in currentAnalysis[fieldName]" :key="itemIndex">
-                    {{ item }}
-                  </li>
-                </ul>
+    <div v-if="currentAnalysis">
+      <div class="row">
+        <div class="col-4 mb-4" v-for="(category, index) in categories" :key="index">
+          <h3>{{ category }}</h3>
+          <div v-if="category === 'Bedrijfsfase'">
+            {{ currentAnalysis.phase }}
+          </div>
+          <div v-else>
+            <div v-for="(answer, answerIndex) in currentAnalysis.answers" :key="answerIndex">
+              <div v-if="answer?.question?.setTitle === category">
+                <strong>{{ answer.question.title }}</strong>
+                <div class="mb-2">
+                  {{ answer.answer }}
+                </div>
               </div>
-              <template v-else>
-                <p class="mb-0 pb-2">{{ currentAnalysis[fieldName] }}</p>
-              </template>
+            </div>
+            <div v-if="!currentAnalysis.answers.some(answer => answer.question?.setTitle === category)">
+              Niet van toepassing in fase '{{ currentAnalysis.phase }}'
             </div>
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
 
     <p>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -556,7 +585,7 @@ onMounted(() => {
             <div v-for="(  formField, fieldKey  ) in   formData  " :key="fieldKey">
               <div v-if="formField.step === formStep" class="d-flex">
                 <div class="fw-bold me-2" data-test="reviewFormFieldLabel">{{ formField.label }}:</div>
-                <p class="mb-0 pb-2" data-test="reviewFormFieldValue">{{ formField.value }}</p>
+                <p class="mb-0 pb-2" data-test="reviewFormFieldValue">{{ formField.value.value }}</p>
               </div>
             </div>
           </div>

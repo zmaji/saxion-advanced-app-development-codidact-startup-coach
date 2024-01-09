@@ -11,7 +11,7 @@ export interface FormStep {
 export interface FormData {
   label: string;
   step: FormStep;
-  value: string | number;
+  value: string | number | value;
   isValid: boolean;
   errorMessage: string;
   inputType: string;
