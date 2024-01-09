@@ -19,7 +19,9 @@
     TextButton,
     TextButtonDisabled,
     IconLabel,
-    Reviewers
+    Reviewers,
+    ContentDocumentPreview,
+    SubTitle
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
   import { useTokenStore } from '@/stores/token';
@@ -37,16 +39,6 @@
   );
 
   const isOwner = computed(() => content.value?.user?.userID === currentUser.value?.userID)
-
-  const attachmentType = computed(() => {
-    if (!content.value?.attachment) return null;
-
-    const ext = content.value.attachment?.split('.').pop()?.toLowerCase() ?? '';
-    if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) return 'image';
-    if (['pdf'].includes(ext)) return 'pdf';
-
-    return 'other';
-  });
 
   const postFeedback = async () => {
     try {
@@ -151,20 +143,25 @@
     <p class="mb-0 pb-4">{{ content!.description }}</p>
 
     <SecondaryTitle>Bijlage</SecondaryTitle>
-    <div v-if="attachmentType === 'image'" class="bg-white px-4 py-3 border rounded">
-      <img :src="`http://localhost:3000/${content.contentID}_${content.attachment}`" alt="Afbeelding" />
-    </div>
-    <div v-else-if="attachmentType === 'pdf'" class="bg-white px-4 py-3 border rounded">
-      <iframe :src="`http://localhost:3000/${content.contentID}_${content.attachment}`" width="100%" height="500px"></iframe>
-    </div>
-    <div v-else class="bg-white px-4 py-3 border rounded d-flex flex-row justify-content-start align-items-center w-fit">
+
+    <div
+      data-bs-toggle="modal"
+      data-bs-target="#document-preview-modal"
+      class="d-block bg-white px-4 py-3 border rounded hover-pointer
+      d-flex flex-row justify-content-start align-items-center w-fit"
+    >
       <IconLabel icon="file" type="primary" display-style="secondary" class="me-3" />
-      <a :href="`http://localhost:3000/${content.contentID}_${content?.attachment}`" target="_blank">{{ content?.attachment }}</a>
+
+      {{ content?.attachment }}
     </div>
 
-    <div v-if="canReview || isOwner" class="row g-5 pt-4">
+    <div v-if="canReview || isOwner" class="row pt-4">
       <div class="col col-lg-7">
         <SecondaryTitle>Feedback</SecondaryTitle>
+
+        <SubTitle v-if="!content.feedback || content.feedback.length === 0">
+          Er is nog geen feedback geplaatst op deze content
+        </SubTitle>
 
         <div v-for="(feedback, key) in content.feedback" :key="key" class="bg-white px-4 py-3 border rounded mb-3">
           <div class="d-flex flex-row flex-wrap justify-content-start pb-2">
@@ -209,5 +206,6 @@
     </div>
   </div>
 
+  <ContentDocumentPreview v-if="content?.attachment" :attachment="content.attachment" :contentID="content.contentID"/>
   <CategorySidebar />
 </template>
