@@ -1,5 +1,4 @@
 import type { CompanyAnalysis } from '../typings/CompanyAnalysis';
-import type { Answer } from '../typings/Answer';
 
 import companyAnalysisModel from '../models/CompanyAnalysis';
 import answerModel from '../models/Answer';

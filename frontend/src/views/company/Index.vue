@@ -47,17 +47,6 @@ const fetchUser = async () => {
   }
 };
 
-const fetchCurrentAnalysis = async () => {
-  try {
-    const response = await httpService.getRequest<CompanyAnalysis>(
-      `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
-    );
-    currentAnalysis.value = response.data;
-  } catch (error) {
-    console.error('Error fetching current user:', error);
-  }
-};
-
 const fetchCurrentCompany = async () => {
   try {
     fetchUser();
@@ -68,6 +57,18 @@ const fetchCurrentCompany = async () => {
     fetchCurrentAnalysis();
   } catch (error) {
     console.error('Error fetching current company:', error);
+  }
+};
+
+const fetchCurrentAnalysis = async () => {
+  try {
+    const response = await httpService.getRequest<CompanyAnalysis>(
+      `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
+    );
+    currentAnalysis.value = response.data;
+    console.log(response.data.companyAnalysisID)
+  } catch (error) {
+    console.error('Error fetching current user:', error);
   }
 };
 
