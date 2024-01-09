@@ -93,7 +93,6 @@ const fetchAnalysisSections = async () => {
     if (response && response.data) {
       await Promise.all(response.data.map((analysisSection) => fetchAnalysisSection(analysisSection.analysisSectionID)));
     }
-    setupInitialQuestion('Bedrijfsfase');
   } catch (e) {
     console.error(e);
   }
@@ -174,13 +173,24 @@ const setupForm = (companyPhase: string) => {
 };
 
 const startAnalysis = () => {
+  setupInitialQuestion('Bedrijfsfase');
   showInformation.value = false;
   showForm.value = true;
   currentStep.value = formSteps[1];
   currentStepFields.value = getCurrentStepFields();
 }
 
-const startForm = () => {
+const resetInitialQuestion = () => {
+  // companyPhase.value = '';
+  formSteps = {};
+  formData = {};
+  setupInitialQuestion('Bedrijfsfase');
+  canValidate.value = true;
+  currentStep.value = formSteps[1];
+  currentStepFields.value = getCurrentStepFields();
+}
+
+const generateForm = () => {
   // @ts-ignore
   companyPhase.value = formData[1].value.value
   setupForm(companyPhase.value);
@@ -199,12 +209,16 @@ const nextStep = () => {
   });
 
   if (isStepValid) {
-    currentStep.value!.completed = true;
-    currentStep.value = formSteps[currentStep.value!.number + 1]
-    currentStepFields.value = getCurrentStepFields();
-    showInformation.value = false;
-    showForm.value = true;
-    canValidate.value = false;
+    if (currentStep.value?.title === 'Bedrijfsfase') {
+      generateForm();
+    } else {
+      currentStep.value!.completed = true;
+      currentStep.value = formSteps[currentStep.value!.number + 1]
+      currentStepFields.value = getCurrentStepFields();
+      showInformation.value = false;
+      showForm.value = true;
+      canValidate.value = false;
+    }
   } else {
     alert('Vul alle verplichte velden in.');
     currentStep.value!.completed = false;
@@ -213,15 +227,8 @@ const nextStep = () => {
 
 const previousStep = () => {
   canValidate.value = true;
-
-  if (currentStep.value === formSteps[1]) {
-    showInformation.value = true;
-    showForm.value = false;
-    alert('U gaat terug naar het overzicht.');
-  } else {
-    currentStep.value = formSteps[currentStep.value!.number - 1]
-    currentStepFields.value = getCurrentStepFields();
-  }
+  currentStep.value = formSteps[currentStep.value!.number - 1]
+  currentStepFields.value = getCurrentStepFields();
 };
 
 const continueAnalysis = () => {
@@ -235,7 +242,7 @@ const continueAnalysis = () => {
 };
 
 const restartAnalysis = () => {
-  resetForm();
+  resetInitialQuestion();
   currentAnalysis.value = null;
   showInformation.value = false;
   showForm.value = true;
@@ -281,7 +288,6 @@ const submitForm = async () => {
   showForm.value = false;
 
   try {
-    const formFields = new FormData();
     const answers: Answer[] = [];
 
     for (const key in formData) {
@@ -302,8 +308,10 @@ const submitForm = async () => {
       }
     }
 
-    formFields.append('phase', String(companyPhase.value));
-    formFields.append('answers', JSON.stringify(answers));
+    const formFields = {
+      phase: companyPhase.value,
+      answers: answers
+    }
 
     const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields);
     const newCompanyAnalysisData = newCompanyAnalysis.data
@@ -330,16 +338,6 @@ const associateAnalysisWithCompany = async (companyID: string, companyData: any)
   } catch (error) {
     console.error('Error associating company analysis:', error);
   }
-};
-
-const resetForm = () => {
-  for (const key in formData) {
-    formData[key].value = '';
-    formData[key].isValid = false;
-  }
-  currentStep.value = formSteps[1];
-  currentStepFields.value = getCurrentStepFields();
-  canValidate.value = false;
 };
 
 const getCurrentStepFields = () => {
@@ -407,12 +405,22 @@ onMounted(() => {
 
     <div class="row">
       <div v-if="!currentAnalysis || currentAnalysis === null" class="col">
-        <SubTitle type="secondary" v-if="!currentStep">Analyse nog niet begonnen</SubTitle>
+        <SubTitle type="secondary" v-if="!currentStep">
+          Analyse nog niet begonnen
+        </SubTitle>
 
-        <SubTitle type="warning" v-if="currentStep" data-test="currentStepButton">
-          {{ currentStep.completed === true ? currentStep.number : currentStep.number - 1 }}
+        <SubTitle type="warning" v-if="currentStep?.title === 'Bedrijfsfase'" data-test="currentStepButton">
+          Bedrijfsfase bepalen
+        </SubTitle>
+
+        <SubTitle v-if="currentStep && currentStep?.title !== 'Bedrijfsfase'" type="warning"
+          data-test="currentStepButton">
+          {{ currentStep && currentStep.completed === true ? currentStep.number : currentStep ? currentStep.number - 1 :
+            '' }}
           /
-          {{ Object.keys(formSteps).length }} stappen voltooid</SubTitle>
+          {{ Object.keys(formSteps).length }} stappen voltooid ({{ companyPhase }})
+        </SubTitle>
+
       </div>
 
       <div v-else class="col">
@@ -422,7 +430,7 @@ onMounted(() => {
     </div>
 
     <div>
-      <TextButton v-if="!currentStep && !currentAnalysis" class="me-2" @click="startAnalysis"
+      <TextButton v-if="!currentStep && !currentAnalysis && !companyPhase" class="me-2" @click="startAnalysis"
         data-test="startAnalysisButton">
         Start de analyse
       </TextButton>
@@ -453,7 +461,7 @@ onMounted(() => {
         <div class="col-1" />
 
         <div class="col-7">
-          <SubHeader v-if="companyPhase !== ''">Stap {{ currentStep.number }}: {{ currentStep.title }}</SubHeader>
+          <SubHeader v-if="companyPhase">Stap {{ currentStep.number }}: {{ currentStep.title }}</SubHeader>
           <SubHeader>{{ currentStep.subtitle }}</SubHeader>
 
           <p>{{ currentStep.description }}</p>
@@ -484,7 +492,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <div class="d-flex flex-row align-items-center justify-content-center pt-5" v-if="companyPhase !== ''">
+      <div class="d-flex flex-row align-items-center justify-content-center pt-5" v-if="companyPhase">
         <template v-if="currentStep.number > 0">
           <template v-for="( step, key, index ) in  formSteps " :key="key">
             <div v-if="index === 0" class="progress-circle not-active"
@@ -499,8 +507,13 @@ onMounted(() => {
       </div>
 
       <div class="d-flex flex-wrap justify-content-center pt-4">
-        <TextButton v-if="currentStep && currentStep.number === 1" type="secondary" display-style="secondary"
-          class="me-4">
+        <TextButton v-if="currentStep && currentStep.title === 'Bedrijfsfase'" type="secondary" display-style="secondary"
+          class="me-4" data-test="previousStepButton">
+          Vorige
+        </TextButton>
+
+        <TextButton v-else-if="currentStep && currentStep.number === 1 && currentStep.title !== 'Bedrijfsfase'"
+          display-style="secondary" class="me-4" @click="resetInitialQuestion" data-test="previousStepButton">
           Vorige
         </TextButton>
 
@@ -508,16 +521,12 @@ onMounted(() => {
           Vorige
         </TextButton>
 
-        <TextButton v-if="currentStep.number !== Object.keys(formSteps).length && companyPhase !== ''" @click="nextStep"
-          data-test="nextStep">
+        <TextButton v-if="currentStep.number !== Object.keys(formSteps).length || currentStep.number === 1"
+          @click="nextStep" data-test="nextStep">
           Volgende
         </TextButton>
 
-        <TextButton v-if="companyPhase === ''" @click="startForm">
-          Volgende
-        </TextButton>
-
-        <TextButton v-if="currentStep.number === Object.keys(formSteps).length && companyPhase !== ''" type="primary"
+        <TextButton v-if="currentStep.number === Object.keys(formSteps).length && currentStep.number !== 1" type="primary"
           @click="reviewForm" data-test="reviewAnalysisButton">
           Controleer analyse
         </TextButton>
