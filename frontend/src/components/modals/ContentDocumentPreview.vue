@@ -67,7 +67,7 @@
 
 <template>
   <div class="modal fade" id="document-preview-modal" tabindex="-1">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Weergave van {{ attachment }}</h5>
@@ -92,9 +92,7 @@
             </IconButton>
           </div>
 
-          <p v-if="attachmentType === 'txt'">
-            {{ textFileContents }}
-          </p>
+          <p v-if="attachmentType === 'txt'">{{ textFileContents }}</p>
 
           <img v-else-if="attachmentType === 'image'" :src="attachmentUrl" alt="Afbeelding" class="w-100"/>
 
@@ -112,6 +110,7 @@
           >
             Download {{ attachment }}
           </IconButton>
+
           <TextButton render-as="button" type="secondary" data-bs-dismiss="modal">Sluiten</TextButton>
         </div>
       </div>
