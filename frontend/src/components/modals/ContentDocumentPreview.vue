@@ -25,8 +25,9 @@
   });
 
   const attachmentUrl = computed(() => {
-    // TODO: put base url .env variable or config file instead of hard coded string
-    return `http://localhost:3000/${props.contentID}_${props.attachment}`;
+    const baseUrl = import.meta.env.VITE_APP_BASE_URL_API;
+
+    return `${baseUrl}/${props.contentID}_${props.attachment}`;
   });
 
   const downloadAttachment = async (attachmentLink: string, fileName: string) => {
