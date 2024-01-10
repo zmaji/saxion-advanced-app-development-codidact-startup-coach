@@ -16,6 +16,12 @@ services:
       - mongo
     container_name: mongo-seed
     restart: "no"
+    environment:
+      - MONGO_HOST=mongo
+      - MONGO_DB_NAME=codidact-startup-coach-db
+      - MONGO_USER=root
+      - MONGO_PASSWORD=admin
+      - MONGO_AUTH_DB=admin
 
   backend:
     image: codidact-startup-coach-backend:latest
