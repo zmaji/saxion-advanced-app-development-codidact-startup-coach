@@ -4,6 +4,6 @@ export interface AnalysisSection {
   analysisSectionID: string;
   title: string;
   description: string;
-  questionSets: QuestionSet[];
-  displayOrder: number;
+  questionSets?: QuestionSet[];
+  displayOrder?: number;
 }
