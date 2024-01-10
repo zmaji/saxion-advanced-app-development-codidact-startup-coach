@@ -1,10 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import CompanyAnalysisController from '../controllers/CompanyAnalysis';
+import isLoggedIn from '../middleware/isLoggedIn';
 
 const router = Router();
 
-router.get('', async (req: Request, res: Response) => {
+router.get('', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await CompanyAnalysisController.getCompanyAnalyses();
 
@@ -24,7 +25,7 @@ router.get('', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/:companyAnalysisID', async (req: Request, res: Response) => {
+router.get('/:companyAnalysisID', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await CompanyAnalysisController.getCompanyAnalysis(req.params.companyAnalysisID);
 
@@ -44,7 +45,7 @@ router.get('/:companyAnalysisID', async (req: Request, res: Response) => {
   }
 });
 
-router.post('', async (req: Request, res: Response) => {
+router.post('', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const companyAnalysis = await CompanyAnalysisController.createCompanyAnalysis(req.body);
 
