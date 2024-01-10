@@ -4,5 +4,5 @@ export interface Question {
   inputType: string;
   title: string;
   description: string;
-  requiredPhase: string[];
+  requiredPhase: string[] | string;
 }

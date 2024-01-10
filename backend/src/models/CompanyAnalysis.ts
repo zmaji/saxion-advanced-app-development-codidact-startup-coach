@@ -10,6 +10,7 @@ const companyAnalysisSchema: Schema<CompanyAnalysis> = new Schema({
   },
   phase: {
     type: String,
+    required: true,
   },
 }, {
   collection: 'companyAnalyses',
