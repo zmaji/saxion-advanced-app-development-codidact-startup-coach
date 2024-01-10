@@ -91,8 +91,14 @@ test-lint-frontend:
 test-frontend:
   image: node:16.20.2
   stage: test
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-frontend
+    paths:
+      - frontend/node_modules/
   only:
     - merge_requests
+  needs:
+    - build-frontend
   script:
     - cd frontend
     - npm install
@@ -102,11 +108,16 @@ test-frontend:
 test-backend:
   image: node:16.20.2
   stage: test
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-backend
+    paths:
+      - backend/node_modules/  
   only:
     - merge_requests
+  needs:
+    - build-backend
   script:
     - cd backend
-    - npm install
     - npm run test
 
 
