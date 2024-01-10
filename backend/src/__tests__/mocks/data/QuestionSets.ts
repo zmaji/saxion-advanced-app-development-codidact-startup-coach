@@ -5,7 +5,7 @@ export const questionSetsIndexData: QuestionSet[] = [
     questionSetID: '586f42bb-9b0a-4428-818b-5fb4874bbb1e',
     analysisSectionID: 'f6c46907-9530-4035-acba-a4e088c5a9a4',
     title: 'Bedrijfsfase',
-    description: 'Het bepalen van de bedrijfsfase is van cruciaal belang om de juiste categorien en vragen te genereren om jouw behoefte te bepalen.'
+    description: 'Het bepalen van de bedrijfsfase is van cruciaal belang om de juiste categorien en vragen te genereren om jouw behoefte te bepalen.',
   },
   {
     questionSetID: 'a343e09a-6c91-4e22-9f87-fbee2c6c4ab2',
