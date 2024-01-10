@@ -7,7 +7,16 @@ import { app } from './config/setupFile';
 describe('CompanyAnalysis', () => {
   describe('GET /companyAnalyses', () => {
     it('should return a list of company analyses', async () => {
-      const response = await request(app).get('/companyAnalyses');
+      const loginResponse = await request(app)
+          .post('/credentials')
+          .send({
+            userName: 'Maurice',
+            password: 'Maurice123',
+          });
+
+      const response = await request(app)
+          .get('/companyAnalyses')
+          .set('Authorization', `Bearer ${loginResponse.body.token}`);
 
       expect(response.status).toBe(StatusCodes.OK);
       expect(response.body).toEqual(companyAnalysesIndexData);
@@ -17,7 +26,16 @@ describe('CompanyAnalysis', () => {
 
 describe('GET /companyAnalyses/:companyAnalysisID', () => {
   it('should return a specific company analysis', async () => {
-    const response = await request(app).get(`/companyAnalyses/${companyAnalysesIndexData[0].companyAnalysisID}`);
+    const loginResponse = await request(app)
+        .post('/credentials')
+        .send({
+          userName: 'Maurice',
+          password: 'Maurice123',
+        });
+
+    const response = await request(app)
+        .get(`/companyAnalyses/${companyAnalysesIndexData[0].companyAnalysisID}`)
+        .set('Authorization', `Bearer ${loginResponse.body.token}`);
 
     expect(response.status).toBe(StatusCodes.OK);
     expect(response?.body.companyAnalysisID).toBe(companyAnalysesIndexData[0].companyAnalysisID);
@@ -33,7 +51,17 @@ describe('GET /companyAnalyses/:companyAnalysisID', () => {
 
   it('should handle an invalid companyAnalysisID', async () => {
     const invalidCompanyAnalysisID = 'invalid-id';
-    const response = await request(app).get(`/companyAnalyses/${invalidCompanyAnalysisID}`);
+
+    const loginResponse = await request(app)
+        .post('/credentials')
+        .send({
+          userName: 'Maurice',
+          password: 'Maurice123',
+        });
+
+    const response = await request(app)
+        .get(`/companyAnalyses/${invalidCompanyAnalysisID}`)
+        .set('Authorization', `Bearer ${loginResponse.body.token}`);
 
     expect(response.status).toBe(StatusCodes.NOT_FOUND);
     expect(response.body).toEqual({ error: `Unable to find company analysis with ID ${invalidCompanyAnalysisID}` });
@@ -68,8 +96,16 @@ describe('POST /companyAnalyses', () => {
       ],
     };
 
+    const loginResponse = await request(app)
+        .post('/credentials')
+        .send({
+          userName: 'Maurice',
+          password: 'Maurice123',
+        });
+
     const response = await request(app)
         .post('/companyAnalyses')
+        .set('Authorization', `Bearer ${loginResponse.body.token}`)
         .send(newCompanyAnalysisData);
     const { companyAnalysisID } = response.body;
 
@@ -85,8 +121,16 @@ describe('POST /companyAnalyses', () => {
       answers: [],
     };
 
+    const loginResponse = await request(app)
+        .post('/credentials')
+        .send({
+          userName: 'Maurice',
+          password: 'Maurice123',
+        });
+
     const response = await request(app)
         .post('/companyAnalyses')
+        .set('Authorization', `Bearer ${loginResponse.body.token}`)
         .send(newCompanyAnalysisData);
 
     expect(response.status).toBe(StatusCodes.BAD_REQUEST);

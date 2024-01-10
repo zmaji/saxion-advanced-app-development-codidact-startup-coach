@@ -9,7 +9,16 @@ import { app } from './config/setupFile';
 describe('AnalysisSection', () => {
   describe('GET /analysisSections', () => {
     it('should return a list of analysis sections', async () => {
-      const response = await request(app).get('/analysisSections');
+      const loginResponse = await request(app)
+          .post('/credentials')
+          .send({
+            userName: 'Maurice',
+            password: 'Maurice123',
+          });
+
+      const response = await request(app)
+          .get('/analysisSections')
+          .set('Authorization', `Bearer ${loginResponse.body.token}`);
 
       expect(response.status).toBe(StatusCodes.OK);
       expect(response.body).toEqual(analysisSectionIndexData);
@@ -19,7 +28,16 @@ describe('AnalysisSection', () => {
 
 describe('GET /analysisSections/:analysisSectionID', () => {
   it('should return a specific analysis section', async () => {
-    const response = await request(app).get(`/analysisSections/${analysisSectionIndexData[0].analysisSectionID}`);
+    const loginResponse = await request(app)
+        .post('/credentials')
+        .send({
+          userName: 'Maurice',
+          password: 'Maurice123',
+        });
+
+    const response = await request(app)
+        .get(`/analysisSections/${analysisSectionIndexData[0].analysisSectionID}`)
+        .set('Authorization', `Bearer ${loginResponse.body.token}`);
 
     expect(response.status).toBe(StatusCodes.OK);
     expect(response?.body.analysisSectionID).toBe(analysisSectionIndexData[0].analysisSectionID);
@@ -50,7 +68,17 @@ describe('GET /analysisSections/:analysisSectionID', () => {
 
   it('should handle an invalid analysisSectionID', async () => {
     const invalidAnalysisSectionID = 'invalid-id';
-    const response = await request(app).get(`/analysisSections/${invalidAnalysisSectionID}`);
+
+    const loginResponse = await request(app)
+        .post('/credentials')
+        .send({
+          userName: 'Maurice',
+          password: 'Maurice123',
+        });
+
+    const response = await request(app)
+        .get(`/analysisSections/${invalidAnalysisSectionID}`)
+        .set('Authorization', `Bearer ${loginResponse.body.token}`);
 
     expect(response.status).toBe(StatusCodes.NOT_FOUND);
     expect(response.body).toEqual({ error: `Unable to find analysis section with ID ${invalidAnalysisSectionID}` });

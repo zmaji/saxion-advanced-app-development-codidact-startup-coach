@@ -1,10 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import analysisSectionController from '../controllers/AnalysisSection';
+import isLoggedIn from '../middleware/isLoggedIn';
 
 const router = Router();
 
-router.get('', async (req: Request, res: Response) => {
+router.get('', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await analysisSectionController.getAnalysisSections();
 
@@ -24,7 +25,7 @@ router.get('', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/:analysisSectionID', async (req: Request, res: Response) => {
+router.get('/:analysisSectionID', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await analysisSectionController.getAnalysisSection(req.params.analysisSectionID);
 
