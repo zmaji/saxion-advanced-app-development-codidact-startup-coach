@@ -20,6 +20,9 @@ export { default as TextLabel } from './labels/TextLabel.vue';
 export { default as IconLabel } from './labels/IconLabel.vue';
 export { default as DateLabel } from './labels/DateLabel.vue';
 
+// Modals components
+export { default as ContentDocumentPreview } from './modals/ContentDocumentPreview.vue';
+
 // Other components
 export { default as LabelSelect } from './content/LabelSelect.vue'
 export { default as CompanySelect } from './content/CompanySelect.vue'

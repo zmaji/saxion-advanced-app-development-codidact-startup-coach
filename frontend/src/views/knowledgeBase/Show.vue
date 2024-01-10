@@ -19,7 +19,9 @@
     TextButton,
     TextButtonDisabled,
     IconLabel,
-    Reviewers
+    Reviewers,
+    ContentDocumentPreview,
+    SubTitle
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
   import { useTokenStore } from '@/stores/token';
@@ -35,6 +37,7 @@
   const canReview = computed(() => content.value?.contentUsers?.some(
     user => user.userID === currentUser.value?.userID)
   );
+
   const isOwner = computed(() => content.value?.user?.userID === currentUser.value?.userID)
 
   const postFeedback = async () => {
@@ -141,15 +144,24 @@
 
     <SecondaryTitle>Bijlage</SecondaryTitle>
 
-    <div class="bg-white px-4 py-3 border rounded d-flex flex-row justify-content-start align-items-center w-fit">
+    <div
+      data-bs-toggle="modal"
+      data-bs-target="#document-preview-modal"
+      class="d-block bg-white px-4 py-3 border rounded hover-pointer
+      d-flex flex-row justify-content-start align-items-center w-fit"
+    >
       <IconLabel icon="file" type="primary" display-style="secondary" class="me-3" />
 
       {{ content?.attachment }}
     </div>
 
-    <div v-if="canReview || isOwner" class="row g-5 pt-4">
+    <div v-if="canReview || isOwner" class="row pt-4">
       <div class="col col-lg-7">
         <SecondaryTitle>Feedback</SecondaryTitle>
+
+        <SubTitle v-if="!content.feedback || content.feedback.length === 0">
+          Er is nog geen feedback geplaatst op deze content
+        </SubTitle>
 
         <div v-for="(feedback, key) in content.feedback" :key="key" class="bg-white px-4 py-3 border rounded mb-3">
           <div class="d-flex flex-row flex-wrap justify-content-start pb-2">
@@ -194,5 +206,6 @@
     </div>
   </div>
 
+  <ContentDocumentPreview v-if="content?.attachment" :attachment="content.attachment" :contentID="content.contentID"/>
   <CategorySidebar />
 </template>

@@ -1,6 +1,7 @@
 import type { Content, ContentFeedback } from '../typings/Content';
 import type { ContentLabel, Label } from '../typings/Label';
 import type { ContentUser, SimpleUser } from '../typings/User';
+import type { FileArray } from 'express-fileupload';
 
 import { v4 as uuidv4 } from 'uuid';
 import contentModel from '../models/Content';
@@ -169,13 +170,19 @@ const getContent = async (contentID: string): Promise<Content | null> => {
   }
 };
 
-const createContent = async (contentData: Content): Promise<Content | null> => {
+const createContent = async (
+    contentData: Content,
+    files: FileArray | null | undefined,
+): Promise<Content | null> => {
   try {
     contentData.contentID = uuidv4();
     contentData.createdAt = new Date().toISOString();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    const parsedLabels = JSON.parse(contentData.labels!);
     const labels: Label[] = [];
 
-    for (const label of contentData.labels!) {
+    for (const label of parsedLabels!) {
       const existingLabel = await labelModel.findOne({ labelID: label.labelID });
       let contentLabel: ContentLabel;
 
@@ -199,6 +206,13 @@ const createContent = async (contentData: Content): Promise<Content | null> => {
       const newContentLabel = new contentLabelModel(contentLabel);
       await newContentLabel.save();
       labels.push(label);
+    }
+
+    if (files) {
+      const file = Array.isArray(files) ? files[0] : files;
+      contentData.attachment = file.attachment.name;
+      file.attachment.name = contentData.contentID + '_' + file.attachment.name;
+      file.attachment.mv('./public/' + file.attachment.name);
     }
 
     const newContent = new contentModel(contentData);
