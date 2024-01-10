@@ -74,7 +74,6 @@
 
       if (response && response.data) {
         currentAnalysis.value = response.data;
-        console.log(currentAnalysis.value)
       }
     } catch (error) {
       console.error('Error fetching current user:', error);
