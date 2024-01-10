@@ -91,8 +91,8 @@ test-lint-frontend:
 test-frontend:
   image: node:16.20.2
   stage: test
-  # only:
-  #   - merge_requests
+  only:
+    - merge_requests
   script:
     - cd frontend
     - npm install
@@ -102,8 +102,8 @@ test-frontend:
 test-backend:
   image: node:16.20.2
   stage: test
-  # only:
-  #   - merge_requests
+  only:
+    - merge_requests
   script:
     - cd backend
     - npm install
@@ -116,8 +116,8 @@ release-backend:
   stage: release
   services:
     - docker:dind
-  # only:
-  #   - main
+  only:
+    - main
   before_script:
     - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
   script:
@@ -130,8 +130,8 @@ release-frontend:
   stage: release
   services:
     - docker:dind
-  # only:
-  #   - main
+  only:
+    - main
   before_script:
     - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
   script:
@@ -144,8 +144,8 @@ release-seed:
   stage: release
   services:
     - docker:dind
-  # only:
-  #   - main
+  only:
+    - main
   before_script:
     - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
   script:
@@ -156,8 +156,8 @@ release-seed:
 deploy:
   stage: deploy
   image: ubuntu:latest
-  # only:
-  #   - main
+  only:
+    - main
   script:
    - apt-get update -qy
    - apt-get install -y openssh-client
