@@ -1,6 +1,7 @@
 import type { Content, ContentFeedback } from '../typings/Content';
 import type { ContentLabel, Label } from '../typings/Label';
 import type { ContentUser, SimpleUser } from '../typings/User';
+import type { FileArray } from 'express-fileupload';
 
 import { v4 as uuidv4 } from 'uuid';
 import contentModel from '../models/Content';
@@ -9,9 +10,6 @@ import labelModel from '../models/Label';
 import userModel from '../models/User';
 import contentUserModel from '../models/ContentUser';
 import contentFeedbackModel from '../models/ContentFeedback';
-import fileUpload, { FileArray } from "express-fileupload";
-import * as path from "path";
-import * as fs from "fs";
 
 interface Filter {
   title?: { $regex: string; $options: string } | string;
@@ -179,8 +177,9 @@ const createContent = async (
   try {
     contentData.contentID = uuidv4();
     contentData.createdAt = new Date().toISOString();
-    // @ts-ignore
-    const parsedLabels = JSON.parse(contentData.labels);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    const parsedLabels = JSON.parse(contentData.labels!);
     const labels: Label[] = [];
 
     for (const label of parsedLabels!) {
