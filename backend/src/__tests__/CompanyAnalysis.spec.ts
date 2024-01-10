@@ -20,14 +20,13 @@ describe('GET /companyAnalyses/:companyAnalysisID', () => {
     const response = await request(app).get(`/companyAnalyses/${companyAnalysesIndexData[0].companyAnalysisID}`);
 
     expect(response.status).toBe(StatusCodes.OK);
-    expect(companyAnalysesIndexData).not.toBeNull();
     expect(response?.body.companyAnalysisID).toBe(companyAnalysesIndexData[0].companyAnalysisID);
     expect(response?.body.phase).toBe(companyAnalysesIndexData[0].phase);
     expect(response?.body.answers).not.toBeNull();
 
     // @ts-ignore
-    response.body.answers.forEach((answer) => {
-      const matchedQuestion = questionsIndexData.find((q) => q.title === answer.question.title);
+    response?.body.answers.forEach((answer) => {
+      const matchedQuestion = questionsIndexData.find((question) => question.title === answer.question.title);
       expect(matchedQuestion).toBeDefined();
     });
   });
