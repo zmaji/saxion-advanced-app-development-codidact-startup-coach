@@ -76,8 +76,6 @@
       formData.append('accessLevel', contentTemplate.accessLevel!);
       formData.append('attachment', contentTemplate.attachment!);
 
-      console.log(formData);
-
       const result = await httpService.postRequest(
         '/content',
         formData,
