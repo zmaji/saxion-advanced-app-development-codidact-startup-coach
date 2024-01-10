@@ -33,7 +33,6 @@
   const errorMessages: Ref<Record<string, string | null>> = ref({});
 
   interface NewContent {
-    contentID?: string | null;
     user: string | undefined;
     title: string;
     description: string;
@@ -41,12 +40,10 @@
     labels: Label[];
     accessLevel: string | null;
     attachment: string | null;
-    createdAt: string | null;
     [key: string]: string | null | undefined | Label[];
   }
 
   const contentTemplate: NewContent = reactive({
-    contentID: null,
     user: currentUserID,
     title: '',
     description: '',
@@ -54,20 +51,42 @@
     labels: contentLabels,
     accessLevel: accessLevel,
     attachment: null,
-    createdAt: null,
   });
+
+  const updateAttachment = (event: any) => {
+    const file = event.target.files[0];
+    contentTemplate.attachment = file;
+    console.log('template file', contentTemplate.attachment);
+    console.log(file);
+  }
 
   const addContent = async () => {
 
     if (!validateContentTemplate()) {
       return;
-    };
+    }
 
     try {
+      const formData = new FormData();
+      formData.append('user', contentTemplate.user!);
+      formData.append('title', contentTemplate.title);
+      formData.append('description', contentTemplate.description);
+      formData.append('category', contentTemplate.category!);
+      formData.append('labels', JSON.stringify(contentTemplate.labels));
+      formData.append('accessLevel', contentTemplate.accessLevel!);
+      formData.append('attachment', contentTemplate.attachment!);
+
+      console.log(formData);
+
       const result = await httpService.postRequest(
         '/content',
-        JSON.parse(JSON.stringify(contentTemplate))
+        formData,
+        true
       );
+
+      if (result && result.data) {
+        console.log(result.data)
+      }
 
       if (result.status === 200) {
         toast.success('Content succesvol toegevoegd!', {
@@ -212,7 +231,7 @@
       <div class="pb-3 col-lg-10">
         <label class="form-label" for="content-file">Bijlage</label>
 
-        <input class="form-control" type="file" id="content-file" />
+        <input class="form-control" type="file" id="content-file" v-on:change="updateAttachment"/>
       </div>
     </div>
 
