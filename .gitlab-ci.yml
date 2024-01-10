@@ -89,6 +89,7 @@ test-lint-frontend:
 
 # Check if frontend unit tests are in order
 test-frontend:
+  image: node:16.20.2
   stage: test
   # only:
   #   - merge_requests
@@ -99,6 +100,7 @@ test-frontend:
 
 # Check if backend unit tests are in order
 test-backend:
+  image: node:16.20.2
   stage: test
   # only:
   #   - merge_requests
