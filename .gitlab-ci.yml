@@ -94,6 +94,7 @@ test-frontend:
   #   - merge_requests
   script:
     - cd frontend
+    - npm install
     - npm run test:unit
 
 # Check if backend unit tests are in order
@@ -103,6 +104,7 @@ test-backend:
   #   - merge_requests
   script:
     - cd backend
+    - npm install
     - npm run test
 
 
