@@ -13,6 +13,7 @@
   import httpService from '../../plugins/http/httpService';
   import { useTokenStore } from '../../stores/token';
   import { jwtDecode } from 'jwt-decode';
+  import { toast } from 'vue3-toastify';
 
   import {
     TextButton,
@@ -249,7 +250,9 @@
         canValidate.value = false;
       }
     } else {
-      alert('Vul alle verplichte velden in.');
+      toast.error('Vul alle verplichte velden in.', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
       currentStep.value!.completed = false;
     }
   };
@@ -278,13 +281,17 @@
     currentStep.value = formSteps[1];
     currentStepFields.value = getCurrentStepFields();
     currentStep.value.completed = false;
-    alert('U herstart de analyse.');
+    toast.warning('U herstart de analyse.', {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   };
 
   const goToOverview = () => {
     showInformation.value = true;
     showForm.value = false;
-    alert('U gaat terug naar het overzicht.');
+    toast.warning('U gaat terug naar het overzicht.', {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   };
 
   const reviewForm = () => {
@@ -359,7 +366,9 @@
     } catch (error) {
       console.error('Error creating company analysis:', error);
     }
-    alert('Analyse succesvol opgeslagen.');
+    toast.success('Analyse succesvol opgeslagen.', {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   };
 
   const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
@@ -558,9 +567,8 @@
           Volgende
         </TextButton>
 
-        <TextButton v-if="currentStep.number === Object.keys(formSteps).length && currentStep.number !== 1" 
-          stype="primary"
-          @click="reviewForm" data-test="reviewAnalysisButton">
+        <TextButton v-if="currentStep.number === Object.keys(formSteps).length && currentStep.number !== 1"
+          stype="primary" @click="reviewForm" data-test="reviewAnalysisButton">
           Controleer analyse
         </TextButton>
       </div>

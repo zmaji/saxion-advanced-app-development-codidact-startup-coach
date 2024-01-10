@@ -92,7 +92,7 @@
 
   const validateContentTemplate = () => {
     console.log(contentTemplate.title?.length);
-      
+
     if (contentTemplate.title!.length < 3) {
       errorMessages.value['title'] = 'De titel moet minstens 3 tekens bevatten.';
 
@@ -166,7 +166,7 @@
   <PageTitle>Content Toevoegen</PageTitle>
 
   <div class="d-flex flex-row flex-wrap align-items-center">
-    <CategoryBreadCrumb/>
+    <CategoryBreadCrumb />
   </div>
 
   <form class="row g-2 g-lg-3">
@@ -176,14 +176,8 @@
       <div class="pb-3 col-lg-10">
         <label for="content-title" class="form-label">Titel</label>
 
-        <input
-          v-model="contentTemplate.title"
-          type="text"
-          class="form-control"
-          id="content-title"
-          placeholder="Vul een titel in"
-          required
-        />
+        <input v-model="contentTemplate.title" type="text" class="form-control" id="content-title"
+          placeholder="Vul een titel in" required />
         <div v-if="errorMessages['title']">
           <small class="invalid-input">{{ errorMessages['title'] }}</small>
         </div>
@@ -192,15 +186,8 @@
       <div class="pb-3 col-lg-10">
         <label for="content-description" class="form-label">Beschrijving</label>
 
-        <textarea
-          v-model="contentTemplate.description"
-          type="text"
-          class="form-control"
-          id="content-description"
-          placeholder="Vul een beschrijving in"
-          rows="5"
-          style="resize: none"
-        />
+        <textarea v-model="contentTemplate.description" type="text" class="form-control" id="content-description"
+          placeholder="Vul een beschrijving in" rows="5" style="resize: none" />
 
         <div v-if="errorMessages['description']">
           <small class="invalid-input">{{ errorMessages['description'] }}</small>
@@ -213,11 +200,7 @@
         <select class="form-select" id="category-select" v-model="contentTemplate.category">
           <option selected :value="null" disabled>Selecteer een categorie</option>
 
-          <option
-            v-for="(category, key) in categories"
-            :key="key"
-            :value="category.categoryID"
-          >
+          <option v-for="(category, key) in categories" :key="key" :value="category.categoryID">
             {{ category.name }}
           </option>
         </select>
@@ -239,11 +222,11 @@
       <div class="pb-3 col-lg-10">
         <label class="form-label">Content labels</label>
 
-        <LabelSelect v-model="contentTemplate.labels"/>
+        <LabelSelect v-model="contentTemplate.labels" />
       </div>
       <div v-if="errorMessages['labels']">
-          <small class="invalid-input">{{ errorMessages['labels'] }}</small>
-        </div>
+        <small class="invalid-input">{{ errorMessages['labels'] }}</small>
+      </div>
     </div>
 
     <div class="col">
@@ -264,7 +247,7 @@
           <div v-if="accessLevel === 'restricted'" class="pb-3 col-lg-10">
             <label class="pb-2" for="user"> Welke gebruikers mogen uw content zien</label>
 
-            <UserSelect/>
+            <UserSelect />
           </div>
         </div>
 
@@ -272,7 +255,7 @@
           <div class="pb-3 col-lg-10">
             <label class="pb-2" for="company"> Welke bedrijven mogen uw content zien</label>
 
-            <CompanySelect/>
+            <CompanySelect />
           </div>
         </div>
       </div>
@@ -280,10 +263,7 @@
   </form>
 
   <div class="d-flex flex-md-row flex-column flex-wrap">
-    <TextButton 
-      class="button mb-3 mb-md-0 me-md-2"
-      @click="addContent"
-    >
+    <TextButton class="button mb-3 mb-md-0 me-md-2" @click="addContent">
       Content toevoegen
     </TextButton>
 
@@ -291,11 +271,9 @@
       Annuleren
     </TextButton>
   </div>
-
 </template>
 
 <style scoped>
-
 .invalid-input {
   border-color: var(--bs-danger);
   color: var(--bs-danger);
