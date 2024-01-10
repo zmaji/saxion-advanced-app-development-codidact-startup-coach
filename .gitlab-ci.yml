@@ -18,6 +18,7 @@ stages:
   - build
   - test
   - release
+  - deploy
 
 # Check if the branch is allowed to make a merge request to the target branch
 allowed-to-merge:
@@ -86,6 +87,40 @@ test-lint-frontend:
     - cd /builds/saxion.nl/hbo-ict/aad/project/09/frontend
     - npm run lint
 
+# Check if frontend unit tests are in order
+test-frontend:
+  image: node:16.20.2
+  stage: test
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-frontend
+    paths:
+      - frontend/node_modules/
+  only:
+    - merge_requests
+  needs:
+    - build-frontend
+  script:
+    - cd frontend
+    - npm install
+    - npm run test:unit
+
+# Check if backend unit tests are in order
+test-backend:
+  image: node:16.20.2
+  stage: test
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-backend
+    paths:
+      - backend/node_modules/  
+  only:
+    - merge_requests
+  needs:
+    - build-backend
+  script:
+    - cd backend
+    - npm run test
+
+
 # Release backend docker image(s) to dockerhub
 release-backend:
   image: docker:cli
@@ -97,8 +132,8 @@ release-backend:
   before_script:
     - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
   script:
-    - docker build --pull --rm -f "./backend/Dockerfile" -t "zikria40/codidact-startup-coach-backend:latest" "./backend"
-    - docker push "zikria40/codidact-startup-coach-backend:latest"
+    - docker build --pull --rm -f "./backend/Dockerfile" -t "${DOCKER_REPO}/codidact-startup-coach-backend:latest" "./backend"
+    - docker push "${DOCKER_REPO}/codidact-startup-coach-backend:latest"
 
 # Release frontend docker image(s) to dockerhub
 release-frontend:
@@ -111,5 +146,40 @@ release-frontend:
   before_script:
     - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
   script:
-    - docker build --pull --rm -f "./frontend/Dockerfile" -t "zikria40/codidact-startup-coach-frontend:latest" "./frontend"
-    - docker push "zikria40/codidact-startup-coach-frontend:latest"
+    - docker build --pull --rm -f "./frontend/Dockerfile" -t "${DOCKER_REPO}/codidact-startup-coach-frontend:latest" "./frontend"
+    - docker push "${DOCKER_REPO}/codidact-startup-coach-frontend:latest"
+
+# Release seed docker image(s) to dockerhub
+release-seed:
+  image: docker:cli
+  stage: release
+  services:
+    - docker:dind
+  only:
+    - main
+  before_script:
+    - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
+  script:
+    - docker build --pull --rm -f "./backend/src/database/Dockerfile" -t "${DOCKER_REPO}/codidact-startup-coach-seed:latest" "./backend/src/database"
+    - docker push "${DOCKER_REPO}/codidact-startup-coach-seed:latest"
+
+# Deploy
+deploy:
+  stage: deploy
+  image: ubuntu:latest
+  only:
+    - main
+  script:
+   - apt-get update -qy
+   - apt-get install -y openssh-client
+   - apt-get install sshpass
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker pull ${DOCKER_REPO}/codidact-startup-coach-seed:latest"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker pull ${DOCKER_REPO}/codidact-startup-coach-backend:latest"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker pull ${DOCKER_REPO}/codidact-startup-coach-frontend:latest"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker stop api-backend || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker rm api-backend || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker stop frontend || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker rm frontend || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker stop mongo-seed || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "docker rm mongo-seed || true"
+   - echo "${SSH_USER}" | sshpass -p "${SSH_PASSWORD}" ssh -tt -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_USER}@${SSH_IP} "cd 09/ && docker-compose -f docker-compose.yml up -d backend frontend seed"
