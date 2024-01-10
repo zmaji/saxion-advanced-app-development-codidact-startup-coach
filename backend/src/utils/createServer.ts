@@ -13,7 +13,7 @@ import labelRoutes from '../routes/Label';
 import userRoutes from '../routes/User';
 import contentUserRoutes from '../routes/ContentUser';
 import contentFeedbackRoutes from '../routes/ContentFeedback';
-import analysisSectionRoutees from '../routes/AnalysisSection';
+import analysisSectionRoutes from '../routes/AnalysisSection';
 import roadmapRoutes from '../routes/Roadmap';
 
 const createServer = () => {
@@ -47,7 +47,7 @@ const createServer = () => {
   app.use('/users', userRoutes);
   app.use('/contentUsers', contentUserRoutes);
   app.use('/feedback', contentFeedbackRoutes);
-  app.use('/analysisSections', analysisSectionRoutees);
+  app.use('/analysisSections', analysisSectionRoutes);
   app.use('/roadmaps', roadmapRoutes);
 
   return app;

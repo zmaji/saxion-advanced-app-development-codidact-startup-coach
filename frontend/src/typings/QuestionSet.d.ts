@@ -1,11 +1,12 @@
-import type { QuestionOption } from '../../../backend/src/typings/QuestionOption';
+import type { Questions } from './Question';
 
 export interface QuestionSet {
   questionSetID: string;
   analysisSectionID?: string;
   inputType: string;
-  options: QuestionOption[];
+  questions: Questions[];
   title: string;
   description: string;
   requiredPhase: string;
+  displayNumber?: number;
 }

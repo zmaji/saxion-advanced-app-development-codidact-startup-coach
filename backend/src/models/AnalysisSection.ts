@@ -16,6 +16,10 @@ const analysisSectionSchema: Schema<AnalysisSection> = new Schema({
     type: String,
     required: true,
   },
+  displayOrder: {
+    type: Number,
+    required: false,
+  },
 }, {
   collection: 'analysisSections',
   versionKey: false,

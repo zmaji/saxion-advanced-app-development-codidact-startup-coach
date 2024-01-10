@@ -1,8 +1,9 @@
-type formFieldTypes = 'text' | 'large-text' | 'select';
+import type { QuestionOption } from './QuestionOption';
 
 export interface FormStep {
   number: number;
-  name: string;
+  title: string;
+  subtitle: string;
   description: string;
   completed: boolean;
 }
@@ -10,8 +11,9 @@ export interface FormStep {
 export interface FormData {
   label: string;
   step: FormStep;
-  value: string | number;
+  value: string | number | value;
   isValid: boolean;
   errorMessage: string;
-  type?: formFieldTypes;
+  inputType: string;
+  options: QuestionOption[];
 }

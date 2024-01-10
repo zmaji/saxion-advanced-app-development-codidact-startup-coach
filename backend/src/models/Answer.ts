@@ -16,7 +16,6 @@ const answerSchema: Schema<Answer> = new Schema({
   selectedOption: {
     type: String,
     required: true,
-    immutable: true,
   },
 }, {
   collection: 'answers',

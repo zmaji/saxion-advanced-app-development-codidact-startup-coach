@@ -1,11 +1,15 @@
-import type { QuestionOption } from './QuestionOption';
+import type { Question } from './Question';
 
 export interface QuestionSet {
   questionSetID: string;
   analysisSectionID?: string;
   inputType: string;
-  options: QuestionOption[];
+  questions: Question[];
+  questions: Question[];
   title: string;
   description: string;
-  requiredPhase: string;
+  requiredPhase?: string;
+  displayOrder?: number;
+  requiredPhase?: string;
+  displayOrder?: number;
 }
