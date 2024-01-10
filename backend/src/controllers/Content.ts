@@ -9,6 +9,9 @@ import labelModel from '../models/Label';
 import userModel from '../models/User';
 import contentUserModel from '../models/ContentUser';
 import contentFeedbackModel from '../models/ContentFeedback';
+import fileUpload, { FileArray } from "express-fileupload";
+import * as path from "path";
+import * as fs from "fs";
 
 interface Filter {
   title?: { $regex: string; $options: string } | string;
@@ -169,13 +172,18 @@ const getContent = async (contentID: string): Promise<Content | null> => {
   }
 };
 
-const createContent = async (contentData: Content): Promise<Content | null> => {
+const createContent = async (
+    contentData: Content,
+    files: FileArray | null | undefined,
+): Promise<Content | null> => {
   try {
     contentData.contentID = uuidv4();
     contentData.createdAt = new Date().toISOString();
+    // @ts-ignore
+    const parsedLabels = JSON.parse(contentData.labels);
     const labels: Label[] = [];
 
-    for (const label of contentData.labels!) {
+    for (const label of parsedLabels!) {
       const existingLabel = await labelModel.findOne({ labelID: label.labelID });
       let contentLabel: ContentLabel;
 
@@ -199,6 +207,13 @@ const createContent = async (contentData: Content): Promise<Content | null> => {
       const newContentLabel = new contentLabelModel(contentLabel);
       await newContentLabel.save();
       labels.push(label);
+    }
+
+    if (files) {
+      const file = Array.isArray(files) ? files[0] : files;
+      contentData.attachment = file.attachment.name;
+      file.attachment.name = contentData.contentID + '_' + file.attachment.name;
+      file.attachment.mv('./public/' + file.attachment.name);
     }
 
     const newContent = new contentModel(contentData);

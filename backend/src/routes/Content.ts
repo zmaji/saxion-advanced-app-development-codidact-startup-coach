@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import contentController from '../controllers/Content';
+import isLoggedIn from '../middleware/isLoggedIn';
 
 const router = Router();
 
@@ -48,9 +49,9 @@ router.get('/:contentID', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', isLoggedIn, async (req: Request, res: Response) => {
   try {
-    const newContent = await contentController.createContent(req.body);
+    const newContent = await contentController.createContent(req.body, req.files);
 
     if (newContent) {
       res
