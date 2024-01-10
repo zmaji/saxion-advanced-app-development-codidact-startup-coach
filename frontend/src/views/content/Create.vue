@@ -1,164 +1,164 @@
 <script setup lang="ts">
-import type { Label } from '@/typings/Label';
-import type { Ref } from 'vue';
-import type { User } from '@/typings/User';
-import type { Category } from '@/typings/Category';
+  import type { Label } from '@/typings/Label';
+  import type { Ref } from 'vue';
+  import type { User } from '@/typings/User';
+  import type { Category } from '@/typings/Category';
 
-import { onMounted, reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import { jwtDecode } from 'jwt-decode';
-import { toast } from 'vue3-toastify';
+  import { onMounted, reactive, ref } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { jwtDecode } from 'jwt-decode';
+  import { toast } from 'vue3-toastify';
 
-import { useTokenStore } from '@/stores/token';
-import router from '@/router/index';
-import httpService from '@/plugins/http/httpService';
-import {
-  CategoryBreadCrumb,
-  PageTitle,
-  SecondaryTitle,
-  TextButton,
-  UserSelect
-} from '@/components';
-import { LabelSelect } from '@/components'
-import { CompanySelect } from '@/components'
+  import { useTokenStore } from '@/stores/token';
+  import router from '@/router/index';
+  import httpService from '@/plugins/http/httpService';
+  import {
+    CategoryBreadCrumb,
+    PageTitle,
+    SecondaryTitle,
+    TextButton,
+    UserSelect
+  } from '@/components';
+  import { LabelSelect } from '@/components'
+  import { CompanySelect } from '@/components'
 
-const route = useRoute();
+  const route = useRoute();
 
-const tokenStore = useTokenStore()
-const categories: Ref<Category[]> = ref<Category[]>([]);
-const currentUser = ref<User | null>(null)
-const currentUserID = ref<string | undefined>('');
-let accessLevel: Ref<string> = ref('public');
-let contentLabels: Ref<Label[]> = ref<Label[]>([]);
-const errorMessages: Ref<Record<string, string | null>> = ref({});
+  const tokenStore = useTokenStore()
+  const categories: Ref<Category[]> = ref<Category[]>([]);
+  const currentUser = ref<User | null>(null)
+  const currentUserID = ref<string | undefined>('');
+  let accessLevel: Ref<string> = ref('public');
+  let contentLabels: Ref<Label[]> = ref<Label[]>([]);
+  const errorMessages: Ref<Record<string, string | null>> = ref({});
 
-interface NewContent {
-  contentID?: string | null;
-  user: string | undefined;
-  title: string;
-  description: string;
-  category: string | null;
-  labels: Label[];
-  accessLevel: string | null;
-  attachment: string | null;
-  createdAt: string | null;
-  [key: string]: string | null | undefined | Label[];
-}
+  interface NewContent {
+    contentID?: string | null;
+    user: string | undefined;
+    title: string;
+    description: string;
+    category: string | null;
+    labels: Label[];
+    accessLevel: string | null;
+    attachment: string | null;
+    createdAt: string | null;
+    [key: string]: string | null | undefined | Label[];
+  }
 
-const contentTemplate: NewContent = reactive({
-  contentID: null,
-  user: currentUserID,
-  title: '',
-  description: '',
-  category: null,
-  labels: contentLabels,
-  accessLevel: accessLevel,
-  attachment: null,
-  createdAt: null,
-});
+  const contentTemplate: NewContent = reactive({
+    contentID: null,
+    user: currentUserID,
+    title: '',
+    description: '',
+    category: null,
+    labels: contentLabels,
+    accessLevel: accessLevel,
+    attachment: null,
+    createdAt: null,
+  });
 
-const addContent = async () => {
+  const addContent = async () => {
 
-  if (!validateContentTemplate()) {
-    return;
+    if (!validateContentTemplate()) {
+      return;
+    };
+
+    try {
+      const result = await httpService.postRequest(
+        '/content',
+        JSON.parse(JSON.stringify(contentTemplate))
+      );
+
+      if (result.status === 200) {
+        toast.success('Content succesvol toegevoegd!', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+
+        setTimeout(() => {
+          navigateToContentOverview();
+        }, 2000);
+      } else {
+        toast.warning('Er ging iets fout', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      toast.error('Er ging iets fout', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      console.error(error);
+    }
+  }
+
+  const validateContentTemplate = () => {
+    console.log(contentTemplate.title?.length);
+
+    if (contentTemplate.title!.length < 3) {
+      errorMessages.value['title'] = 'De titel moet minstens 3 tekens bevatten.';
+
+    } else {
+      errorMessages.value['title'] = '';
+    }
+
+    if (contentTemplate.description!.length < 10) {
+      errorMessages.value['description'] = 'De beschrijving moet minstens 10 letters lang zijn.';
+
+    } else {
+      errorMessages.value['description'] = '';
+    }
+
+    if (contentTemplate.labels && contentTemplate.labels.length < 1) {
+      errorMessages.value['labels'] = 'Er moet minimaal één label toegevoegd worden.';
+
+    } else {
+      errorMessages.value['labels'] = '';
+    }
+
+    if (!contentTemplate.category) {
+      errorMessages.value['category'] = 'Er moet één categorie gekozen worden.';
+
+    } else {
+      errorMessages.value['category'] = '';
+    }
+
+    return errorMessages.value;
+  }
+
+  const navigateToContentOverview = () => {
+    router.push({ name: 'knowledgeBase.overview' });
+  }
+
+  const fetchUserData = async () => {
+    try {
+      const userToken = tokenStore.getToken;
+      currentUser.value = jwtDecode(userToken);
+      currentUserID.value = currentUser.value?.userID;
+
+    } catch (error) {
+      console.error('Error fetching current userID:', error);
+    }
   };
 
-  try {
-    const result = await httpService.postRequest(
-      '/content',
-      JSON.parse(JSON.stringify(contentTemplate))
-    );
+  const fetchCategories = async () => {
+    try {
+      const response = await httpService.getRequest<Category[]>('/categories/flattened', false);
 
-    if (result.status === 200) {
-      toast.success('Content succesvol toegevoegd!', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-
-      setTimeout(() => {
-        navigateToContentOverview();
-      }, 2000);
-    } else {
-      toast.warning('Er ging iets fout', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      if (response && response.data) {
+        categories.value = response.data;
+      }
+    } catch (e) {
+      console.error(e);
     }
-  } catch (error) {
-    toast.error('Er ging iets fout', {
-      position: toast.POSITION.TOP_RIGHT,
-    });
-    console.error(error);
-  }
-}
-
-const validateContentTemplate = () => {
-  console.log(contentTemplate.title?.length);
-
-  if (contentTemplate.title!.length < 3) {
-    errorMessages.value['title'] = 'De titel moet minstens 3 tekens bevatten.';
-
-  } else {
-    errorMessages.value['title'] = '';
   }
 
-  if (contentTemplate.description!.length < 10) {
-    errorMessages.value['description'] = 'De beschrijving moet minstens 10 letters lang zijn.';
-
-  } else {
-    errorMessages.value['description'] = '';
-  }
-
-  if (contentTemplate.labels && contentTemplate.labels.length < 1) {
-    errorMessages.value['labels'] = 'Er moet minimaal één label toegevoegd worden.';
-
-  } else {
-    errorMessages.value['labels'] = '';
-  }
-
-  if (!contentTemplate.category) {
-    errorMessages.value['category'] = 'Er moet één categorie gekozen worden.';
-
-  } else {
-    errorMessages.value['category'] = '';
-  }
-
-  return errorMessages.value;
-}
-
-const navigateToContentOverview = () => {
-  router.push({ name: 'knowledgeBase.overview' });
-}
-
-const fetchUserData = async () => {
-  try {
-    const userToken = tokenStore.getToken;
-    currentUser.value = jwtDecode(userToken);
-    currentUserID.value = currentUser.value?.userID;
-
-  } catch (error) {
-    console.error('Error fetching current userID:', error);
-  }
-};
-
-const fetchCategories = async () => {
-  try {
-    const response = await httpService.getRequest<Category[]>('/categories/flattened', false);
-
-    if (response && response.data) {
-      categories.value = response.data;
-    }
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-onMounted(() => {
-  fetchCategories().then(() => {
-    if (route.query.category) {
-      contentTemplate.category = route.query.category.valueOf().toString();
-    }
-  })
-  fetchUserData();
-});
+  onMounted(() => {
+    fetchCategories().then(() => {
+      if (route.query.category) {
+        contentTemplate.category = route.query.category.valueOf().toString();
+      }
+    })
+    fetchUserData();
+  });
 
 </script>
 
