@@ -70,6 +70,7 @@ const getRoadmap = async (headers: string): Promise<Roadmap | null> => {
 
 const assignModules = async (companyAnalysisID: string): Promise<Module[] | null> => {
   const modules: Module[] = [];
+  const allModules: Module[] = await moduleModel.find({}, { _id: 0 }).lean();
 
   const companyAnalysis = await companyAnalysisModel.findOne({ companyAnalysisID }, { _id: 0 }).lean();
 
@@ -77,17 +78,21 @@ const assignModules = async (companyAnalysisID: string): Promise<Module[] | null
     return null;
   }
 
-  const allModules: Module[] = await moduleModel.find({}, { _id: 0 }).lean();
-  // const phaseModule: Module[] = allModules.filter((module) => {
-  //   module.phase.filter((phase) => phase === companyAnalysis.phase.toLowerCase());
-  // });
+  const phaseModules: Module[] = [];
 
   for (const module of allModules) {
+    if (module.phase.includes(companyAnalysis.phase.toLowerCase())) {
+      console.log('added', module.phase);
+      phaseModules.push(module);
+    }
+  }
+
+  for (const module of phaseModules) {
     if (await isConformToCriteria(companyAnalysisID, module)) {
       modules.push(module);
     }
   }
-  for (const module of modules) {
+  for (const module of phaseModules) {
     console.log(module);
   }
 
