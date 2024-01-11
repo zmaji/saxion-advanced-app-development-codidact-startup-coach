@@ -38,5 +38,16 @@
     "accessLevel": "private",
     "attachment": "random_file.txt",
     "createdAt": "2023-12-12T11:45:00Z"
+  },
+  {
+    "contentID": "7d84faa1-a1c7-4402-a7f1-4b48c1371557",
+    "userID": "12c20d6e-1bc6-4d7a-acaf-2021afc7a242",
+    "title": "Revolutie in Strategiebijeenkomsten: Een Nieuwe Aanpak voor Succes",
+    "description": "We zijn verheugd om een baanbrekende manier te introduceren om strategiebijeenkomsten te houden die beloven de samenwerking te verbeteren, creativiteit te stimuleren en succes te bevorderen.",
+    "category": "b8b7187e-7335-477e-b087-219d0d95910a",
+    "accessLevel": "public",
+    "attachment": "example-video.mp4",
+    "createdAt": "2023-12-12T11:45:00Z"
   }
+
 ]
