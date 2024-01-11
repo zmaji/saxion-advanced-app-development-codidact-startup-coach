@@ -75,32 +75,33 @@ const assignModules = async (companyAnalysisID: string): Promise<Module[] | null
     return null;
   }
 
-  const allModules: Module[] = await moduleModel.find();
+  const allModules: Module[] = await moduleModel.find().lean();
   // const phaseModule: Module[] = allModules.filter((module) => {
   //   module.phase.filter((phase) => phase === companyAnalysis.phase.toLowerCase());
   // });
 
   const analysisAnswers = await answerModel.find({ companyAnalysisID }, { _id: 0 }).lean();
-  analysisAnswers.forEach(async (answer) => {
-    const question = await questionModel.findOne({
-      questionID: answer.linkedQuestionID,
-    });
-    // console.log(question);
+  await Promise.all(analysisAnswers.map(async (answer) => {
+    const question = await questionModel.findOne({ questionID: answer.linkedQuestionID }).lean();
 
     if (question) {
-      allModules.forEach((module) => {
-        console.log(module.criteria);
-        // if (question.questionSetID === module.criteria.questionSetID) {
-        //   console.log('gelijk');
-        // }
+      allModules.forEach((module: Module) => {
+        if (question.questionSetID === module.criteria.questionSetID) {
+          module.criteria.expectedAnswers.forEach((pair) => {
+            if (pair.questionID === question.questionID &&
+              pair.seletedOptionID === answer.selectedOption) {
+              if (!modules.includes(module)) {
+                modules.push(module);
+              }
+            }
+          });
+        }
       });
     }
-  });
-
-  // console.log(analysisAnswers);
+  }));
 
   // modules.forEach((module) => {
-  //   console.log(module.name);
+  //   console.log(module);
   // });
 
   return modules;
