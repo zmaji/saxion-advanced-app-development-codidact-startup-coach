@@ -50,6 +50,7 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<CompanyAna
                 description: question.description,
               },
               answer: questionOption.value,
+              answerModule: questionOption.moduleID,
             });
           }
         }
