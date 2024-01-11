@@ -102,7 +102,7 @@
           <video
             v-else-if="attachmentType === 'video'"
             :src="attachmentUrl"
-            poster="../../../public/images/powered-by-codidact-backdrop.svg"
+            poster="/public/images/powered-by-codidact-backdrop.svg"
             class="frame-ratio"
             controls
             preload="none"
