@@ -9,7 +9,7 @@ export interface Module {
     expectedAnswers: [
       {
         questionID: string,
-        seletedOptionID: string
+        selectedOptionID: string
       }
     ]
   }

@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { Company } from '../typings/Company';
 import { User } from '../typings/User';
 import { Module } from '../typings/Module';
+import { Answer } from '../typings/Answer';
 import moduleModel from '../models/Module';
 import roadmapModel from '../models/Roadmap';
 import stepModel from '../models/Step';
@@ -80,31 +81,58 @@ const assignModules = async (companyAnalysisID: string): Promise<Module[] | null
   //   module.phase.filter((phase) => phase === companyAnalysis.phase.toLowerCase());
   // });
 
-  const analysisAnswers = await answerModel.find({ companyAnalysisID }, { _id: 0 }).lean();
-  await Promise.all(analysisAnswers.map(async (answer) => {
+  // const analysisAnswers: Answer[] = await answerModel.find({ companyAnalysisID }, { _id: 0 }).lean();
+  // await Promise.all(analysisAnswers.map(async (answer) => {
+  //   const question = await questionModel.findOne({ questionID: answer.linkedQuestionID }).lean();
+
+  //   if (question) {
+  //     allModules.forEach((module: Module) => {
+  //       if (question.questionSetID === module.criteria.questionSetID) {
+  //         module.criteria.expectedAnswers.forEach((pair) => {
+  //           if (pair.questionID === question.questionID &&
+  //             pair.seletedOptionID === answer.selectedOption) {
+  //             if (!modules.includes(module)) {
+  //               modules.push(module);
+  //             }
+  //           }
+  //         });
+  //       }
+  //     });
+  //   }
+  // }));
+
+  for (const module of allModules) {
+    if (await isConformToCriteria(companyAnalysisID, module)) {
+      modules.push(module);
+    }
+  }
+  for (const module of modules) {
+    console.log(module);
+  }
+
+  return modules;
+};
+
+const isConformToCriteria = async (companyAnalysisID: string, module: Module): Promise<boolean> => {
+  const analysisAnswers: Answer[] = await answerModel.find({ companyAnalysisID }, { _id: 0 }).lean();
+
+  for (const answer of analysisAnswers) {
     const question = await questionModel.findOne({ questionID: answer.linkedQuestionID }).lean();
 
     if (question) {
-      allModules.forEach((module: Module) => {
-        if (question.questionSetID === module.criteria.questionSetID) {
-          module.criteria.expectedAnswers.forEach((pair) => {
-            if (pair.questionID === question.questionID &&
-              pair.seletedOptionID === answer.selectedOption) {
-              if (!modules.includes(module)) {
-                modules.push(module);
-              }
-            }
-          });
+      for (const pair of module.criteria.expectedAnswers) {
+        if (!pair.questionID || pair.questionID === '') {
+          return false;
+        } else if (pair.questionID === question.questionID) {
+          if (pair.selectedOptionID !== answer.selectedOption) {
+            return false;
+          }
         }
-      });
+      }
     }
-  }));
+  }
 
-  // modules.forEach((module) => {
-  //   console.log(module);
-  // });
-
-  return modules;
+  return true;
 };
 
 const roadmapController = {
