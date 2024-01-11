@@ -18,6 +18,7 @@
     const ext = props.attachment?.split('.').pop()?.toLowerCase() ?? '';
 
     if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) return 'image';
+    if (['mp4'].includes(ext)) return 'video';
     if (['pdf'].includes(ext)) return 'pdf';
     if (['txt'].includes(ext)) return 'txt';
 
@@ -96,7 +97,16 @@
 
           <img v-else-if="attachmentType === 'image'" :src="attachmentUrl" alt="Afbeelding" class="w-100"/>
 
-          <iframe v-else-if="attachmentType === 'pdf'" :src="attachmentUrl" class="frame-ratio"/>
+          <iframe v-else-if="attachmentType === 'pdf'" :src="attachmentUrl" class="frame-ratio h-100"/>
+
+          <video
+            v-else-if="attachmentType === 'video'"
+            :src="attachmentUrl"
+            poster="../../../public/images/powered-by-codidact-backdrop.svg"
+            class="frame-ratio"
+            controls
+            preload="none"
+          />
         </div>
 
         <div class="modal-footer">
@@ -125,7 +135,6 @@
 
   .frame-ratio {
     width: 100%;
-    height: 100%;
     aspect-ratio: 16/9;
   }
 </style>
