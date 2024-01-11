@@ -13,6 +13,11 @@ const answerSchema: Schema<Answer> = new Schema({
     required: true,
     immutable: true,
   },
+  linkedQuestionID: {
+    type: String,
+    required: true,
+    immutable: true,
+  },
   selectedOption: {
     type: String,
     required: true,

@@ -14,6 +14,12 @@ const moduleSchema: Schema<Module> = new Schema({
   },
   name: {
     type: String,
+    unique: true,
+    required: true,
+  },
+  phase: {
+    type: [String],
+    unique: true,
     required: true,
   },
   description: {
