@@ -12,7 +12,7 @@
     ],
     "criteria": {
       "questionSetID":"a343e09a-6c91-4e22-9f87-fbee2c6c4ab2",
-      "expextedAnswers": [
+      "expectedAnswers": [
         {
           "questionID":"fd446cdc-5871-4a5c-9f2a-34cf285c1a6f",
           "seletedOptionID":"cf907c23-21a6-4ea3-b6b7-621442312a8d"
@@ -37,7 +37,7 @@
     "phase": [],
     "criteria": {
       "questionSetID":"7ec42662-158d-4bc1-8707-57cf7dcce794",
-      "expextedAnswers": [
+      "expectedAnswers": [
         {
           "questionID":"",
           "seletedOptionID":""
@@ -58,7 +58,7 @@
     ],
     "criteria": {
       "questionSetID":"19d8248f-355f-4f82-994a-07237b1a290c",
-      "expextedAnswers": [
+      "expectedAnswers": [
         {
           "questionID":"9367fe56-6a12-4c06-b90b-7f39c4069d15",
           "seletedOptionID":"794b96f3-263c-475e-9f94-4314712a0d92"
@@ -81,7 +81,7 @@
     ],
     "criteria": {
       "questionSetID":"2496b27f-6dd2-4f81-9481-c6fddd87d61e",
-      "expextedAnswers": [
+      "expectedAnswers": [
         {
           "questionID":"8e64eaac-2eeb-4c94-bf5c-8de7df52d7c5",
           "seletedOptionID":"0428f10f-d4ac-4705-8f7d-8833e5570dd2"
@@ -105,7 +105,7 @@
     ],
     "criteria": {
       "questionSetID":"23f75520-c2ce-49a1-ac28-00ad8a81e585",
-      "expextedAnswers": [
+      "expectedAnswers": [
         {
           "questionID":"5d2572ed-cce7-4a48-a3b2-12d1cf5da531",
           "seletedOptionID":"b6e9c36e-171d-4482-916b-5936db3be06e"
@@ -129,7 +129,7 @@
     ],
     "criteria": {
       "questionSetID":"d384ebe6-74e6-4ee9-9d8e-255df84d21c8",
-      "expextedAnswers": [
+      "expectedAnswers": [
         {
           "questionID":"0c0649d9-85eb-41eb-8c8f-77b2b7cc80f1",
           "seletedOptionID":"ae60b40e-43d3-4a6e-9a7e-ba0e8a5ac5f7"
@@ -157,7 +157,7 @@
     ],
     "criteria": {
       "questionSetID":"bd814254-8b25-477a-9ed6-997dc63e53c1",
-      "expextedAnswers": [
+      "expectedAnswers": [
         {
           "questionID":"35bfb0fc-9ac4-40b2-9ef0-1eaf34f713ff",
           "seletedOptionID":"f4a92d3e-82ce-43d3-bd80-7f7f0509a66f"
@@ -181,7 +181,7 @@
     ],
     "criteria": {
       "questionSetID":"bad26f4f-0dec-40c9-a333-902477e6dd9d",
-      "expextedAnswers": [
+      "expectedAnswers": [
         {
           "questionID":"",
           "seletedOptionID":""
@@ -200,7 +200,7 @@
     ],
     "criteria": {
       "questionSetID":"45394ab5-aee6-4cca-b004-45c8cb66fbb8",
-      "expextedAnswers": [
+      "expectedAnswers": [
         {
           "questionID":"",
           "seletedOptionID":""
@@ -219,7 +219,7 @@
     ],
     "criteria": {
       "questionSetID":"97522514-18f8-477d-ac06-86391e5b6c9e",
-      "expextedAnswers": [
+      "expectedAnswers": [
         {
           "questionID":"",
           "seletedOptionID":""
