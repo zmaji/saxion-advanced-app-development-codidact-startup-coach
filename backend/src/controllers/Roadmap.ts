@@ -43,8 +43,9 @@ const getRoadmap = async (headers: string): Promise<Roadmap | null> => {
   if (!roadmap) {
     return null;
   }
-  assignModules('2165e04d-e505-4a43-8551-579aa182f9bc');
-  const modules = await moduleModel.find({ roadmapID: company!.roadmap }, { _id: 0 }).lean();
+
+  const modules: Module[] | null = await assignModules(company.companyAnalysis!.toString());
+  // const modules = await moduleModel.find({ roadmapID: company!.roadmap }, { _id: 0 }).lean();
 
   if (!modules || modules.length === 0) {
     roadmap.modules = [];
@@ -53,7 +54,7 @@ const getRoadmap = async (headers: string): Promise<Roadmap | null> => {
   }
 
   const modulesWithSteps = await Promise.all(
-      modules.map(async (module) => {
+      modules.map(async (module: Module) => {
         const moduleSteps = await stepModel.find({ moduleID: module.moduleID }, { _id: 0 }).lean();
 
         if (!moduleSteps || moduleSteps.length === 0) {
@@ -76,30 +77,10 @@ const assignModules = async (companyAnalysisID: string): Promise<Module[] | null
     return null;
   }
 
-  const allModules: Module[] = await moduleModel.find().lean();
+  const allModules: Module[] = await moduleModel.find({}, { _id: 0 }).lean();
   // const phaseModule: Module[] = allModules.filter((module) => {
   //   module.phase.filter((phase) => phase === companyAnalysis.phase.toLowerCase());
   // });
-
-  // const analysisAnswers: Answer[] = await answerModel.find({ companyAnalysisID }, { _id: 0 }).lean();
-  // await Promise.all(analysisAnswers.map(async (answer) => {
-  //   const question = await questionModel.findOne({ questionID: answer.linkedQuestionID }).lean();
-
-  //   if (question) {
-  //     allModules.forEach((module: Module) => {
-  //       if (question.questionSetID === module.criteria.questionSetID) {
-  //         module.criteria.expectedAnswers.forEach((pair) => {
-  //           if (pair.questionID === question.questionID &&
-  //             pair.seletedOptionID === answer.selectedOption) {
-  //             if (!modules.includes(module)) {
-  //               modules.push(module);
-  //             }
-  //           }
-  //         });
-  //       }
-  //     });
-  //   }
-  // }));
 
   for (const module of allModules) {
     if (await isConformToCriteria(companyAnalysisID, module)) {
@@ -117,7 +98,7 @@ const isConformToCriteria = async (companyAnalysisID: string, module: Module): P
   const analysisAnswers: Answer[] = await answerModel.find({ companyAnalysisID }, { _id: 0 }).lean();
 
   for (const answer of analysisAnswers) {
-    const question = await questionModel.findOne({ questionID: answer.linkedQuestionID }).lean();
+    const question = await questionModel.findOne({ questionID: answer.linkedQuestionID }, { _id: 0 }).lean();
 
     if (question) {
       for (const pair of module.criteria.expectedAnswers) {
