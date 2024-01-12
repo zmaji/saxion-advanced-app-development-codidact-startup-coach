@@ -18,6 +18,12 @@ const getCompanyAnalyses = async (): Promise<CompanyAnalysis[]> => {
   }
 };
 
+/**
+ * Retrieves a specific company analysis by its ID, including associated answers and question details.
+ *
+ * @param {string} companyAnalysisID - The ID of the company analysis to retrieve.
+ * @returns {Promise<CompanyAnalysis | null>} A promise that resolves to a CompanyAnalysis object or null if not found.
+ */
 const getCompanyAnalysis = async (companyAnalysisID: string): Promise<CompanyAnalysis | null> => {
   try {
     const companyAnalysis = await companyAnalysisModel.findOne({ companyAnalysisID }, { _id: 0 }).lean();
@@ -63,6 +69,12 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<CompanyAna
   }
 };
 
+/**
+ * Creates a new company analysis along with associated answers.
+ *
+ * @param {CompanyAnalysis} companyAnalysisData - The data for the new company analysis.
+ * @returns {Promise<CompanyAnalysis | null>} A promise that resolves to the created CompanyAnalysis object or null if an error occurs.
+ */
 const createCompanyAnalysis = async (companyAnalysisData: CompanyAnalysis): Promise<CompanyAnalysis | null> => {
   try {
     companyAnalysisData.companyAnalysisID = uuidv4();

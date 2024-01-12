@@ -14,6 +14,12 @@ const getAnalysisSections = async (): Promise<AnalysisSection[]> => {
   }
 };
 
+/**
+ * Retrieves a specific analysis section by its ID, including associated question sets, questions, and options.
+ *
+ * @param {string} analysisSectionID - The ID of the analysis section to retrieve.
+ * @returns {Promise<AnalysisSection | null>} A promise that resolves to an AnalysisSection object or null if not found.
+ */
 const getAnalysisSection = async (analysisSectionID: string): Promise<AnalysisSection | null> => {
   try {
     const analysisSection: AnalysisSection | null = await analysisSectionModel.findOne(
