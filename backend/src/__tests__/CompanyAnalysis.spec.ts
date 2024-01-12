@@ -77,21 +77,25 @@ describe('POST /companyAnalyses', () => {
           answerID: '',
           companyAnalysisID: '',
           selectedOption: 'cf907c23-21a6-4ea3-b6b7-621442312a8d',
+          linkedQuestionID: 'fd446cdc-5871-4a5c-9f2a-34cf285c1a6f',
         },
         {
           answerID: '',
           companyAnalysisID: '',
-          selectedOption: '1fbb3de0-5b10-4f13-b6f9-7fbd93c2d276',
+          selectedOption: 'a86c5c3a-e874-4b2e-8ff2-cd8d89839bfb',
+          linkedQuestionID: '0f22c869-10a2-4d16-b9d3-21a0df04d09b',
         },
         {
           answerID: '',
           companyAnalysisID: '',
-          selectedOption: '3fe52771-6b3b-47e8-b0b4-83f0d8b65466',
+          selectedOption: '92aa4b69-e8e6-408d-b130-cf466bb95b08',
+          linkedQuestionID: 'eb55ce5f-63f5-4927-a897-0f1c4a758e02',
         },
         {
           answerID: '',
           companyAnalysisID: '',
-          selectedOption: '40d1be91-cd27-4611-8ea3-baeb4f68d74e',
+          selectedOption: '794b96f3-263c-475e-9f94-4314712a0d92',
+          linkedQuestionID: '9367fe56-6a12-4c06-b90b-7f39c4069d15',
         },
       ],
     };

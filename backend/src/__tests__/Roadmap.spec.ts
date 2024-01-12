@@ -1,15 +1,15 @@
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
-import { roadmapIndexData } from './mocks/data/Roadmap';
+import { existingRoadmapIndexData, roadmapIndexData } from './mocks/data/Roadmap';
 import { app } from './config/setupFile';
 
 describe('GET /roadmaps/companyRoadmap', () => {
-  it('should return the roadmap with modules and steps of the user that is logged in',
+  it('should return an existing roadmap with modules and steps of the user that is logged in',
       async () => {
         const loginResponse = await request(app)
             .post('/credentials')
             .send({
-              userName: 'Zikria',
+              userName: 'Zikria4',
               password: 'Zikria123',
             });
 
@@ -18,7 +18,7 @@ describe('GET /roadmaps/companyRoadmap', () => {
             .set('Authorization', `Bearer ${loginResponse.body.token}`);
 
         expect(response.status).toBe(StatusCodes.OK);
-        expect(response.body).toEqual(roadmapIndexData[0]);
+        expect(response.body).toEqual(existingRoadmapIndexData[0]);
       });
 
   it('should return the roadmap with no modules of the user that is logged in'
@@ -61,7 +61,7 @@ describe('GET /roadmaps/companyRoadmap', () => {
     expect(response.body).toEqual({ error: 'User is not linked to a company or companyID is invalid' });
   });
 
-  it('should handle an invalid roadmapID', async () => {
+  it('should handle generating roadmap withoud companyAnalysis / modules', async () => {
     const loginResponse = await request(app)
         .post('/credentials')
         .send({
@@ -73,8 +73,8 @@ describe('GET /roadmaps/companyRoadmap', () => {
         .get(`/roadmaps/companyRoadmap`)
         .set('Authorization', `Bearer ${loginResponse.body.token}`);
 
-    expect(response.status).toBe(StatusCodes.FORBIDDEN);
-    expect(response.body).toEqual({ error: 'User is not linked to a company or companyID is invalid' });
+    expect(response.status).toBe(StatusCodes.OK);
+    expect(response.body.modules).toEqual([]);
   });
 });
 
