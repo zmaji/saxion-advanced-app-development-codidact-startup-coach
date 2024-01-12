@@ -53,4 +53,14 @@ export const usersIndexData: User[] = [
     secret: 'l6To2eRXXw4',
     roles: ['user'],
   },
+  {
+    userID: '1fccefd3-0871-4ccf-8354-9e6feed1a678',
+    company: '2922da3b-4726-4347-8893-4324b7c30d00',
+    userName: 'Zikria4',
+    emailAddress: 'zikria4@saxion.nl',
+    fullName: 'Zikria Azimi',
+    password: '$2a$12$/3QiW1ooC9eFhIbvhlnRV.diHGRSz6fsE1TANFpaIIt5TFsKN1/Zu',
+    secret: 'l6To2eRXXw4',
+    roles: ['user'],
+  },
 ];

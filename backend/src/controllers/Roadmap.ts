@@ -3,6 +3,7 @@ import type { Company } from '../typings/Company';
 import type { User } from '../typings/User';
 import type { Module } from '../typings/Module';
 import type { Answer } from '../typings/Answer';
+import type { Step } from '../typings/Step';
 
 import jwt from 'jsonwebtoken';
 import moduleModel from '../models/Module';
@@ -13,7 +14,6 @@ import companyAnalysisModel from '../models/CompanyAnalysis';
 import answerModel from '../models/Answer';
 import questionModel from '../models/Question';
 import { v4 as uuidv4 } from 'uuid';
-import { Step } from '../typings/Step';
 
 const getAllRoadmaps = async (): Promise<Roadmap[] | null> => {
   try {

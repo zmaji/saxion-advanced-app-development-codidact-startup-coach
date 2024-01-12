@@ -56,7 +56,6 @@ const getCompanyAnalysis = async (companyAnalysisID: string): Promise<CompanyAna
                 description: question.description,
               },
               answer: questionOption.value,
-              answerModule: questionOption.moduleID,
             });
           }
         }
@@ -88,6 +87,7 @@ const createCompanyAnalysis = async (companyAnalysisData: CompanyAnalysis): Prom
         answerID: uuidv4(),
         companyAnalysisID: companyAnalysisData.companyAnalysisID,
         selectedOption: answer.selectedOption,
+        linkedQuestionID: answer.linkedQuestionID,
       });
       await newAnswer.save();
     }

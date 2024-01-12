@@ -13,11 +13,6 @@ const questionOptionSchema: Schema<QuestionOption> = new Schema({
     required: true,
     immutable: true,
   },
-  moduleID: {
-    type: String,
-    required: true,
-    immutable: true,
-  },
   value: {
     type: String,
     required: true,
