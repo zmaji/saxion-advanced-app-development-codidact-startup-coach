@@ -389,6 +389,9 @@
     } catch (error) {
       console.error('Error creating company analysis:', error);
     }
+    toast.success('Analyse succesvol opgeslagen.', {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   };
 
   const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
