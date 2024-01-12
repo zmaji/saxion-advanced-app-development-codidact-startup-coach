@@ -1,10 +1,10 @@
 import type { Roadmap } from '../typings/Roadmap';
+import type { Company } from '../typings/Company';
+import type { User } from '../typings/User';
+import type { Module } from '../typings/Module';
+import type { Answer } from '../typings/Answer';
 
 import jwt from 'jsonwebtoken';
-import { Company } from '../typings/Company';
-import { User } from '../typings/User';
-import { Module } from '../typings/Module';
-import { Answer } from '../typings/Answer';
 import moduleModel from '../models/Module';
 import roadmapModel from '../models/Roadmap';
 import stepModel from '../models/Step';
@@ -12,6 +12,8 @@ import companyModel from '../models/Company';
 import companyAnalysisModel from '../models/CompanyAnalysis';
 import answerModel from '../models/Answer';
 import questionModel from '../models/Question';
+import { v4 as uuidv4 } from 'uuid';
+import { Step } from '../typings/Step';
 
 const getAllRoadmaps = async (): Promise<Roadmap[] | null> => {
   try {
@@ -24,12 +26,9 @@ const getAllRoadmaps = async (): Promise<Roadmap[] | null> => {
 
 const getRoadmap = async (headers: string): Promise<Roadmap | null> => {
   const userToken: string = headers.split(' ')[1];
-  const user = jwt.decode(userToken) as User | null;
+  const user: User | null = jwt.decode(userToken) as User | null;
 
-  const company: Company | null = await companyModel.findOne(
-      { companyID: user!.company },
-      { _id: 0 },
-  );
+  let company: Company | null = await companyModel.findOne({ companyID: user!.company }, { _id: 0 }).lean();
 
   if (!company) {
     return null;
@@ -41,78 +40,100 @@ const getRoadmap = async (headers: string): Promise<Roadmap | null> => {
   ).lean();
 
   if (!roadmap) {
-    return null;
+    const newRoadmap: Roadmap = {
+      roadmapID: uuidv4(),
+      title: `De roadmap voor ${company.name}`,
+      description: `De weg naar succes voor ${company.name},
+      binnen deze roadmap zijn modules toegevoegd op basis van de resultaten van de behoefte analyse`,
+      modules: [],
+    };
+
+    const newMongoRoadmap = new roadmapModel(newRoadmap);
+    await newMongoRoadmap.save();
+
+    company = {
+      ...company,
+      roadmap: newRoadmap.roadmapID,
+    };
+    await companyModel.findOneAndUpdate({ companyID: company.companyID }, company, { new: true });
+
+    const modules: Module[] = await assignModules(company.companyAnalysis as string, newRoadmap.roadmapID);
+
+    return { ...newRoadmap, modules: await getModulesWithSteps(modules) };
   }
 
-  const modules: Module[] | null = await assignModules(company.companyAnalysis!.toString());
-  // const modules = await moduleModel.find({ roadmapID: company!.roadmap }, { _id: 0 }).lean();
+  const modules: Module[] | null = await moduleModel.find({ roadmapID: roadmap.roadmapID }, { _id: 0 }).lean();
 
-  if (!modules || modules.length === 0) {
-    roadmap.modules = [];
-
-    return roadmap;
-  }
-
-  const modulesWithSteps = await Promise.all(
-      modules.map(async (module: Module) => {
-        const moduleSteps = await stepModel.find({ moduleID: module.moduleID }, { _id: 0 }).lean();
-
-        if (!moduleSteps || moduleSteps.length === 0) {
-          return { ...module, steps: [] };
-        }
-
-        return { ...module, steps: moduleSteps };
-      }),
-  );
-
-  return { ...roadmap, modules: modulesWithSteps };
+  return { ...roadmap, modules: await getModulesWithSteps(modules ? modules : []) };
 };
 
-const assignModules = async (companyAnalysisID: string): Promise<Module[] | null> => {
-  const modules: Module[] = [];
-  const allModules: Module[] = await moduleModel.find({}, { _id: 0 }).lean();
+const getModulesWithSteps = async (modules: Module[]): Promise<Module[]> => {
+  const modulesWithSteps: Module[] = [];
 
-  const companyAnalysis = await companyAnalysisModel.findOne({ companyAnalysisID }, { _id: 0 }).lean();
-
-  if (!companyAnalysis) {
-    return null;
+  for (const module of modules) {
+    const moduleSteps = await stepModel.find({ moduleID: module.moduleID }, { _id: 0 }).lean();
+    modulesWithSteps.push({ ...module, steps: moduleSteps });
   }
 
-  const phaseModules: Module[] = [];
+  return modulesWithSteps;
+};
 
-  for (const module of allModules) {
-    if (module.phase.includes(companyAnalysis.phase.toLowerCase())) {
-      console.log('added', module.phase);
-      phaseModules.push(module);
+const assignModules = async (companyAnalysisID: string, roadmapID: string): Promise<Module[]> => {
+  const companyAnalysis = await companyAnalysisModel.findOne({ companyAnalysisID }, { _id: 0 });
+
+  if (companyAnalysis) {
+    const roadmapModules: Module[] = [];
+    const phaseModules: Module[] = await moduleModel.find({
+      isDefault: true,
+      phase: { $in: companyAnalysis.phase.toLowerCase() },
+    }, { _id: 0 }).lean();
+    const steps: Step[] = await stepModel.find({}, { _id: 0 }).lean();
+
+    for (const module of phaseModules) {
+      if (await isConformToCriteria(companyAnalysisID, module)) {
+        const moduleSteps: Step[] = steps.filter((step) => step.moduleID === module.moduleID);
+
+        module.moduleID = uuidv4();
+        module.roadmapID = roadmapID;
+        module.isDefault = false;
+        const newModule = new moduleModel(module);
+        await newModule.save();
+
+        for (let moduleStep of moduleSteps) {
+          moduleStep = {
+            ...moduleStep,
+            stepID: uuidv4(),
+            moduleID: module.moduleID,
+          };
+
+          const newModuleStep = new stepModel(moduleStep);
+          await newModuleStep.save();
+        }
+
+        roadmapModules.push(module);
+      }
     }
+
+    return roadmapModules;
   }
 
-  for (const module of phaseModules) {
-    if (await isConformToCriteria(companyAnalysisID, module)) {
-      modules.push(module);
-    }
-  }
-  for (const module of phaseModules) {
-    console.log(module);
-  }
-
-  return modules;
+  return [];
 };
 
 const isConformToCriteria = async (companyAnalysisID: string, module: Module): Promise<boolean> => {
-  const analysisAnswers: Answer[] = await answerModel.find({ companyAnalysisID }, { _id: 0 }).lean();
+  const analysisAnswers: Answer[] = await answerModel.find({ companyAnalysisID });
+  const questions = await questionModel.find();
 
   for (const answer of analysisAnswers) {
-    const question = await questionModel.findOne({ questionID: answer.linkedQuestionID }, { _id: 0 }).lean();
+    const question = questions.find((question) => question.questionID === answer.linkedQuestionID);
 
     if (question) {
-      for (const pair of module.criteria.expectedAnswers) {
-        if (!pair.questionID || pair.questionID === '') {
+      for (const expectedAnswer of module.criteria.expectedAnswers) {
+        if (
+          (expectedAnswer.questionID === question.questionID) &&
+          (expectedAnswer.selectedOptionID !== answer.selectedOption)
+        ) {
           return false;
-        } else if (pair.questionID === question.questionID) {
-          if (pair.selectedOptionID !== answer.selectedOption) {
-            return false;
-          }
         }
       }
     }
