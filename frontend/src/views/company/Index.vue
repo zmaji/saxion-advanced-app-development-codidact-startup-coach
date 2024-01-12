@@ -112,21 +112,53 @@
     }
   }
 
-  const initialiseCategories = async () => {
-    try {
-      const uniqueCategories = new Set<string>();
+  const initialiseCategories = () => {
+    const uniqueCategories = new Set<string>(
+      analysisSections.value.flatMap((section) =>
+        section.questionSets
+          .filter((questionSet) => typeof questionSet.title === 'string')
+          .map((questionSet) => questionSet.title)
+      )
+    );
+    categories.value = Array.from(uniqueCategories);
+  };
 
-      for (const section of analysisSections.value) {
-        for (const questionSet of section.questionSets) {
-          if (typeof questionSet.title === 'string') {
-            uniqueCategories.add(questionSet.title);
-          }
-        }
-      }
-      categories.value = Array.from(uniqueCategories);
-    } catch (error) {
-      console.error('Error initializing categories:', error);
-    }
+  /**
+ * Sets up form data and form steps based on the provided analysis section and question set.
+ *
+ * @param {AnalysisSection} analysisSection - The analysis section to set up.
+ * @param {QuestionSet} questionSet - The question set within the analysis section.
+ * @param {number} formStepIndex - The index for the form step.
+ * @param {number} formDataIndex - The index for the form data.
+ * @returns {void}
+ */
+  const setupFormData = (
+    analysisSection: AnalysisSection,
+    questionSet: QuestionSet,
+    formStepIndex: number,
+    formDataIndex: number
+  ) => {
+    formSteps[formStepIndex] = {
+      number: formStepIndex,
+      title: `${analysisSection.title}`,
+      subtitle: `${questionSet.title}`,
+      description: questionSet.description,
+      completed: false,
+    };
+
+    questionSet.questions?.forEach((question: Question) => {
+      formData[formDataIndex] = {
+        label: question.title,
+        step: formSteps[formStepIndex],
+        value: '',
+        inputType: question.inputType,
+        options: question.questionOptions,
+        isValid: false,
+        errorMessage: 'Dit is een verplicht veld.',
+      };
+
+      formDataIndex++;
+    });
   };
 
   const setupInitialQuestion = (questionSetTitle: string) => {
@@ -135,30 +167,18 @@
         analysisSection.questionSets
           .filter((questionSet: QuestionSet) => questionSet.title === questionSetTitle)
           .forEach((questionSet: QuestionSet) => {
-            formSteps[1] = {
-              number: 1,
-              title: `${analysisSection.title}`,
-              subtitle: `${questionSet.title}`,
-              description: questionSet.description,
-              completed: false,
-            };
-
-            questionSet.questions?.forEach((question: Question) => {
-              formData[1] = {
-                label: question.title,
-                step: formSteps[1],
-                value: '',
-                inputType: question.inputType,
-                options: question.questionOptions,
-                isValid: false,
-                errorMessage: 'Dit is een verplicht veld.',
-              };
-            });
+            setupFormData(analysisSection, questionSet, 1, 1);
           });
       }
     });
   };
 
+  /**
+   * Sets up form steps and form data based on analysis sections and question sets filtered by company phase.
+   *
+   * @param {string} companyPhase - The current phase of the company.
+   * @returns {void}
+   */
   const setupForm = (companyPhase: string) => {
     let formStepIndex = 1;
     let formDataIndex = 1;
@@ -173,29 +193,10 @@
             );
 
             if (filteredQuestions.length > 0) {
-              formSteps[formStepIndex] = {
-                number: formStepIndex,
-                title: `${analysisSection.title}`,
-                subtitle: `${questionSet.title}`,
-                description: questionSet.description,
-                completed: false,
-              };
-
-              filteredQuestions.forEach((question: Question) => {
-                formData[formDataIndex] = {
-                  label: question.title,
-                  step: formSteps[formStepIndex],
-                  value: '',
-                  inputType: question.inputType,
-                  options: question.questionOptions,
-                  isValid: false,
-                  errorMessage: 'Dit is een verplicht veld.',
-                };
-
-                formDataIndex++;
-              });
+              setupFormData(analysisSection, questionSet, formStepIndex, formDataIndex);
 
               formStepIndex++;
+              formDataIndex += filteredQuestions.length;
             }
           }
         });
@@ -228,6 +229,11 @@
     currentStepFields.value = getCurrentStepFields();
   }
 
+  /**
+ * Move to the next step in the analysis.
+ * Validates each value in the current step of the analysis form.
+ * @returns {void} Nothing.
+ */
   const nextStep = () => {
     currentStepFields.value = getCurrentStepFields();
 
@@ -317,58 +323,72 @@
     showOverview.value = false;
   }
 
-  const submitForm = async () => {
-    currentStep.value = formSteps[currentStep.value!.number + 1]
-    showOverview.value = false;
-    showInformation.value = true;
-    showForm.value = false;
+  /**
+   * Generates answers based on user input values and matched options.
+   * @returns {Answer[]} An array of answers.
+   */
+  const generateAnswers = () => {
+    const answers: Answer[] = [];
 
-    try {
-      const answers: Answer[] = [];
+    for (const key in formData) {
+      if (formData[key].value) {
+        // @ts-ignore
+        const selectedValue = formData[key].value.value;
+        const matchingOption = formData[key].options.find(
+          (questionOption: QuestionOption) => questionOption.value === selectedValue
+        );
 
-      for (const key in formData) {
-        if (formData[key].value) {
-          // @ts-ignore
-          const selectedValue = formData[key].value.value;
-          const matchingOption = formData[key].options.find(
-            (questionOption: QuestionOption) => questionOption.value === selectedValue
-          );
+        if (matchingOption) {
+          const answer: Answer = {
+            answerID: '',
+            companyAnalysisID: '',
+            selectedOption: matchingOption.questionOptionID,
+          };
 
-          if (matchingOption) {
-            const answer: Answer = {
-              answerID: '',
-              companyAnalysisID: '',
-              selectedOption: matchingOption.questionOptionID,
-            };
-
-            answers.push(answer);
-          }
+          answers.push(answer);
         }
       }
+    }
+
+    return answers;
+  };
+
+  /**
+   * Submits the analysis form.
+   * Generates given answers and creates a new company analysis and associates it with the company.
+   * @returns {void} Nothing.
+   */
+  const submitForm = async () => {
+    try {
+      currentStep.value = formSteps[currentStep.value!.number + 1]
+      showOverview.value = false;
+      showInformation.value = true;
+      showForm.value = false;
+
+      const answers = generateAnswers();
 
       const formFields = {
         phase: companyPhase.value,
-        answers: answers
-      }
+        answers: answers,
+      };
 
       const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields);
-      const newCompanyAnalysisData = newCompanyAnalysis.data
+      const newCompanyAnalysisData = newCompanyAnalysis.data;
 
-      if (newCompanyAnalysisData) {
+      if (newCompanyAnalysisData && currentCompany.value) {
         const companyData = {
-          companyAnalysis: newCompanyAnalysisData.companyAnalysisID
-        }
+          companyAnalysis: newCompanyAnalysisData.companyAnalysisID,
+        };
 
-        if (currentCompany.value) {
-          await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
-        }
+        await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
       }
+
+      toast.success('Analyse succesvol opgeslagen.', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
     } catch (error) {
       console.error('Error creating company analysis:', error);
     }
-    toast.success('Analyse succesvol opgeslagen.', {
-      position: toast.POSITION.TOP_RIGHT,
-    });
   };
 
   const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
