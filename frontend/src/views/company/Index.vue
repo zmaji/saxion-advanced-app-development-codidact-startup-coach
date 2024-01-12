@@ -113,15 +113,15 @@
   }
 
   const initialiseCategories = () => {
-  const uniqueCategories = new Set<string>(
-    analysisSections.value.flatMap((section) =>
-      section.questionSets
-        .filter((questionSet) => typeof questionSet.title === 'string')
-        .map((questionSet) => questionSet.title)
-    )
-  );
-  categories.value = Array.from(uniqueCategories);
-};
+    const uniqueCategories = new Set<string>(
+      analysisSections.value.flatMap((section) =>
+        section.questionSets
+          .filter((questionSet) => typeof questionSet.title === 'string')
+          .map((questionSet) => questionSet.title)
+      )
+    );
+    categories.value = Array.from(uniqueCategories);
+  };
 
   /**
  * Sets up form data and form steps based on the provided analysis section and question set.
@@ -133,76 +133,76 @@
  * @returns {void}
  */
   const setupFormData = (
-  analysisSection: AnalysisSection,
-  questionSet: QuestionSet,
-  formStepIndex: number,
-  formDataIndex: number
-) => {
-  formSteps[formStepIndex] = {
-    number: formStepIndex,
-    title: `${analysisSection.title}`,
-    subtitle: `${questionSet.title}`,
-    description: questionSet.description,
-    completed: false,
-  };
-
-  questionSet.questions?.forEach((question: Question) => {
-    formData[formDataIndex] = {
-      label: question.title,
-      step: formSteps[formStepIndex],
-      value: '',
-      inputType: question.inputType,
-      options: question.questionOptions,
-      isValid: false,
-      errorMessage: 'Dit is een verplicht veld.',
+    analysisSection: AnalysisSection,
+    questionSet: QuestionSet,
+    formStepIndex: number,
+    formDataIndex: number
+  ) => {
+    formSteps[formStepIndex] = {
+      number: formStepIndex,
+      title: `${analysisSection.title}`,
+      subtitle: `${questionSet.title}`,
+      description: questionSet.description,
+      completed: false,
     };
 
-    formDataIndex++;
-  });
-};
+    questionSet.questions?.forEach((question: Question) => {
+      formData[formDataIndex] = {
+        label: question.title,
+        step: formSteps[formStepIndex],
+        value: '',
+        inputType: question.inputType,
+        options: question.questionOptions,
+        isValid: false,
+        errorMessage: 'Dit is een verplicht veld.',
+      };
 
-const setupInitialQuestion = (questionSetTitle: string) => {
-  analysisSections.value.forEach((analysisSection: AnalysisSection) => {
-    if (analysisSection) {
-      analysisSection.questionSets
-        .filter((questionSet: QuestionSet) => questionSet.title === questionSetTitle)
-        .forEach((questionSet: QuestionSet) => {
-          setupFormData(analysisSection, questionSet, 1, 1);
-        });
-    }
-  });
-};
+      formDataIndex++;
+    });
+  };
 
-/**
- * Sets up form steps and form data based on analysis sections and question sets filtered by company phase.
- *
- * @param {string} companyPhase - The current phase of the company.
- * @returns {void}
- */
-const setupForm = (companyPhase: string) => {
-  let formStepIndex = 1;
-  let formDataIndex = 1;
+  const setupInitialQuestion = (questionSetTitle: string) => {
+    analysisSections.value.forEach((analysisSection: AnalysisSection) => {
+      if (analysisSection) {
+        analysisSection.questionSets
+          .filter((questionSet: QuestionSet) => questionSet.title === questionSetTitle)
+          .forEach((questionSet: QuestionSet) => {
+            setupFormData(analysisSection, questionSet, 1, 1);
+          });
+      }
+    });
+  };
 
-  analysisSections.value.forEach((analysisSection: AnalysisSection) => {
-    if (analysisSection) {
-      analysisSection.questionSets.forEach((questionSet: QuestionSet) => {
-        if (questionSet.title !== 'Bedrijfsfase') {
-          const filteredQuestions = questionSet.questions.filter(
-            (question: Question) =>
-              question.requiredPhase.includes(companyPhase.toLowerCase())
-          );
+  /**
+   * Sets up form steps and form data based on analysis sections and question sets filtered by company phase.
+   *
+   * @param {string} companyPhase - The current phase of the company.
+   * @returns {void}
+   */
+  const setupForm = (companyPhase: string) => {
+    let formStepIndex = 1;
+    let formDataIndex = 1;
 
-          if (filteredQuestions.length > 0) {
-            setupFormData(analysisSection, questionSet, formStepIndex, formDataIndex);
+    analysisSections.value.forEach((analysisSection: AnalysisSection) => {
+      if (analysisSection) {
+        analysisSection.questionSets.forEach((questionSet: QuestionSet) => {
+          if (questionSet.title !== 'Bedrijfsfase') {
+            const filteredQuestions = questionSet.questions.filter(
+              (question: Question) =>
+                question.requiredPhase.includes(companyPhase.toLowerCase())
+            );
 
-            formStepIndex++;
-            formDataIndex += filteredQuestions.length;
+            if (filteredQuestions.length > 0) {
+              setupFormData(analysisSection, questionSet, formStepIndex, formDataIndex);
+
+              formStepIndex++;
+              formDataIndex += filteredQuestions.length;
+            }
           }
-        }
-      });
-    }
-  });
-};
+        });
+      }
+    });
+  };
 
   const startAnalysis = () => {
     setupInitialQuestion('Bedrijfsfase');
@@ -323,73 +323,73 @@ const setupForm = (companyPhase: string) => {
     showOverview.value = false;
   }
 
-/**
- * Generates answers based on user input values and matched options.
- * @returns {Answer[]} An array of answers.
- */
+  /**
+   * Generates answers based on user input values and matched options.
+   * @returns {Answer[]} An array of answers.
+   */
   const generateAnswers = () => {
-  const answers: Answer[] = [];
+    const answers: Answer[] = [];
 
-  for (const key in formData) {
-    if (formData[key].value) {
-      // @ts-ignore
-      const selectedValue = formData[key].value.value;
-      const matchingOption = formData[key].options.find(
-        (questionOption: QuestionOption) => questionOption.value === selectedValue
-      );
+    for (const key in formData) {
+      if (formData[key].value) {
+        // @ts-ignore
+        const selectedValue = formData[key].value.value;
+        const matchingOption = formData[key].options.find(
+          (questionOption: QuestionOption) => questionOption.value === selectedValue
+        );
 
-      if (matchingOption) {
-        const answer: Answer = {
-          answerID: '',
-          companyAnalysisID: '',
-          selectedOption: matchingOption.questionOptionID,
-        };
+        if (matchingOption) {
+          const answer: Answer = {
+            answerID: '',
+            companyAnalysisID: '',
+            selectedOption: matchingOption.questionOptionID,
+          };
 
-        answers.push(answer);
+          answers.push(answer);
+        }
       }
     }
-  }
 
-  return answers;
-};
+    return answers;
+  };
 
-/**
- * Submits the analysis form.
- * Generates given answers and creates a new company analysis and associates it with the company.
- * @returns {void} Nothing.
- */
+  /**
+   * Submits the analysis form.
+   * Generates given answers and creates a new company analysis and associates it with the company.
+   * @returns {void} Nothing.
+   */
   const submitForm = async () => {
-  try {
-    currentStep.value = formSteps[currentStep.value!.number + 1]
-    showOverview.value = false;
-    showInformation.value = true;
-    showForm.value = false;
+    try {
+      currentStep.value = formSteps[currentStep.value!.number + 1]
+      showOverview.value = false;
+      showInformation.value = true;
+      showForm.value = false;
 
-    const answers = generateAnswers();
+      const answers = generateAnswers();
 
-    const formFields = {
-      phase: companyPhase.value,
-      answers: answers,
-    };
-
-    const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields);
-    const newCompanyAnalysisData = newCompanyAnalysis.data;
-
-    if (newCompanyAnalysisData && currentCompany.value) {
-      const companyData = {
-        companyAnalysis: newCompanyAnalysisData.companyAnalysisID,
+      const formFields = {
+        phase: companyPhase.value,
+        answers: answers,
       };
 
-      await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
-    }
+      const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields);
+      const newCompanyAnalysisData = newCompanyAnalysis.data;
 
-    toast.success('Analyse succesvol opgeslagen.', {
-      position: toast.POSITION.TOP_RIGHT,
-    });
-  } catch (error) {
-    console.error('Error creating company analysis:', error);
-  }
-};
+      if (newCompanyAnalysisData && currentCompany.value) {
+        const companyData = {
+          companyAnalysis: newCompanyAnalysisData.companyAnalysisID,
+        };
+
+        await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
+      }
+
+      toast.success('Analyse succesvol opgeslagen.', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } catch (error) {
+      console.error('Error creating company analysis:', error);
+    }
+  };
 
   const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
     try {
