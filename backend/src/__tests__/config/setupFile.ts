@@ -18,6 +18,7 @@ import answersModel from '../../models/Answer';
 import questionSetModel from '../../models/QuestionSet';
 import questionModel from '../../models/Question';
 import questionOptionModel from '../../models/QuestionOption';
+import moduleCriteriaModel from '../../models/ModuleCriteria';
 import { companiesIndexData } from '../mocks/data/Companies';
 import { companyAnalysesIndexData } from '../mocks/data/CompanyAnalyses';
 import { labelsIndexData } from '../mocks/data/Labels';
@@ -34,6 +35,7 @@ import { answersIndexData } from '../mocks/data/Answers';
 import { questionSetsIndexData } from '../mocks/data/QuestionSets';
 import { questionsIndexData } from '../mocks/data/Questions';
 import { questionOptionsIndexData } from '../mocks/data/QuestionOptions';
+import { moduleCriteriaIndexData } from '../mocks/data/ModuleCriteria';
 
 let mongoServer: MongoMemoryServer;
 
@@ -94,6 +96,11 @@ beforeAll(async () => {
 
   for (const module of moduleIndexData) {
     const newMockModule = new moduleModel(module);
+    await newMockModule.save();
+  }
+
+  for (const moduleCriteria of moduleCriteriaIndexData) {
+    const newMockModule = new moduleCriteriaModel(moduleCriteria);
     await newMockModule.save();
   }
 

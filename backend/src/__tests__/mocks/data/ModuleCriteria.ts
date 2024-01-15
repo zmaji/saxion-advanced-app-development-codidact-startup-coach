@@ -1,6 +1,6 @@
 import { ModuleCriteria } from '../../../typings/Module';
 
-export const moduleIndexData: ModuleCriteria[] = [
+export const moduleCriteriaIndexData: ModuleCriteria[] = [
   {
     moduleID: 'eb8c22d0-e183-4d59-a839-762307639faf',
     questionID: 'fd446cdc-5871-4a5c-9f2a-34cf285c1a6f',

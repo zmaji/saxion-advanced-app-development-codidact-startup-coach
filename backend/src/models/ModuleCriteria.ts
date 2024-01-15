@@ -5,16 +5,13 @@ import mongoose, { Schema } from 'mongoose';
 const moduleCriteriaSchema: Schema<ModuleCriteria> = new Schema({
   moduleID: {
     type: String,
-    unique: true,
     immutable: true,
   },
   questionID: {
     type: String,
-    unique: true,
   },
   selectedOptionID: {
     type: String,
-    unique: true,
   },
 }, {
   collection: 'moduleCriteria',
