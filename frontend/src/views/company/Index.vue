@@ -386,9 +386,9 @@
         await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
       }
 
-      // toast.success('Analyse succesvol opgeslagen.', {
-      //   position: toast.POSITION.TOP_RIGHT,
-      // });
+      toast.success('Analyse succesvol opgeslagen.', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
     } catch (error) {
       console.error('Error creating company analysis:', error);
     }

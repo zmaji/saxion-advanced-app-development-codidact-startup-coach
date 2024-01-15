@@ -127,8 +127,8 @@ release-backend:
   stage: release
   services:
     - docker:dind
-  # only:
-  #   - main
+  only:
+    - main
   before_script:
     - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
   script:
@@ -141,8 +141,8 @@ release-frontend:
   stage: release
   services:
     - docker:dind
-  # only:
-  #   - main
+  only:
+    - main
   before_script:
     - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASSWORD}" ${DOCKER_REGISTRY}
   script:
