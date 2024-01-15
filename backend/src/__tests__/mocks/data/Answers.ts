@@ -85,8 +85,6 @@ export const answersIndexData: Answer[] = [
     selectedOption: '1c34a3b3-0b63-4f10-9bd3-865838ff27a5',
     linkedQuestionID: '89472ec4-2f7a-4c27-b611-bb2f0a9bb773',
   },
-  // test
-
   {
     answerID: 'f5c8c2a1-4869-4f5a-bdde-aa5b8d2e34a7',
     companyAnalysisID: '2167e04d-e505-4a43-8551-579aa182f9bg',

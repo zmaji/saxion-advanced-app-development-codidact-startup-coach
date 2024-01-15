@@ -10,9 +10,8 @@
       "startup",
       "scale-up"
     ],
-      "questionSetID":"a343e09a-6c91-4e22-9f87-fbee2c6c4ab2"
-    },
-    
+    "questionSetID":"a343e09a-6c91-4e22-9f87-fbee2c6c4ab2"
+  },
   {
     "moduleID": "71f9fcbf-4902-43a0-aa4b-5a92223c5dc9",
     "roadmapID": null,
@@ -116,5 +115,4 @@
     ],
     "questionSetID":"97522514-18f8-477d-ac06-86391e5b6c9e"
   }
-
 ]
