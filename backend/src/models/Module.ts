@@ -19,6 +19,10 @@ const moduleSchema: Schema<Module> = new Schema({
     type: [String],
     required: true,
   },
+  questionSetID: {
+    type: String,
+    required: false,
+  },
   description: {
     type: String,
     required: true,

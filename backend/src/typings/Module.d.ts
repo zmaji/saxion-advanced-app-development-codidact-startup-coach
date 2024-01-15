@@ -4,17 +4,16 @@ export interface Module {
   moduleID: string;
   roadmapID: string;
   phase: string[];
-  criteria: {
-    questionSetID: string;
-    expectedAnswers: ExpectedAnswer[];
-  };
+  questionSetID: string;
+  expectedAnswers?: ModuleCriteria[];
   isDefault: boolean;
   steps?: Step[];
   name: string;
   description: string;
 }
 
-interface ExpectedAnswer {
+export interface ModuleCriteria {
+  moduleID: string
   questionID: string;
   selectedOptionID: string;
 }

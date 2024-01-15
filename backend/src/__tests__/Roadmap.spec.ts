@@ -1,10 +1,28 @@
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
-import { existingRoadmapIndexData, roadmapIndexData } from './mocks/data/Roadmap';
+import { existingRoadmapData, newlyCreatedRoadmap } from './mocks/data/Roadmap';
 import { app } from './config/setupFile';
 
 describe('GET /roadmaps/companyRoadmap', () => {
-  it('should return an existing roadmap with modules and steps of the user that is logged in',
+  it('should return an a newly generated roadmap if none exist and analysis is done',
+      async () => {
+        const loginResponse = await request(app)
+            .post('/credentials')
+            .send({
+              userName: 'Zikria',
+              password: 'Zikria123',
+            });
+
+        const response = await request(app)
+            .get(`/roadmaps/companyRoadmap`)
+            .set('Authorization', `Bearer ${loginResponse.body.token}`);
+
+        expect(response.status).toBe(StatusCodes.OK);
+        expect(response.body.modules).toHaveLength(newlyCreatedRoadmap.modules.length);
+        expect(response.body.description).toEqual(newlyCreatedRoadmap.description);
+      });
+
+  it('should return an existing roadmap',
       async () => {
         const loginResponse = await request(app)
             .post('/credentials')
@@ -18,24 +36,7 @@ describe('GET /roadmaps/companyRoadmap', () => {
             .set('Authorization', `Bearer ${loginResponse.body.token}`);
 
         expect(response.status).toBe(StatusCodes.OK);
-        expect(response.body).toEqual(existingRoadmapIndexData[0]);
-      });
-
-  it('should return the roadmap with no modules of the user that is logged in'
-      , async () => {
-        const loginResponse = await request(app)
-            .post('/credentials')
-            .send({
-              userName: 'Maurice',
-              password: 'Maurice123',
-            });
-
-        const response = await request(app)
-            .get(`/roadmaps/companyRoadmap`)
-            .set('Authorization', `Bearer ${loginResponse.body.token}`);
-
-        expect(response.status).toBe(StatusCodes.OK);
-        expect(response.body).toEqual(roadmapIndexData[1]);
+        expect(response.body).toEqual(existingRoadmapData);
       });
 
   it('should handle a user who is not logged in', async () => {
@@ -45,7 +46,7 @@ describe('GET /roadmaps/companyRoadmap', () => {
     expect(response.body).toEqual({ error: 'Authentication required' });
   });
 
-  it('should handle an invalid companyID', async () => {
+  it('should handle users with no company', async () => {
     const loginResponse = await request(app)
         .post('/credentials')
         .send({
@@ -59,22 +60,6 @@ describe('GET /roadmaps/companyRoadmap', () => {
 
     expect(response.status).toBe(StatusCodes.FORBIDDEN);
     expect(response.body).toEqual({ error: 'User is not linked to a company or companyID is invalid' });
-  });
-
-  it('should handle generating roadmap withoud companyAnalysis / modules', async () => {
-    const loginResponse = await request(app)
-        .post('/credentials')
-        .send({
-          userName: 'Zikria3',
-          password: 'Zikria123',
-        });
-
-    const response = await request(app)
-        .get(`/roadmaps/companyRoadmap`)
-        .set('Authorization', `Bearer ${loginResponse.body.token}`);
-
-    expect(response.status).toBe(StatusCodes.OK);
-    expect(response.body.modules).toEqual([]);
   });
 });
 

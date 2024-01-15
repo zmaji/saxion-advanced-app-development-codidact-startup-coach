@@ -94,7 +94,6 @@ const createCompanyAnalysis = async (companyAnalysisData: CompanyAnalysis): Prom
 
     return removeIdField(companyAnalysis);
   } catch (error) {
-    console.error('Something went wrong creating a company analysis:', error);
     throw error;
   }
 };

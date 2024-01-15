@@ -26,7 +26,7 @@ import { contentLabelsIndexData } from '../mocks/data/ContentLabels';
 import { usersIndexData } from '../mocks/data/Users';
 import { contentFeedbackIndexData } from '../mocks/data/ContentFeedback';
 import { contentUsersIndexData } from '../mocks/data/ContentUsers';
-import { existingRoadmapIndexData, roadmapIndexData } from '../mocks/data/Roadmap';
+import { existingRoadmapIndexData } from '../mocks/data/Roadmap';
 import { moduleIndexData } from '../mocks/data/Modules';
 import { stepsIndexData } from '../mocks/data/Steps';
 import { analysisSectionIndexData } from '../mocks/data/AnalysisSections';
@@ -85,11 +85,6 @@ beforeAll(async () => {
   for (const contentFeedback of contentFeedbackIndexData) {
     const newMockContentFeedback = new contentFeedbackModel(contentFeedback);
     await newMockContentFeedback.save();
-  }
-
-  for (const roadmap of roadmapIndexData) {
-    const newMockRoadmap = new roadmapModel(roadmap);
-    await newMockRoadmap.save();
   }
 
   for (const roadmap of existingRoadmapIndexData) {
