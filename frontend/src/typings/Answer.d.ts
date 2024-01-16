@@ -7,5 +7,6 @@ export interface Answer {
     description: string,
     setTitle: string,
     title: string
-  }
+  };
+  linkedQuestionID: string;
 }

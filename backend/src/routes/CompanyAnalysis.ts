@@ -55,7 +55,6 @@ router.post('', isLoggedIn, async (req: Request, res: Response) => {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to create company analysis' });
     }
   } catch (error) {
-    console.error('Error creating company analysis:', error);
     res.status(StatusCodes.BAD_REQUEST).json({ error: 'Fields were not filled in properly' });
   }
 });

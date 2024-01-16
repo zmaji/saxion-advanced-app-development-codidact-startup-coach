@@ -8,6 +8,10 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: admin
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
     ports:
       - 27017:27017
 
@@ -44,4 +48,4 @@ services:
     container_name: frontend
     restart: always
     ports:
-      - 80:80
+      - 8080:80

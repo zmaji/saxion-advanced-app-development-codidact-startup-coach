@@ -14,7 +14,6 @@ const companySchema: Schema<Company> = new Schema({
   },
   roadmap: {
     type: String,
-    immutable: true,
   },
   name: {
     type: String,

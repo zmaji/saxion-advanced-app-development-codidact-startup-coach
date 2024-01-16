@@ -6,7 +6,6 @@ const roadmapSchema: Schema<Roadmap> = new Schema({
   roadmapID: {
     type: String,
     unique: true,
-    immutable: true,
   },
   title: {
     type: String,

@@ -11,6 +11,8 @@ CMD mongoimport --host=${MONGO_HOST} --db=${MONGO_DB_NAME} --collection=companie
   echo "Roadmaps seeded successfully" && \
   mongoimport --host=${MONGO_HOST} --db=${MONGO_DB_NAME} --collection=modules --type=json --file=Modules.json --jsonArray --mode upsert --upsertFields moduleID -u ${MONGO_USER} -p ${MONGO_PASSWORD} --authenticationDatabase=${MONGO_AUTH_DB} --authenticationMechanism SCRAM-SHA-256 && \
   echo "Modules seeded successfully" && \
+  mongoimport --host=${MONGO_HOST} --db=${MONGO_DB_NAME} --collection=moduleCriteria --type=json --file=ModuleCriteria.json --jsonArray --mode upsert --upsertFields moduleID,questionID,selectedOptionID -u ${MONGO_USER} -p ${MONGO_PASSWORD} --authenticationDatabase=${MONGO_AUTH_DB} --authenticationMechanism SCRAM-SHA-256 && \
+  echo "Module Criteria seeded successfully" && \
   mongoimport --host=${MONGO_HOST} --db=${MONGO_DB_NAME} --collection=steps --type=json --file=Steps.json --jsonArray --mode upsert --upsertFields stepID -u ${MONGO_USER} -p ${MONGO_PASSWORD} --authenticationDatabase=${MONGO_AUTH_DB} --authenticationMechanism SCRAM-SHA-256 && \
   echo "Steps seeded successfully" && \
   mongoimport --host=${MONGO_HOST} --db=${MONGO_DB_NAME} --collection=companyAnalyses --type=json --file=CompanyAnalyses.json --jsonArray --mode upsert --upsertFields companyAnalysisID -u ${MONGO_USER} -p ${MONGO_PASSWORD} --authenticationDatabase=${MONGO_AUTH_DB} --authenticationMechanism SCRAM-SHA-256 && \

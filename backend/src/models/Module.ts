@@ -10,15 +10,27 @@ const moduleSchema: Schema<Module> = new Schema({
   },
   roadmapID: {
     type: String,
-    immutable: true,
   },
   name: {
     type: String,
     required: true,
   },
+  phase: {
+    type: [String],
+    required: true,
+  },
+  questionSetID: {
+    type: String,
+    required: false,
+  },
   description: {
     type: String,
     required: true,
+  },
+  isDefault: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
 }, {
   collection: 'modules',

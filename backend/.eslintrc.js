@@ -55,7 +55,7 @@ module.exports = {
       },
     },
     {
-      files: ['*Controller.ts'],
+      files: ['src/controllers/**/*'],
       rules: {
         'no-useless-catch': 'off',
       },

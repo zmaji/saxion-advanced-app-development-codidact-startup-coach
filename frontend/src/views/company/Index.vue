@@ -335,7 +335,9 @@
         // @ts-ignore
         const selectedValue = formData[key].value.value;
         const matchingOption = formData[key].options.find(
-          (questionOption: QuestionOption) => questionOption.value === selectedValue
+          (questionOption: QuestionOption) => {
+            questionOption.value === selectedValue
+          }
         );
 
         if (matchingOption) {
@@ -343,6 +345,7 @@
             answerID: '',
             companyAnalysisID: '',
             selectedOption: matchingOption.questionOptionID,
+            linkedQuestionID: matchingOption.questionID
           };
 
           answers.push(answer);
@@ -383,12 +386,12 @@
         await associateAnalysisWithCompany(currentCompany.value.companyID, companyData);
       }
 
-      toast.success('Analyse succesvol opgeslagen.', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
     } catch (error) {
       console.error('Error creating company analysis:', error);
     }
+    toast.success('Analyse succesvol opgeslagen.', {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   };
 
   const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {

@@ -87,13 +87,13 @@ const createCompanyAnalysis = async (companyAnalysisData: CompanyAnalysis): Prom
         answerID: uuidv4(),
         companyAnalysisID: companyAnalysisData.companyAnalysisID,
         selectedOption: answer.selectedOption,
+        linkedQuestionID: answer.linkedQuestionID,
       });
       await newAnswer.save();
     }
 
     return removeIdField(companyAnalysis);
   } catch (error) {
-    console.error('Something went wrong creating a company analysis:', error);
     throw error;
   }
 };
