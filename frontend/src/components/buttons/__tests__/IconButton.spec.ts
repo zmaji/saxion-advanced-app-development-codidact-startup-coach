@@ -9,7 +9,10 @@ describe('IconButton', () => {
   })
 
   it('renders as a button with given buttonType', () => {
-    const wrapper = shallowMount(IconButton, { props: { renderAs: 'button', buttonType: 'submit', icon: 'submit-icon' } })
+    const wrapper = shallowMount(IconButton, 
+      { 
+        props: { renderAs: 'button', buttonType: 'submit', icon: 'submit-icon' } 
+      })
     expect(wrapper.find('button').attributes('type')).toBe('submit')
   })
 

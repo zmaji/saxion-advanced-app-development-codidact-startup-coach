@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { shallowMount } from '@vue/test-utils'
 import DateLabel from '../DateLabel.vue'
+
 import IconLabel from '@/components/labels/IconLabel.vue'
 
 describe('DateLabel', () => {
