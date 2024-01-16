@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ContentCategoryAccordion from '../ContentCategoryAccordion.vue'
+
 import { ContentCategory } from '@/components'
 
 describe('ContentCategoryAccordion', () => {

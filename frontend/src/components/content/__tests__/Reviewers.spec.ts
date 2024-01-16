@@ -1,7 +1,13 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import {
+describe,
+it,
+expect,
+beforeEach
+} from 'vitest';
 import { shallowMount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import Reviewers from '../Reviewers.vue'
+
 import { IconLabel, TextButton, UserSelect } from '@/components'
 
 describe('Reviewers', () => {

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { shallowMount, RouterLinkStub } from '@vue/test-utils'
 import ContentItem from '../ContentItem.vue'
+
 import { IconLabel, TextLabel, DateLabel } from '@/components'
 
 describe('ContentItem', () => {
