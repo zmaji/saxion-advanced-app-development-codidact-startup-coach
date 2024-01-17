@@ -3,7 +3,6 @@
   import type { Ref } from 'vue';
   import type { Roadmap } from '@/typings/Roadmap';
   import type { Company } from '@/typings/Company';
-  import type { Module } from '@/typings/Module';
 
   import { onMounted, ref } from 'vue';
   import { jwtDecode } from 'jwt-decode';

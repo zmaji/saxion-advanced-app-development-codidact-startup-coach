@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
   import type { Module } from '@/typings/Module';
 
   import { TextLabel } from '@/components';
