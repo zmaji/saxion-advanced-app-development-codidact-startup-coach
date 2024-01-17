@@ -48,6 +48,16 @@
         </TextLabel>
 
         <TextLabel
+          v-if="step.status === StepStatuses.inReview"
+          type="info-subtle"
+          textType="info"
+          fontWeight="medium"
+          class="d-inline-block"
+        >
+          In review
+        </TextLabel>
+
+        <TextLabel
           v-if="step.status === StepStatuses.finished"
           type="success-subtle"
           textType="success"
