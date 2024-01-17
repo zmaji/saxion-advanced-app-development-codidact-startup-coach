@@ -1,4 +1,5 @@
 import type { Content } from './Content';
+import type { StepStatuses } from '@/enums/StepStatuses';
 
 export interface Step {
   stepID: string,
@@ -6,7 +7,7 @@ export interface Step {
   name: string,
   description: string,
   content: string,
-  status: string,
+  status: StepStatuses,
   linkedContent?: Content[],
   isDefault: boolean
 }

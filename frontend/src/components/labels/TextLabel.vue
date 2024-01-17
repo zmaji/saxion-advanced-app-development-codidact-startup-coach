@@ -1,8 +1,8 @@
 <script setup lang="ts">
   interface Props {
-    type: string,
-    textType: string,
-    fontWeight: string,
+    type?: string,
+    textType?: string,
+    fontWeight?: string,
   }
 
   withDefaults(defineProps<Props>(), {
