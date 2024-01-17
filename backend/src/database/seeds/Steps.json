@@ -5,16 +5,16 @@
     "name": "Market Research Planning",
     "description": "Define the scope and objectives of your market research. Identify key questions to answer and set goals for collecting relevant data.",
     "linkedContentID": "31bb0c9b-39ff-44e3-8e20-09b2e3c99b9a",
-    "status": "inProgress",
-    "isDefault": false
+    "status": "toStart",
+    "isDefault": true
   },
   {
     "stepID": "3dc88c66-5c08-4b24-b950-ae1b70f4f88f",
     "moduleID": "eb8c22d0-e183-4d59-a839-762307639faf",
     "name": "Data Collection and Analysis",
     "description": "Gather data from primary and secondary sources. Analyze the data to extract valuable insights about market trends and customer preferences.",
-    "status": "finished",
-    "isDefault": false
+    "status": "toStart",
+    "isDefault": true
   },
   {
     "stepID": "42c15d3f-3b0d-4e0c-b4aa-2c0dd2126e44",
@@ -22,8 +22,8 @@
     "name": "Validation and Feedback",
     "description": "Validate your startup idea by obtaining feedback from potential customers. Use the insights gained to refine and improve your product concept.",
     "linkedContentID": "ea0abe91-b28d-47d0-a6ac-e9e4e3e8a8ae",
-    "status": "inReview",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "85c3655e-2fcf-4e21-8f94-1aa1a5a14190",
@@ -31,8 +31,8 @@
     "name": "Prototyping Initial Design",
     "description": "Create a preliminary design for your product prototype. Focus on essential features and functionalities.",
     "linkedContentID": "bd4d00da-c6c5-4a8f-a811-acc89f91a4ab",
-    "status": "inProgress",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "af372e10-5e17-481f-8d5c-19967fc471db",
@@ -40,87 +40,183 @@
     "name": "MVP Development",
     "description": "Build the Minimum Viable Product (MVP) based on the prototyped design. Focus on functionality that provides core value to users.",
     "linkedContentID": "e97403bf-2789-43da-afda-866522c819da",
-    "status": "finished",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "d2766623-01c3-4be7-80d0-d8f855a65b8c",
     "moduleID": "71f9fcbf-4902-43a0-aa4b-5a92223c5dc9",
     "name": "User Feedback Iteration",
     "description": "Review user feedback from the MVP and make necessary iterations to enhance the product. Aim for improved usability and user satisfaction.",
-    "status": "inReview",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "7d368cc2-f546-4de3-8312-df163d216a7a",
     "moduleID": "1aae8e51-92fb-4a1d-83ea-0a07c48255df",
     "name": "Identifying Team Skills",
     "description": "Assess the skills needed for your startup and identify gaps in the founding team's expertise. Aim for a well-rounded skill set.",
-    "status": "inProgress",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "27a61a5d-7e32-4c49-88e6-c3b0a0e6bf63",
     "moduleID": "1aae8e51-92fb-4a1d-83ea-0a07c48255df",
     "name": "Team Recruitment",
     "description": "Recruit team members with complementary skills to fill identified gaps. Look for individuals who share the startup's vision and values.",
-    "status": "finished",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "bb8a25f0-c11b-4f2b-b1d5-76ab9a59c3db",
     "moduleID": "1aae8e51-92fb-4a1d-83ea-0a07c48255df",
     "name": "Team Building Activities",
     "description": "Foster a strong team culture through team-building activities. Strengthen communication and trust among team members.",
-    "status": "inReview",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "1db83f4d-71d2-4b87-aa7b-977b887bfc8e",
     "moduleID": "dbdfd9dc-3830-4297-86d8-f281874663f8",
     "name": "Target Audience Definition",
     "description": "Define your target audience based on market research. Understand the demographics, needs, and preferences of potential customers.",
-    "status": "inProgress",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "24a9071f-ee34-465a-8821-7b2e30746d62",
     "moduleID": "dbdfd9dc-3830-4297-86d8-f281874663f8",
     "name": "Distribution Channel Strategy",
     "description": "Develop a strategy for distributing your product to the target audience. Explore various channels and choose the most effective ones.",
-    "status": "finished",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "7c1f2f8c-5202-4c5e-a826-23b758d9ab26",
     "moduleID": "dbdfd9dc-3830-4297-86d8-f281874663f8",
     "name": "Promotional Tactics",
     "description": "Plan and implement promotional tactics to create awareness and generate interest in your product. Build anticipation for the launch.",
-    "status": "inReview",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "f8aaf8c3-ec3e-45c9-a222-d3ac4b17e2f7",
     "moduleID": "a76e8fd1-f74d-4d1f-911c-ef625d999036",
     "name": "Financial Planning Foundations",
     "description": "Establish the foundational elements of your startup's financial plan. Define budgets, set financial goals, and understand key financial metrics.",
-    "status": "inProgress",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "b6c24f4a-ae84-4b5a-b18a-69f85a5252a4",
     "moduleID": "a76e8fd1-f74d-4d1f-911c-ef625d999036",
     "name": "Funding Exploration",
     "description": "Explore various funding options available for startups. Understand the pros and cons of different funding sources.",
-    "status": "finished",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
   },
   {
     "stepID": "23db4487-cb9d-4e9a-99d2-ec88f65244ac",
     "moduleID": "a76e8fd1-f74d-4d1f-911c-ef625d999036",
     "name": "Financial Management Plan",
     "description": "Develop a plan for effective financial management. Implement controls and processes to ensure financial stability and growth.",
-    "status": "inReview",
-    "isDefault":"false"
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "f8aaf8c8-ec3e-45c9-a222-d3ac4b17e2f7",
+    "moduleID": "7afd7b2d-a9a9-432c-ae7b-f0f9c1906827",
+    "name": "My Team",
+    "description": "Establish the foundational elements of your startup's financial plan. Define budgets, set financial goals, and understand key financial metrics.",
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "b6c34f4a-ae84-4b5a-b18a-69f85a5252a4",
+    "moduleID": "7afd7b2d-a9a9-432c-ae7b-f0f9c1906827",
+    "name": "Funding Exploration",
+    "description": "Explore various funding options available for startups. Understand the pros and cons of different funding sources.",
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "f8aaf8c4-ec3e-45c9-a222-d3ac4b17e2f7",
+    "moduleID": "8985bd3d-c0d4-4a40-bfdc-ee78968a3f02",
+    "name": "Strategic Wealth Blueprint",
+    "description": "Lay the groundwork for your startup's financial success. Craft a strategic plan encompassing budgeting, financial goal-setting, and a deep understanding of key financial metrics to ensure a solid foundation for your journey towards prosperity.",
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "b6c44f4a-ae84-4b5a-b18a-69f85a5252a4",
+    "moduleID": "8985bd3d-c0d4-4a40-bfdc-ee78968a3f02",
+    "name": "Funding Exploration Expedition",
+    "description": "Embark on a comprehensive exploration of funding options for startups. Navigate the seas of finance, understanding the nuances, pros, and cons of different funding sources. Equip yourself with the knowledge needed to secure the right funding for your entrepreneurial journey.",
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "f8aaf8c5-ec3e-45c9-a222-d3ac4b17e2f7",
+    "moduleID": "54fa1432-55bb-404b-9bb2-91a9b68d0424",
+    "name": "My lawyer",
+    "description": "Establish the foundational elements of your startup's financial plan. Define budgets, set financial goals, and understand key financial metrics.",
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "b6c54f4a-ae84-4b5a-b18a-69f85a5252a4",
+    "moduleID": "54fa1432-55bb-404b-9bb2-91a9b68d0424",
+    "name": "I am doing it right",
+    "description": "Explore various funding options available for startups. Understand the pros and cons of different funding sources.",
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "b6c64f4a-ae84-4b5a-b18a-69f85a5252a4",
+    "moduleID": "274d4384-b261-4f43-87e3-d2130f805529",
+    "name": "Navigate the Seas of Funding",
+    "description": "Dive deep into the innovative features of our Containerschip module. Explore how advanced technology enhances cargo transport efficiency and container management. Uncover the key elements that set sail for a successful maritime journey.",
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "f8aaf8c6-ec3e-45c9-a222-d3ac4b17e2f7",
+    "moduleID": "274d4384-b261-4f43-87e3-d2130f805529",
+    "name": "Charting a Course for Operational Excellence",
+    "description": "Delve into the world of startup funding with a focus on the Containerschip module. Learn about different funding options available for maritime ventures. Understand the pros and cons associated with each funding source, ensuring a well-informed journey toward financial support.",
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "b6c74f4a-ae84-4b5a-b18a-69f85a5252a4",
+    "moduleID": "274d4384-b261-4f43-87e3-d2130f805529",
+    "name": "Scaling the Seas - Phase Up",
+    "description": "Embrace the scale-up phase of our Containerschip solution. Unleash the potential for increased efficiency and reliability in cargo transport. Navigate through this pivotal phase, ensuring optimal container management and steering your maritime endeavors towards unprecedented success.",
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "b6c84f4a-ae84-4b5a-b18a-69f85a5252a4",
+    "moduleID": "8b485b9d-41d5-44f8-bb3c-499889de3b96",
+    "name": "Strategic Expansion Blueprint",
+    "description": "Lay the foundation for strategic expansion using our Groeistrategie solutions. Develop a comprehensive blueprint that outlines the steps to take, key markets to target, and the resources needed for a successful expansion journey, guiding your business towards new horizons of prosperity.",
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "f8aaf8c7-ec3e-45c9-a222-d3ac4b17e2f7",
+    "moduleID": "8b485b9d-41d5-44f8-bb3c-499889de3b96",
+    "name": "Market Penetration Mastery",
+    "description": "Dive deep into market penetration strategies within the Groeistrategie framework. Explore effective ways to penetrate target markets, establish a strong presence, and outshine competitors. Learn how to leverage our solutions to master the art of market penetration for sustained business growth.",
+    "status": "toStart",
+    "isDefault":true
+  },
+  {
+    "stepID": "b6c94f4a-ae84-4b5a-b18a-69f85a5252a4",
+    "moduleID": "8b485b9d-41d5-44f8-bb3c-499889de3b96",
+    "name": "Sustainable Growth Navigation",
+    "description": "Navigate the seas of sustainable growth with our Groeistrategie solutions. Understand the principles of sustainable business practices and how to integrate them into your growth strategy. Sail through the scale-up phase with a focus on long-term success, ensuring your business reaches new heights while maintaining environmental and social responsibility.",
+    "status": "toStart",
+    "isDefault":true
   }
 ]
