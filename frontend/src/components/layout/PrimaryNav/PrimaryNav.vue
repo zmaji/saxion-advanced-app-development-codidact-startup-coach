@@ -57,6 +57,9 @@
       <div class="collapse navbar-collapse justify-content-end pe-5" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
+            <RouterLink :to="{ name: 'company.overview' }" class="nav-link">Bedrijfsomgeving</RouterLink>
+          </li>
+          <li class="nav-item">
             <RouterLink :to="{ name: 'knowledgeBase.overview' }" class="nav-link">Kennisbank</RouterLink>
           </li>
         </ul>

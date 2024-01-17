@@ -5,7 +5,7 @@ import Login from '@/views/auth/Login.vue';
 import Register from '@/views/auth/Register.vue';
 import knowledgeBaseIndex from '@/views/knowledgeBase/Index.vue';
 import contentShow from '@/views/knowledgeBase/Show.vue';
-import RoadmapIndex from '@/views/roadmap/Index.vue';
+import CompanyRoadmap from '@/views/company/Roadmap.vue';
 import Components from '@/views/Components.vue';
 import CompanyIndex from '@/views/company/Index.vue'
 import ContentCreate from '@/views/content/Create.vue'
@@ -93,7 +93,7 @@ const router = createRouter({
         {
           path: 'roadmap',
           name: 'company.roadmap',
-          component: RoadmapIndex,
+          component: CompanyRoadmap,
           meta: {
             title: 'Bedrijfsroadmap',
             showNavigationBars: true,
