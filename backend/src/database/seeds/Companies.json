@@ -11,5 +11,12 @@
     "roadmap": "af15e87d-e129-4e67-9344-18284184a577",
     "name": "Saxion",
     "location": "Deventer"
+  },
+  {
+    "companyID": "cb092a35-422a-468d-a959-83bcf3f2203b",
+    "roadmap": "af17e87d-e129-4e67-9344-18284184a577",
+    "companyAnalysis": "2166e04d-e505-4a43-8551-579aa182f9bc",
+    "name": "Maurice's bedrijf",
+    "location": "Apeldoorn"
   }
 ]

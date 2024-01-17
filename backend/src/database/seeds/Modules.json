@@ -114,5 +114,121 @@
       "scale-up"
     ],
     "questionSetID":"97522514-18f8-477d-ac06-86391e5b6c9e"
+  },
+  {
+    "moduleID": "eb8c23d0-e183-4d59-a839-762307639faf",
+    "roadmapID":  "af17e87d-e129-4e67-9344-18284184a577",
+    "name": "Inspiratie",
+    "description": "Explore target markets, identify customer needs, and validate your startup idea through thorough market research. Lay the foundation for a product that addresses real market demands.",
+    "isDefault": false,
+    "phase": [
+      "pre-startup",
+      "startup",
+      "scale-up"
+    ],
+    "questionSetID":"a343e09a-6c91-4e22-9f87-fbee2c6c4ab2"
+  },
+  {
+    "moduleID": "71f9fcbf-4903-43a0-aa4b-5a92223c5dc9",
+    "roadmapID":  "af17e87d-e129-4e67-9344-18284184a577",
+    "name": "Probleem & Oplossing",
+    "description": "Embark on the journey of product development by creating prototypes and minimum viable products (MVPs). Iterate on your ideas, gather feedback, and refine your product to meet user expectations.",
+    "isDefault": false,
+    "phase": [],
+    "questionSetID":"7ec42662-158d-4bc1-8707-57cf7dcce794"
+  },
+  {
+    "moduleID": "1aae8e51-92fb-5a1d-83ea-0a07c48255df",
+    "roadmapID":  "af17e87d-e129-4e67-9344-18284184a577",
+    "name": "Focus - Visie & Missie",
+    "description": "Build a strong and complementary founding team that brings diverse skills to the table. Foster effective communication, collaboration, and a shared vision to drive the success of your startup.",
+    "isDefault": false,
+    "phase": [
+      "pre-startup",
+      "startup",
+      "scale-up"
+    ],
+    "questionSetID":"19d8248f-355f-4f82-994a-07237b1a290c"
+  },
+  {
+    "moduleID": "dbdfd9dc-3830-4397-86d8-f281874663f8",
+    "roadmapID":  "af17e87d-e129-4e67-9344-18284184a577",
+    "name": "Product & business model",
+    "description": "Develop a comprehensive go-to-market strategy to launch your product successfully. Define your target audience, distribution channels, pricing, and promotional tactics to maximize market penetration.",
+    "isDefault": false,
+    "phase": [
+      "startup"
+    ],
+    "questionSetID":"2496b27f-6dd2-4f81-9481-c6fddd87d61e"
+  },
+  {
+    "moduleID": "a76e8fd1-f74d-4d2f-911c-ef625d999036",
+    "roadmapID":  "af17e87d-e129-4e67-9344-18284184a577",
+    "name": "Marktomvang & Competitie",
+    "description": "Outline a solid financial plan and explore funding options to support your startup's growth. Understand budgeting, forecasting, and financial management to secure the necessary resources for your venture.",
+    "isDefault": false,
+    "phase": [
+      "startup",
+      "scale-up"
+    ],
+    "questionSetID":"23f75520-c2ce-49a1-ac28-00ad8a81e585"
+  },
+  {
+    "moduleID": "7afd7b2d-a9a9-433c-ae7b-f0f9c1906827",
+    "roadmapID":  "af17e87d-e129-4e67-9344-18284184a577",
+    "name": "Team",
+    "description": "Navigate your organizational roadmap seamlessly with Dynamic Progress Solutions' Team module, ensuring synchronized teamwork and agile progression through strategic steps",
+    "isDefault": false,
+    "phase": [
+      "startup",
+      "scale-up"
+    ],
+    "questionSetID":"d384ebe6-74e6-4ee9-9d8e-255df84d21c8"
+  },
+  {
+    "moduleID": "8985bd3d-c0d4-4a50-bfdc-ee78968a3f02",
+    "roadmapID":  "af17e87d-e129-4e67-9344-18284184a577",
+    "name": "Financiën",
+    "description": "Unlock financial success with Financiën, your comprehensive solution for strategic planning, investment management, and fiscal optimization on your business roadmap",
+    "isDefault": false,
+    "phase": [
+      "startup",
+      "scale-up"
+    ],
+    "questionSetID":"bd814254-8b25-477a-9ed6-997dc63e53c1"
+  },
+  {
+    "moduleID": "54fa1432-55bb-405b-9bb2-91a9b68d0424",
+    "roadmapID":  "af17e87d-e129-4e67-9344-18284184a577",
+    "name": "Juridisch",
+    "description": "Navigate legal complexities effortlessly with Juridisch, your essential module for legal compliance, risk management, and strategic legal guidance on your business roadmap.",
+    "isDefault": false,
+    "phase": [
+      "startup",
+      "scale-up"
+    ],
+    "questionSetID":"bad26f4f-0dec-40c9-a333-902477e6dd9d"
+  },
+  {
+    "moduleID": "274d4384-b261-4f53-87e3-d2130f805529",
+    "roadmapID":  "af17e87d-e129-4e67-9344-18284184a577",
+    "name": "Containerschip",
+    "description": "Set sail for efficiency and reliability with our cutting-edge containerschip solutions, ensuring seamless cargo transport, optimal container management, and a smooth voyage towards maritime success.",
+    "isDefault": false,
+    "phase": [
+      "scale-up"
+    ],
+    "questionSetID":"45394ab5-aee6-4cca-b004-45c8cb66fbb8"
+  },
+  {
+    "moduleID": "8b485b9d-42d5-44f8-bb3c-499889de3b96",
+    "roadmapID":  "af17e87d-e129-4e67-9344-18284184a577",
+    "name": "Groeistrategie",
+    "description": "Chart a course for prosperity with our Groeistrategie solutions, guiding your business through strategic expansion, market penetration, and sustainable growth to achieve new heights of success.",
+    "isDefault": false,
+    "phase": [
+      "scale-up"
+    ],
+    "questionSetID":"97522514-18f8-477d-ac06-86391e5b6c9e"
   }
 ]
