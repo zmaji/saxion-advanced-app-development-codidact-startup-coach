@@ -1,4 +1,4 @@
-type StepStatuses = 'toStart' | 'inProgress' | 'inReview' | 'finished';
+import { StepStatuses } from '../enums/StepStatuses';
 
 export interface Step {
   stepID: string,
