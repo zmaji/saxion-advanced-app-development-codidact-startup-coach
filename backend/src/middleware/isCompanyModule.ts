@@ -30,7 +30,7 @@ const isCompanyModule = async (req : Request, res: Response, next: NextFunction)
     } else {
       res
           .status(StatusCodes.FORBIDDEN)
-          .json({ error: 'This is module is part of another company\'s roadmap which you are not a part of' } );
+          .json({ error: 'This module is part of another company\'s roadmap which you are not a part of' } );
     }
   } catch (error) {
     res

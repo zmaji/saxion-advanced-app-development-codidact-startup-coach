@@ -5,7 +5,7 @@ export interface Step {
   moduleID: string,
   name: string,
   description: string,
-  status: string,
-  linkedContentID?: StepStatuses,
+  status: StepStatuses,
+  linkedContentID?: string,
   isDefault: boolean
 }
