@@ -2,10 +2,11 @@ import { Router, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import isLoggedIn from '../middleware/isLoggedIn';
 import moduleController from '../controllers/Module';
+import isCompanyModule from '../middleware/isCompanyModule';
 
 const router = Router();
 
-router.get('/:moduleID', isLoggedIn, async (req: Request, res: Response) => {
+router.get('/:moduleID', isLoggedIn, isCompanyModule, async (req: Request, res: Response) => {
   try {
     if (req.headers.authorization) {
       const result = await moduleController.getModule(
