@@ -124,6 +124,7 @@ const assignModules = async (companyAnalysisID: string, roadmapID: string): Prom
             ...moduleStep,
             stepID: uuidv4(),
             moduleID: module.moduleID,
+            isDefault: false,
           };
 
           const newModuleStep = new stepModel(moduleStep);

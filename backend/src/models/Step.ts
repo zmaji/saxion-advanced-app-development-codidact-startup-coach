@@ -38,6 +38,6 @@ const stepSchema: Schema<Step> = new Schema({
   versionKey: false,
 });
 
-const StepModel = mongoose.model<Step>('Step', stepSchema);
+const stepModel = mongoose.model<Step>('Step', stepSchema);
 
-export default StepModel;
+export default stepModel;

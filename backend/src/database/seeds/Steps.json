@@ -5,7 +5,7 @@
     "name": "Market Research Planning",
     "description": "Define the scope and objectives of your market research. Identify key questions to answer and set goals for collecting relevant data.",
     "linkedContentID": "31bb0c9b-39ff-44e3-8e20-09b2e3c99b9a",
-    "status": "in progress",
+    "status": "inProgress",
     "isDefault": false
   },
   {
@@ -22,7 +22,7 @@
     "name": "Validation and Feedback",
     "description": "Validate your startup idea by obtaining feedback from potential customers. Use the insights gained to refine and improve your product concept.",
     "linkedContentID": "ea0abe91-b28d-47d0-a6ac-e9e4e3e8a8ae",
-    "status": "in review",
+    "status": "inReview",
     "isDefault":"false"
   },
   {
@@ -31,7 +31,7 @@
     "name": "Prototyping Initial Design",
     "description": "Create a preliminary design for your product prototype. Focus on essential features and functionalities.",
     "linkedContentID": "bd4d00da-c6c5-4a8f-a811-acc89f91a4ab",
-    "status": "in progress",
+    "status": "inProgress",
     "isDefault":"false"
   },
   {
@@ -48,7 +48,7 @@
     "moduleID": "71f9fcbf-4902-43a0-aa4b-5a92223c5dc9",
     "name": "User Feedback Iteration",
     "description": "Review user feedback from the MVP and make necessary iterations to enhance the product. Aim for improved usability and user satisfaction.",
-    "status": "in review",
+    "status": "inReview",
     "isDefault":"false"
   },
   {
@@ -56,7 +56,7 @@
     "moduleID": "1aae8e51-92fb-4a1d-83ea-0a07c48255df",
     "name": "Identifying Team Skills",
     "description": "Assess the skills needed for your startup and identify gaps in the founding team's expertise. Aim for a well-rounded skill set.",
-    "status": "in progress",
+    "status": "inProgress",
     "isDefault":"false"
   },
   {
@@ -72,7 +72,7 @@
     "moduleID": "1aae8e51-92fb-4a1d-83ea-0a07c48255df",
     "name": "Team Building Activities",
     "description": "Foster a strong team culture through team-building activities. Strengthen communication and trust among team members.",
-    "status": "in review",
+    "status": "inReview",
     "isDefault":"false"
   },
   {
@@ -80,7 +80,7 @@
     "moduleID": "dbdfd9dc-3830-4297-86d8-f281874663f8",
     "name": "Target Audience Definition",
     "description": "Define your target audience based on market research. Understand the demographics, needs, and preferences of potential customers.",
-    "status": "in progress",
+    "status": "inProgress",
     "isDefault":"false"
   },
   {
@@ -96,7 +96,7 @@
     "moduleID": "dbdfd9dc-3830-4297-86d8-f281874663f8",
     "name": "Promotional Tactics",
     "description": "Plan and implement promotional tactics to create awareness and generate interest in your product. Build anticipation for the launch.",
-    "status": "in review",
+    "status": "inReview",
     "isDefault":"false"
   },
   {
@@ -104,7 +104,7 @@
     "moduleID": "a76e8fd1-f74d-4d1f-911c-ef625d999036",
     "name": "Financial Planning Foundations",
     "description": "Establish the foundational elements of your startup's financial plan. Define budgets, set financial goals, and understand key financial metrics.",
-    "status": "in progress",
+    "status": "inProgress",
     "isDefault":"false"
   },
   {
@@ -120,7 +120,7 @@
     "moduleID": "a76e8fd1-f74d-4d1f-911c-ef625d999036",
     "name": "Financial Management Plan",
     "description": "Develop a plan for effective financial management. Implement controls and processes to ensure financial stability and growth.",
-    "status": "in review",
+    "status": "inReview",
     "isDefault":"false"
   }
 ]
