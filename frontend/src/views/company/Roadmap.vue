@@ -1,77 +1,36 @@
 <script setup lang="ts">
-  import type { Content, ContentFeedback } from '@/typings/Content';
-  import type { Label } from '@/typings/Label';
   import type { User } from '@/typings/User';
   import type { Ref } from 'vue';
+  import type { Roadmap } from '@/typings/Roadmap';
 
-  import { onMounted, ref, computed } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { onMounted, ref } from 'vue';
   import { jwtDecode } from 'jwt-decode';
-  import { toast } from 'vue3-toastify';
 
   import {
-    CategoryBreadCrumb,
-    CategorySidebar,
-    DateLabel,
     PageTitle,
     SecondaryTitle,
-    TextLabel,
-    TextButton,
-    TextButtonDisabled,
-    IconLabel,
-    Reviewers,
-    ContentDocumentPreview,
-    SubTitle
+    SubTitle,
+    TextLabel
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
   import { useTokenStore } from '@/stores/token';
 
-  const route = useRoute();
   const loaded = ref(false);
-  const content: Ref<Content | undefined> = ref<Content>();
+  const roadmap: Ref<Roadmap | undefined> = ref<Roadmap>();
   const tokenStore = useTokenStore()
   const currentUser = ref<User | null>(null)
   const currentUserID = ref<string | undefined>('');
-  const newFeedback = ref<string>('');
 
-  const canReview = computed(() => content.value?.contentUsers?.some(
-    user => user.userID === currentUser.value?.userID)
-  );
-
-  const isOwner = computed(() => content.value?.user?.userID === currentUser.value?.userID)
-
-  const postFeedback = async () => {
+  // const canReview = computed(() => content.value?.contentUsers?.some(
+  //   user => user.userID === currentUser.value?.userID)
+  // );
+  
+  const fetchRoadmap = async () => {
     try {
-      const response = await httpService.postRequest<ContentFeedback>(
-        `/feedback/${route.params.contentID}`,
-        {
-          feedback: newFeedback.value
-        },
-        true
-      );
+      const response = await httpService.getRequest<Roadmap>('/roadmaps/companyRoadmap', true);
 
       if (response && response.data) {
-        content.value?.feedback?.push(response.data);
-
-        toast.success('Feedback succesvol geplaatst!', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        newFeedback.value = '';
-      }
-    } catch (e) {
-      toast.error('Fout bij het plaatsen van feedback.', {
-        position: toast.POSITION.TOP_RIGHT
-      });
-      console.error(e);
-    }
-  }
-
-  const fetchContent = async () => {
-    try {
-      const response = await httpService.getRequest<Content>(`/content/${route.params.contentID}`, false);
-
-      if (response && response.data) {
-        content.value = response.data;
+        roadmap.value = response.data;
       }
     } catch (e) {
       console.error(e);
@@ -92,30 +51,31 @@
   };
 
   onMounted(() => {
-    fetchContent();
+    fetchRoadmap();
     fetchUserData();
   });
 </script>
 
 <template>
-  <PageTitle>Roadmap index</PageTitle>
+  <PageTitle>De Roadmap van {{ currentUser?.company }}</PageTitle>
 
   <SubTitle>Overzicht van roadmap</SubTitle>
 
   <SecondaryTitle>Secondary header</SecondaryTitle>
 
   <div class="row row-cols-3 g-2 g-lg-3">
-    <div class="col">
-      <div class="rounded p-3 shadow-sm bg-white">Row column</div>
-    </div>
+    <div v-for="(module, key) in roadmap?.modules" class="col" :key="key">
+      <div class="rounded px-4 py-3 shadow-sm bg-white">
+        <h4 class="mb-0 pb-1">{{ module.name }}</h4>
 
-    <div class="col">
-      <div class="rounded p-3 shadow-sm bg-white">Row column</div>
+        <TextLabel
+          type="success-subtle"
+          textType="success"
+          fontWeight="medium"
+          class="d-inline-block"
+        >Voltooid
+        </TextLabel>
+      </div>
     </div>
-
-    <div class="col">
-      <div class="rounded p-3 shadow-sm bg-white">Row column</div>
-    </div>
-
   </div>
 </template>
