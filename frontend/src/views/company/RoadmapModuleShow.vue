@@ -14,6 +14,7 @@
     TextLabel
   } from '@/components';
   import httpService from '@/plugins/http/httpService';
+  import { determineModuleProgress } from '@/utils/roadmapModule';
   
   const route = useRoute();
   const loaded = ref(false);
@@ -55,9 +56,33 @@
       </IconButton>
     </div>
 
-    <TextLabel type="white" class="d-inline-block mb-3">
-      {{ module.steps!.filter((step) => step.status === StepStatuses.finished).length }} /
-      {{ module.steps!.length }} stappen voltooid
+    <TextLabel
+      v-if="determineModuleProgress(module) === StepStatuses.toStart"
+      fontWeight="medium"
+      class="d-inline-block"
+    >
+      Nog niet begonnen
+    </TextLabel>
+
+    <TextLabel
+      v-if="determineModuleProgress(module) === StepStatuses.inProgress"
+      type="warning-subtle"
+      textType="warning"
+      fontWeight="medium"
+      class="d-inline-block"
+    >
+      {{ module.steps!.filter((step) => step.status === StepStatuses.finished).length }}
+      /{{ module.steps!.length }} stappen voltooid
+    </TextLabel>
+
+    <TextLabel
+      v-if="determineModuleProgress(module) === StepStatuses.finished"
+      type="success-subtle"
+      textType="success"
+      fontWeight="medium"
+      class="d-inline-block"
+    >
+      Voltooid
     </TextLabel>
 
     <SubHeader>Over deze module</SubHeader>

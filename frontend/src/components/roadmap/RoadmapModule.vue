@@ -4,22 +4,13 @@
 
   import { TextLabel } from '@/components';
   import { StepStatuses } from '@/enums/StepStatuses';
+  import { determineModuleProgress } from '@/utils/roadmapModule';
 
   interface Props {
     module: Module
   }
 
   withDefaults(defineProps<Props>(), {});
-
-  const determineModuleProgress = (module: Module): string => {
-    if (module.steps!.filter((step) => step.status === StepStatuses.toStart).length === module.steps?.length) {
-      return StepStatuses.toStart;
-    } else if (module.steps!.filter((step) => step.status === StepStatuses.finished).length === module.steps?.length) {
-      return StepStatuses.finished;
-    } else {
-      return StepStatuses.inProgress;
-    }
-  }
 </script>
 
 <template>
