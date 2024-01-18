@@ -77,7 +77,7 @@
       <SubTitle>{{ roadmap.description }}</SubTitle>
 
       <div class="row row-cols-3 g-2 g-lg-3">
-        <RoadmapModule v-for="(module, key) in roadmap.modules" :module="module" class="col" :key="key"/>
+        <RoadmapModule v-for="(module, key) in roadmap.modules" :module="module" :key="key"/>
       </div>
     </template>
 
