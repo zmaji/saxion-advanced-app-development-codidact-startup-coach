@@ -59,7 +59,7 @@
     <TextLabel
       v-if="determineModuleProgress(module) === StepStatuses.toStart"
       fontWeight="medium"
-      class="d-inline-block"
+      class="d-inline-block mb-3"
     >
       Nog niet begonnen
     </TextLabel>
@@ -69,7 +69,7 @@
       type="warning-subtle"
       textType="warning"
       fontWeight="medium"
-      class="d-inline-block"
+      class="d-inline-block mb-3"
     >
       {{ module.steps!.filter((step) => step.status === StepStatuses.finished).length }}
       /{{ module.steps!.length }} stappen voltooid
@@ -80,7 +80,7 @@
       type="success-subtle"
       textType="success"
       fontWeight="medium"
-      class="d-inline-block"
+      class="d-inline-block mb-3"
     >
       Voltooid
     </TextLabel>
