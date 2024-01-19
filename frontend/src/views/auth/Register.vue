@@ -78,6 +78,6 @@
     height: 100%;
     background: url(../images/skewed-side.svg) no-repeat;
     background-size: cover;
-    margin: -1px;
+    transform: translateX(-1px);
   }
 </style>

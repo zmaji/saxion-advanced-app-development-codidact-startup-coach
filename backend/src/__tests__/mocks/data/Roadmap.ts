@@ -110,6 +110,11 @@ export const existingRoadmapIndexData = [
     title: 'Default roadmap',
     description: 'This roadmap delineates a dynamic strategy for launching and growing a new venture. It encompasses critical phases such as market research, product development, and customer acquisition. Through iterative testing, agile adaptation, and strategic scaling, the roadmap guides the startup towards sustainable success.',
   },
+  {
+    roadmapID: 'af17e87d-e129-4e67-9344-18284184a577',
+    title: 'Roadmap naar succes',
+    description: 'Ik ga successvol worden',
+  },
 ];
 
 export const existingRoadmapData: Roadmap = {

@@ -13,7 +13,7 @@ export const usersIndexData: User[] = [
   },
   {
     userID: '12c20d6e-1bc6-4d7a-acaf-2021afc7a242',
-    company: 'cb092a25-422a-468d-a959-83bcf3f2203b',
+    company: '4d11409a-3143-42f0-9f7a-5e08e69b3d74',
     userName: 'Maurice',
     emailAddress: 'maurice@saxion.nl',
     fullName: 'Maurice ten Teije',

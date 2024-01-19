@@ -34,5 +34,7 @@ export { default as ContentCategoryAccordion } from './contentCategories/Content
 export { default as ContentCategoryNavItem } from './contentCategories/ContentCategoryNavItem.vue';
 export { default as CategoryBreadCrumb } from './contentCategories/CategoryBreadCrumb.vue';
 export { default as CategoryCrumb } from './contentCategories/CategoryCrumb.vue';
+export { default as RoadmapModule } from './roadmap/RoadmapModule.vue';
+export { default as ModuleStep } from './roadmap/ModuleStep.vue';
 
 export { default as SearchBar } from './search/SearchBar.vue';

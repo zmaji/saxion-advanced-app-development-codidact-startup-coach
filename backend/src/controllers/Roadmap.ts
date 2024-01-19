@@ -105,7 +105,7 @@ const assignModules = async (companyAnalysisID: string, roadmapID: string): Prom
       isDefault: true,
       phase: { $in: companyAnalysis.phase.toLowerCase() },
     }, { _id: 0 }).lean();
-    const steps: Step[] = await stepModel.find({}, { _id: 0 }).lean();
+    const steps: Step[] = await stepModel.find({ isDefault: true }, { _id: 0 }).lean();
     const moduleCriteria = await moduleCriteriaModel.find().lean();
     for (const module of phaseModules) {
       const expectedAnswers = moduleCriteria.filter((criteria) => criteria.moduleID === module.moduleID);
@@ -124,6 +124,7 @@ const assignModules = async (companyAnalysisID: string, roadmapID: string): Prom
             ...moduleStep,
             stepID: uuidv4(),
             moduleID: module.moduleID,
+            isDefault: false,
           };
 
           const newModuleStep = new stepModel(moduleStep);

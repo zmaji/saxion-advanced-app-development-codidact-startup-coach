@@ -37,6 +37,6 @@ const moduleSchema: Schema<Module> = new Schema({
   versionKey: false,
 });
 
-const ModuleModel = mongoose.model<Module>('Module', moduleSchema);
+const moduleModel = mongoose.model<Module>('Module', moduleSchema);
 
-export default ModuleModel;
+export default moduleModel;
