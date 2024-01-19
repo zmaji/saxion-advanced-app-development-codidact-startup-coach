@@ -21,7 +21,7 @@
 </script>
 
 <template>
-  <p :class="[props.marginBottom, dynamicDomClasses]" class="d-inline-block px-3 py-2 rounded">
+  <p :class="[props.marginBottom, props.marginTop, dynamicDomClasses]" class="d-inline-block px-3 py-2 rounded">
     <slot></slot>
   </p>
 </template>
