@@ -1,10 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import companyController from '../controllers/Company';
+import isLoggedIn from '../middleware/isLoggedIn';
 
 const router = Router();
 
-router.get('', async (req: Request, res: Response) => {
+router.get('', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await companyController.getCompanies();
 
@@ -24,7 +25,7 @@ router.get('', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/:companyID', async (req: Request, res: Response) => {
+router.get('/:companyID', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await companyController.getCompany(req.params.companyID);
 
@@ -44,7 +45,7 @@ router.get('/:companyID', async (req: Request, res: Response) => {
   }
 });
 
-router.put('/:companyID', async (req: Request, res: Response) => {
+router.put('/:companyID', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const updatedCompany = await companyController.updateCompany(req.params.companyID, req.body);
 

@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
 import { app } from './config/setupFile';
+import { loginAsUser } from './utils/login';
 
 describe('Content', () => {
   describe('POST /feedback/:contentID', () => {
@@ -17,16 +18,11 @@ describe('Content', () => {
     });
 
     it('should block authenticated users that are not reviewers of selected content from posting feedback', async () => {
-      const loginResponse = await request(app)
-          .post('/credentials')
-          .send({
-            userName: 'Alex',
-            password: 'Maurice123',
-          });
+      const token = await loginAsUser(app, 'Alex', 'Maurice123');
 
       const response = await request(app)
           .post(`/feedback/${contentID}`)
-          .set('Authorization', `Bearer ${loginResponse.body.token}`)
+          .set('Authorization', `Bearer ${token}`)
           .send({
             feedback: 'Very nice',
           });
@@ -35,16 +31,11 @@ describe('Content', () => {
     });
 
     it('should return the posted feedback on successful post', async () => {
-      const loginResponse = await request(app)
-          .post('/credentials')
-          .send({
-            userName: 'Maurice',
-            password: 'Maurice123',
-          });
+      const token = await loginAsUser(app, 'Maurice', 'Maurice123');
 
       const response = await request(app)
           .post(`/feedback/${contentID}`)
-          .set('Authorization', `Bearer ${loginResponse.body.token}`)
+          .set('Authorization', `Bearer ${token}`)
           .send({
             feedback: 'Very nice',
           });

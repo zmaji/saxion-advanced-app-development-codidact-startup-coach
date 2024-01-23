@@ -20,7 +20,7 @@
 
   const fetchCompanies = async () => {
     try {
-      const response = await httpService.getRequest<Company[]>('/companies', false);
+      const response = await httpService.getRequest<Company[]>('/companies', true);
 
       if (response && response.data) {
         companies.value = response.data;

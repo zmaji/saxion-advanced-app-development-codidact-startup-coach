@@ -56,8 +56,6 @@
   const updateAttachment = (event: any) => {
     const file = event.target.files[0];
     contentTemplate.attachment = file;
-    console.log('template file', contentTemplate.attachment);
-    console.log(file);
   }
 
   const addContent = async () => {
@@ -82,10 +80,6 @@
         true
       );
 
-      if (result && result.data) {
-        console.log(result.data)
-      }
-
       if (result.status === 200) {
         toast.success('Content succesvol toegevoegd!', {
           position: toast.POSITION.TOP_RIGHT,
@@ -108,8 +102,6 @@
   }
 
   const validateContentTemplate = () => {
-    console.log(contentTemplate.title?.length);
-
     if (contentTemplate.title!.length < 3) {
       errorMessages.value['title'] = 'De titel moet minstens 3 tekens bevatten.';
 
@@ -158,7 +150,7 @@
 
   const fetchCategories = async () => {
     try {
-      const response = await httpService.getRequest<Category[]>('/categories/flattened', false);
+      const response = await httpService.getRequest<Category[]>('/categories/flattened', true);
 
       if (response && response.data) {
         categories.value = response.data;

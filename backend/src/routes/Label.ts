@@ -1,10 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import labelController from '../controllers/Label';
+import isLoggedIn from '../middleware/isLoggedIn';
 
 const router = Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await labelController.getAllLabels();
 
@@ -24,7 +25,7 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/:labelID', async (req: Request, res: Response) => {
+router.get('/:labelID', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await labelController.getLabel(req.params.labelID);
 
@@ -44,7 +45,7 @@ router.get('/:labelID', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await labelController.createLabel(req.body);
 

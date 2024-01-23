@@ -1,52 +1,32 @@
-# frontend
+# Codidact Startup Coach Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+## Introduction
+Welcome to the Codidact Startup Coach project! This readme serves as a guide to run the front-end the Codidact Startup Coach application.
 
-## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Before running the project, make sure you have the following prerequisites installed on your system:
 
-## Type Support for `.vue` Imports in TS
+1. [Node.js](https://nodejs.org/en) If you don't have Node installed, you can install it by following the instructions at Node.js's official website.
+With this you can install the application dependencies and run the tests.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## Setup for local development
+Follow the steps below to set up and run the project:
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+1. Clone this repository to your local machine:
+   ```bash
+   git clone https://gitlab.com/saxion.nl/hbo-ict/aad/project/09.git
+   ```
+2. Navigate to the ```frontend``` directory.
+3. If necessary, create a ```.env``` file in the backend. There is a .env.example available for this purpose. ```In case of reviewing this project as a teacher, the .env file will be provided.```
+4. Ensure that port 8080 is available on your machine, as the UI will be exposed on this port.
+5. Run the following command to install all dependencies:
+   ```npm i```
+6. Run the following command to start the project using Docker Compose:
+   ```npm run dev```
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+## Running tests
+The project includes  tests to ensure the API endpoints work as expected. To run these tests, use the following command:
+```test:unit```
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+## Linting
+To check the code for errors and fix possible problems, use the following command: ```lint```.   

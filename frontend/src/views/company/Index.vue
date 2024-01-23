@@ -53,7 +53,7 @@
     try {
       fetchUser();
       const response = await httpService.getRequest<Company>(
-        `/companies/${currentUser.value?.company}`
+        `/companies/${currentUser.value?.company}`, true
       );
 
       if (response && response.data) {
@@ -70,7 +70,7 @@
   const fetchCurrentAnalysis = async () => {
     try {
       const response = await httpService.getRequest<CompanyAnalysis>(
-        `/companyAnalyses/${currentCompany.value?.companyAnalysis}`
+        `/companyAnalyses/${currentCompany.value?.companyAnalysis}`, true
       );
 
       if (response && response.data) {
@@ -83,7 +83,7 @@
 
   const fetchAnalysisSection = async (analysisSectionID: string) => {
     try {
-      const response = await httpService.getRequest<AnalysisSection>(`/analysisSections/${analysisSectionID}`, false);
+      const response = await httpService.getRequest<AnalysisSection>(`/analysisSections/${analysisSectionID}`, true);
 
       if (response && response.data) {
         analysisSections.value.push(response.data);
@@ -100,7 +100,7 @@
 
   const fetchAnalysisSections = async () => {
     try {
-      const response = await httpService.getRequest<AnalysisSection[]>('/analysisSections/', false);
+      const response = await httpService.getRequest<AnalysisSection[]>('/analysisSections/', true);
 
       if (response && response.data) {
         await Promise.all(response.data.map(
@@ -329,16 +329,13 @@
    */
   const generateAnswers = () => {
     const answers: Answer[] = [];
-
     for (const key in formData) {
       if (formData[key].value) {
         // @ts-ignore
         const selectedValue = formData[key].value.value;
         const matchingOption = formData[key].options.find(
-          (questionOption: QuestionOption) => {
-            questionOption.value === selectedValue
-          }
-        );
+          (option: QuestionOption) => option.value === selectedValue
+          );
 
         if (matchingOption) {
           const answer: Answer = {
@@ -347,7 +344,6 @@
             selectedOption: matchingOption.questionOptionID,
             linkedQuestionID: matchingOption.questionID
           };
-
           answers.push(answer);
         }
       }
@@ -375,7 +371,7 @@
         answers: answers,
       };
 
-      const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields);
+      const newCompanyAnalysis = await httpService.postRequest<CompanyAnalysis>('/companyAnalyses', formFields, true);
       const newCompanyAnalysisData = newCompanyAnalysis.data;
 
       if (newCompanyAnalysisData && currentCompany.value) {
@@ -396,7 +392,7 @@
 
   const associateAnalysisWithCompany = async (companyID: string, companyData: any) => {
     try {
-      await httpService.putRequest<Company>(`/companies/${companyID}`, companyData);
+      await httpService.putRequest<Company>(`/companies/${companyID}`, companyData, true);
       fetchCurrentCompany();
     } catch (error) {
       console.error('Error associating company analysis:', error);

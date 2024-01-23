@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
 import { app } from './config/setupFile';
+import { loginAsUser } from './utils/login';
 
 describe('Content', () => {
   describe('POST /contentUsers/:contentID', () => {
@@ -20,16 +21,11 @@ describe('Content', () => {
     });
 
     it('should block authenticated users that are the owner of selected content from adding reviewers', async () => {
-      const loginResponse = await request(app)
-          .post('/credentials')
-          .send({
-            userName: 'Alex',
-            password: 'Maurice123',
-          });
+      const token = await loginAsUser(app, 'Maurice', 'Maurice123');
 
       const response = await request(app)
           .post(`/contentUsers/${contentID}`)
-          .set('Authorization', `Bearer ${loginResponse.body.token}`)
+          .set('Authorization', `Bearer ${token}`)
           .send([
             {
               userID: contentUserID,
@@ -40,16 +36,11 @@ describe('Content', () => {
     });
 
     it('should return the posted contentUser on successful post', async () => {
-      const loginResponse = await request(app)
-          .post('/credentials')
-          .send({
-            userName: 'Zikria',
-            password: 'Zikria123',
-          });
+      const token = await loginAsUser(app, 'Zikria', 'Zikria123');
 
       const response = await request(app)
           .post(`/contentUsers/${contentID}`)
-          .set('Authorization', `Bearer ${loginResponse.body.token}`)
+          .set('Authorization', `Bearer ${token}`)
           .send([
             {
               userID: contentUserID,

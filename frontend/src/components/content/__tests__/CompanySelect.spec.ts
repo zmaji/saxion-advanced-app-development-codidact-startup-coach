@@ -15,8 +15,8 @@ describe('CompanySelect', () => {
     const wrapper = mount(CompanySelect)
     const multiselect = wrapper.findComponent(VueMultiselect)
 
-    expect(multiselect.props('multiple')).toBe(true)
-    expect(multiselect.props('taggable')).toBe(true)
-    expect(multiselect.props('closeOnSelect')).toBe(false)
+    expect(multiselect.props('multiple' as never)).toBe(true)
+    expect(multiselect.props('taggable' as never)).toBe(true)
+    expect(multiselect.props('closeOnSelect' as never)).toBe(false)
   })
 })

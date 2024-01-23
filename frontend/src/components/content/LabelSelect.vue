@@ -38,27 +38,27 @@
     try {
       const response = await httpService.postRequest(
         '/labels',
-        newLabel
+        newLabel, true
       );
 
       let label: Label = response.data as Label;
       await fetchAddedLabel(label.labelID);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
   const fetchLabels = async () => {
     labels.value = []
     const fetchedLabels = await httpService.getRequest<Label[]>(
-      '/labels'
+      '/labels', true
     )
     labels.value = fetchedLabels.data;
   }
 
   const fetchAddedLabel = async (labelID: string) => {
     const result = await httpService.getRequest<Label>(
-      `/labels/${labelID}`
+      `/labels/${labelID}`, true
     )
 
     if (result) {

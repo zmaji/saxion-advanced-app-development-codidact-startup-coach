@@ -43,7 +43,7 @@
         `/content?title=${searchQuery.value}` +
           `&labels=${filteredLabelNames}` +
           `&category=${categoryFilter.value ? categoryFilter.value.categoryID : ''}`,
-        false
+          true
       );
 
       if (response) {
@@ -57,7 +57,7 @@
 
   const fetchCategories = async () => {
     try {
-      const response = await httpService.getRequest<Category[]>('/categories/flattened', false);
+      const response = await httpService.getRequest<Category[]>('/categories/flattened', true);
 
       if (response && response.data) {
         categories.value = response.data;
@@ -69,7 +69,7 @@
 
   const fetchLabels = async () => {
     try {
-      const response = await httpService.getRequest<Label[]>('/labels', false);
+      const response = await httpService.getRequest<Label[]>('/labels', true);
 
       if (response && response.data) {
         labels.value = response.data;

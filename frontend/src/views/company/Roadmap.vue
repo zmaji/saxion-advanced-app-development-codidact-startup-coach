@@ -28,7 +28,6 @@
       const userToken = tokenStore.getToken;
       currentUser.value = jwtDecode(userToken);
       currentUserID.value = currentUser.value?.userID;
-
     } catch (error) {
       console.error('Error fetching current userID:', error);
     }

@@ -5,7 +5,7 @@ import isLoggedIn from '../middleware/isLoggedIn';
 
 const router = Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const { title, labels, category } = req.query;
 
@@ -31,7 +31,7 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/:contentID', async (req: Request, res: Response) => {
+router.get('/:contentID', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await contentController.getContent(req.params.contentID);
 
@@ -69,7 +69,7 @@ router.post('/', isLoggedIn, async (req: Request, res: Response) => {
   }
 });
 
-router.put('/:contentID', async (req: Request, res: Response) => {
+router.put('/:contentID', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const updatedContent = await contentController.updateContent(req.params.contentID, req.body);
 
@@ -89,7 +89,7 @@ router.put('/:contentID', async (req: Request, res: Response) => {
   }
 });
 
-router.delete('/:contentID', async (req: Request, res: Response) => {
+router.delete('/:contentID', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const deletedContent = await contentController.deleteContent(req.params.contentID);
 

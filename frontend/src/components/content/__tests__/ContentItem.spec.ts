@@ -1,15 +1,25 @@
+import type { Content } from '@/typings/Content'
+
 import { describe, it, expect } from 'vitest'
 import { shallowMount, RouterLinkStub } from '@vue/test-utils'
 import ContentItem from '../ContentItem.vue'
+import { randomUUID } from 'crypto'
 
 import { IconLabel, TextLabel, DateLabel } from '@/components'
 
 describe('ContentItem', () => {
-  const mockContent = {
+  const mockContent: Content = {
     contentID: '1',
     title: 'Test Content',
-    labels: [{ name: 'Label 1' }, { name: 'Label 2' }, { name: 'Label 3' }],
-    createdAt: new Date().toISOString()
+    labels: [
+      { name: 'Label 1', labelID: randomUUID(), isDefault: false }, 
+      { name: 'Label 2', labelID: randomUUID(), isDefault: false }, 
+      { name: 'Label 3', labelID: randomUUID(), isDefault: false }
+    ],
+    createdAt: new Date().toISOString(),
+    accessLevel: 'public',
+    description: 'Test Description',
+    category: 'Test Category'
   }
 
   it('renders correctly with content prop', () => {
