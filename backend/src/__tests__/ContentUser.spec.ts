@@ -31,7 +31,7 @@ describe('Content', () => {
               userID: contentUserID,
             },
           ]);
-          
+
       expect(response.status).toBe(StatusCodes.FORBIDDEN);
     });
 

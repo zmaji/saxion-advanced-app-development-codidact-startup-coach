@@ -39,7 +39,7 @@ describe('GET /roadmaps/companyRoadmap', () => {
 
   it('should handle users with no company', async () => {
     const token = await loginAsUser(app, 'Zikria2', 'Zikria123');
-    
+
     const response = await request(app)
         .get(`/roadmaps/companyRoadmap`)
         .set('Authorization', `Bearer ${token}`);

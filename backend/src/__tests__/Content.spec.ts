@@ -5,7 +5,6 @@ import { contentsIndexData, contentsSingleContent } from './mocks/data/Contents'
 import { loginAsUser } from './utils/login';
 
 describe('Content', () => {
-
   describe('GET /content', () => {
     it('should return a list of content', async () => {
       const token = await loginAsUser(app, 'Maurice', 'Maurice123');
