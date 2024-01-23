@@ -1,7 +1,8 @@
+import type { buttonSizes } from '..'
+
 import { describe, it, expect } from 'vitest'
 import { shallowMount } from '@vue/test-utils'
 import IconButton from '../IconButton.vue'
-import type { buttonSizes } from '..'
 
 describe('IconButton', () => {
   it('renders with default props', () => {

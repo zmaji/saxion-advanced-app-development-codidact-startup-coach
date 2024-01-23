@@ -1,7 +1,8 @@
+import type { buttonSizes, buttonTypes } from '..'
+
 import { describe, it, expect } from 'vitest'
 import { shallowMount } from '@vue/test-utils'
 import TextButtonDisabled from '../TextButtonDisabled.vue'
-import type { buttonSizes, buttonTypes } from '..'
 
 describe('TextButtonDisabled', () => {
   it('renders with default props', () => {
