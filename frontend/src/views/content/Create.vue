@@ -150,7 +150,7 @@
 
   const fetchCategories = async () => {
     try {
-      const response = await httpService.getRequest<Category[]>('/categories/flattened', false);
+      const response = await httpService.getRequest<Category[]>('/categories/flattened', true);
 
       if (response && response.data) {
         categories.value = response.data;

@@ -25,7 +25,7 @@
       if (currentCategory) {
         const response = await httpService.getRequest<Category>(
           `/categories/${currentCategory}/parents`,
-          false
+          true
         );
 
         if (response && response.data) {

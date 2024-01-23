@@ -68,7 +68,7 @@
 
   const fetchContent = async () => {
     try {
-      const response = await httpService.getRequest<Content>(`/content/${route.params.contentID}`, false);
+      const response = await httpService.getRequest<Content>(`/content/${route.params.contentID}`, true);
 
       if (response && response.data) {
         content.value = response.data;
