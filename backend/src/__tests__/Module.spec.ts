@@ -43,7 +43,6 @@ describe('GET /modules/:moduleID', () => {
         const response = await request(app)
             .get(`/modules/InvalidID`)
             .set('Authorization', `Bearer ${loginResponse.body.token}`);
-        console.log(response.body);
         expect(response.status).toBe(StatusCodes.NOT_FOUND);
         expect(response.body).toEqual({ error: 'Module not found' });
       });
