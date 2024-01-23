@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { shallowMount } from '@vue/test-utils'
 import TextButtonDisabled from '../TextButtonDisabled.vue'
+import type { buttonSizes, buttonTypes } from '..'
 
 describe('TextButtonDisabled', () => {
   it('renders with default props', () => {
@@ -13,7 +14,7 @@ describe('TextButtonDisabled', () => {
   })
 
   it('renders with different types', () => {
-    const types = ['primary', 'secondary', 'tertiary']
+    const types: buttonTypes[] = ['primary', 'secondary', 'info', 'success', 'warning', 'danger']
     types.forEach(type => {
       const wrapper = shallowMount(TextButtonDisabled, { props: { type } })
       expect(wrapper.find('button').classes()).toContain(`btn-${type}`)
@@ -34,7 +35,7 @@ describe('TextButtonDisabled', () => {
   })
 
   it('renders with different sizes', () => {
-    const sizes = ['small', 'medium', 'large']
+    const sizes: buttonSizes[] = ['sm', 'lg']
     sizes.forEach(size => {
       const wrapper = shallowMount(TextButtonDisabled, { props: { size } })
       expect(wrapper.find('button').classes()).toContain(`btn-${size}`)

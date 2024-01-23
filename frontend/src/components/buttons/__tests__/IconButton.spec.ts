@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { shallowMount } from '@vue/test-utils'
 import IconButton from '../IconButton.vue'
+import type { buttonSizes } from '..'
 
 describe('IconButton', () => {
   it('renders with default props', () => {
@@ -36,7 +37,7 @@ describe('IconButton', () => {
   })
 
   it('renders with different sizes', () => {
-    const sizes = ['small', 'medium', 'large']
+    const sizes: buttonSizes[] = ['sm', 'lg']
     sizes.forEach(size => {
       const wrapper = shallowMount(IconButton, { props: { size: size, icon: `${size}-icon` } })
       expect(wrapper.html()).toContain(`btn-${size}`)

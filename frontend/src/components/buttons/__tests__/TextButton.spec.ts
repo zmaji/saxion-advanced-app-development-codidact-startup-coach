@@ -17,8 +17,8 @@ describe('TextButton', () => {
   })
 
   it('applies the correct size class', () => {
-    const wrapper = shallowMount(TextButton, { props: { size: 'large', icon: 'large-icon' } })
-    expect(wrapper.attributes('class')).toContain('btn-large')
+    const wrapper = shallowMount(TextButton, { props: { size: 'lg', icon: 'large-icon' } })
+    expect(wrapper.attributes('class')).toContain('btn-lg')
   })
 
   it('changes style based on displayStyle prop', () => {
