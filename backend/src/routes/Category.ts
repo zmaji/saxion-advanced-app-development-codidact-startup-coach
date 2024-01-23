@@ -1,10 +1,11 @@
 import { Router, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import categoryController from '../controllers/Category';
+import isLoggedIn from '../middleware/isLoggedIn';
 
 const router = Router();
 
-router.get('', async (req: Request, res: Response) => {
+router.get('', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await categoryController.getAllCategories();
 
@@ -24,7 +25,7 @@ router.get('', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/flattened', async (req: Request, res: Response) => {
+router.get('/flattened', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await categoryController.getAllFlattenedCategories();
 
@@ -38,7 +39,7 @@ router.get('/flattened', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/:categoryID/parents', async (req: Request, res: Response) => {
+router.get('/:categoryID/parents', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const { categoryID } = req.params;
     const result = await categoryController.getAllParentCategories(categoryID);
@@ -53,7 +54,7 @@ router.get('/:categoryID/parents', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/:categoryID', async (req: Request, res: Response) => {
+router.get('/:categoryID', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const { categoryID } = req.params;
     const result = await categoryController.getCategoryById(categoryID);
@@ -68,7 +69,7 @@ router.get('/:categoryID', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/:parentCategoryID/subcategories', async (req: Request, res: Response) => {
+router.get('/:parentCategoryID/subcategories', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const { parentCategoryID } = req.params;
     const result = await categoryController.getSubcategoriesByParentId(parentCategoryID);

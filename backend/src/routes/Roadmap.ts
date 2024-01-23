@@ -5,7 +5,7 @@ import isLoggedIn from '../middleware/isLoggedIn';
 
 const router = Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', isLoggedIn, async (req: Request, res: Response) => {
   try {
     const result = await roadmapController.getAllRoadmaps();
 
