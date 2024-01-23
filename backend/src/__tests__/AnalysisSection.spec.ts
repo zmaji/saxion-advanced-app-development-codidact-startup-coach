@@ -5,20 +5,16 @@ import { questionSetsIndexData } from './mocks/data/QuestionSets';
 import { questionsIndexData } from './mocks/data/Questions';
 import { questionOptionsIndexData } from './mocks/data/QuestionOptions';
 import { app } from './config/setupFile';
+import { loginAsUser } from './utils/login';
 
 describe('AnalysisSection', () => {
   describe('GET /analysisSections', () => {
     it('should return a list of analysis sections', async () => {
-      const loginResponse = await request(app)
-          .post('/credentials')
-          .send({
-            userName: 'Maurice',
-            password: 'Maurice123',
-          });
+      const token = await loginAsUser(app, 'Zikria', 'Zikria123');
 
       const response = await request(app)
           .get('/analysisSections')
-          .set('Authorization', `Bearer ${loginResponse.body.token}`);
+          .set('Authorization', `Bearer ${token}`);
 
       expect(response.status).toBe(StatusCodes.OK);
       expect(response.body).toEqual(analysisSectionIndexData);
@@ -28,16 +24,11 @@ describe('AnalysisSection', () => {
 
 describe('GET /analysisSections/:analysisSectionID', () => {
   it('should return a specific analysis section', async () => {
-    const loginResponse = await request(app)
-        .post('/credentials')
-        .send({
-          userName: 'Maurice',
-          password: 'Maurice123',
-        });
+    const token = await loginAsUser(app, 'Zikria', 'Zikria123');
 
     const response = await request(app)
         .get(`/analysisSections/${analysisSectionIndexData[0].analysisSectionID}`)
-        .set('Authorization', `Bearer ${loginResponse.body.token}`);
+        .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(StatusCodes.OK);
     expect(response?.body.analysisSectionID).toBe(analysisSectionIndexData[0].analysisSectionID);
@@ -69,16 +60,11 @@ describe('GET /analysisSections/:analysisSectionID', () => {
   it('should handle an invalid analysisSectionID', async () => {
     const invalidAnalysisSectionID = 'invalid-id';
 
-    const loginResponse = await request(app)
-        .post('/credentials')
-        .send({
-          userName: 'Maurice',
-          password: 'Maurice123',
-        });
+    const token = await loginAsUser(app, 'Zikria', 'Zikria123');
 
     const response = await request(app)
         .get(`/analysisSections/${invalidAnalysisSectionID}`)
-        .set('Authorization', `Bearer ${loginResponse.body.token}`);
+        .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(StatusCodes.NOT_FOUND);
     expect(response.body).toEqual({ error: `Unable to find analysis section with ID ${invalidAnalysisSectionID}` });

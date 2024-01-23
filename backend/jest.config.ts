@@ -11,7 +11,7 @@ module.exports = {
     '^.+\\.ts$': 'ts-jest',
   },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|js)$',
-  testPathIgnorePatterns: ['/node_modules/', '/dist/', '/src/__tests__/mocks/', '/src/__tests__/config/', 'coverage'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/', '/src/__tests__/mocks/', '/src/__tests__/config/', 'coverage', 'src/__tests__/utils'],
   verbose: true,
   forceExit: true,
   clearMocks: true,
@@ -25,5 +25,6 @@ module.exports = {
     '/src/__tests__/mocks',
     '/src/__tests__/config',
     '/src/typings',
+    'src/__tests__/utils',
   ],
 };
