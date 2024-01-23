@@ -101,7 +101,6 @@ test-frontend:
     - build-frontend
   script:
     - cd frontend
-    - npm install
     - npm run test:unit
 
 # Check if backend unit tests are in order
