@@ -44,7 +44,7 @@
       let label: Label = response.data as Label;
       await fetchAddedLabel(label.labelID);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

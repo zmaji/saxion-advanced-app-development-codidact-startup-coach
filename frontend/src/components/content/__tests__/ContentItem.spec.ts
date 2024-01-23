@@ -1,10 +1,11 @@
+import type { Content } from '@/typings/Content'
+
 import { describe, it, expect } from 'vitest'
 import { shallowMount, RouterLinkStub } from '@vue/test-utils'
 import ContentItem from '../ContentItem.vue'
+import { randomUUID } from 'crypto'
 
 import { IconLabel, TextLabel, DateLabel } from '@/components'
-import type { Content } from '@/typings/Content'
-import { randomUUID } from 'crypto'
 
 describe('ContentItem', () => {
   const mockContent: Content = {
