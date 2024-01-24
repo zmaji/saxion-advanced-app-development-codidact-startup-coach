@@ -53,7 +53,7 @@
     "contentID": "3a5dd752-fbc0-4bda-82c2-95f2feca30cd",
     "userID": "12c20d6e-1bc6-4d7a-acaf-2021afc7a242",
     "title": "Pipelines zijn geweldig!",
-    "description": "Dit is gegenereert vanuit GitLab.",
+    "description": "Dit is gegenereert vanuit GitLab. Versie 2.",
     "category": "b8b7187e-7335-477e-b087-219d0d95910a",
     "accessLevel": "public",
     "attachment": "example-video.mp4",

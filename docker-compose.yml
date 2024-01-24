@@ -18,7 +18,7 @@ services:
     container_name: mongo-seed
     restart: "no"
     environment:
-      - MONGO_HOST=85.10.149.169
+      - MONGO_HOST=mongo
       - MONGO_DB_NAME=codidact-startup-coach-db
       - MONGO_USER=root
       - MONGO_PASSWORD=admin
@@ -43,7 +43,5 @@ services:
     image: 'zikria40/codidact-startup-coach-frontend:latest'
     container_name: frontend
     restart: always
-    environment:
-      - VITE_APP_BASE_URL_API=http://localhost:3000
     ports:
-      - 8080:80
+      - 80:80
