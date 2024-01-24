@@ -8,7 +8,7 @@ import { useTokenStore } from '@/stores/token';
 
 const baseUrl = import.meta.env.VITE_APP_BASE_URL_API;
 
-const setAuthorizationHeader = () => {
+const setAuthorizationHeader = async () => {
   const token = useTokenStore().getToken;
 
   if (token) {
@@ -18,7 +18,7 @@ const setAuthorizationHeader = () => {
 
 const getRequest = async<T>(url: string, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
-    setAuthorizationHeader();
+    await setAuthorizationHeader();
   }
   try {
     return await axios.get(`${baseUrl}${url}`);
@@ -29,7 +29,7 @@ const getRequest = async<T>(url: string, useToken: boolean = true): Promise<Axio
 
 const putRequest = async<T>(url: string, data: any, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
-    setAuthorizationHeader();
+    await setAuthorizationHeader();
   }
   try {
     return await axios.put(`${baseUrl}${url}`, data);
@@ -40,7 +40,7 @@ const putRequest = async<T>(url: string, data: any, useToken: boolean = true): P
 
 const postRequest = async<T>(url: string, data: any, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
-    setAuthorizationHeader();
+    await setAuthorizationHeader();
   }
   try {
     return await axios.post(`${baseUrl}${url}`, data);
@@ -51,7 +51,7 @@ const postRequest = async<T>(url: string, data: any, useToken: boolean = true): 
 
 const deleteRequest = async<T>(url: string, useToken: boolean = true): Promise<AxiosResponse<T>> => {
   if (useToken) {
-    setAuthorizationHeader();
+    await setAuthorizationHeader();
   }
   try {
     return await axios.delete(`${baseUrl}${url}`);
